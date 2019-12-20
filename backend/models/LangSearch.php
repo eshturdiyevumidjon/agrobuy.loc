@@ -43,13 +43,8 @@ class LangSearch extends Lang
     public function search($params)
     {   
         $user = Yii::$app->user->identity;
-        if($user->id != 1) {
-            $langs = \yii\helpers\ArrayHelper::getColumn(\backend\models\CompanyLanguage::find()->where(['company_id'=>$user->company_id])->all(),'language_id');
+        $query = Lang::find();
 
-            $query = Lang::find()->where(['id' => $langs,'status'=>1]);
-        } 
-
-        else $query = Lang::find();  
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

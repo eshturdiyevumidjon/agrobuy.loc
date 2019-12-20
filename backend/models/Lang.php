@@ -79,15 +79,7 @@ class Lang extends \yii\db\ActiveRecord
 
     public static function getLanguagesCompany()
     {
-       $user = Yii::$app->user->identity;
-
-        if($user->id != 1 && $user != null){
-            $langs = \yii\helpers\ArrayHelper::getColumn(\backend\models\CompanyLanguage::find()->where(['company_id'=>$user->company_id,'status'=>1])->all(),'language_id');
-            return Lang::find()->where(['create'=>1,'id'=>$langs,'status'=>1])->all();
-        }
-        elseif($user != null && $user->id == 1) {
             return Lang::find()->where(['create'=>1,'status'=>1])->all();
-        }
     }
 
     //Получение текущего объекта языка
@@ -109,14 +101,5 @@ class Lang extends \yii\db\ActiveRecord
     public static function getLaguagesList()
     {
         return Lang::find()->where(['create'=>0])->all();
-    }
-
-    public function getLangCompany($id)
-    {
-        $comp_lang = CompanyLanguage::find()->where(['language_id' => $id])->one();
-        if($comp_lang->status  == 1) {
-            return true;
-        }
-        else return false;
     }
 }

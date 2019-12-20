@@ -23,9 +23,6 @@ use yii\helpers\ArrayHelper;
  * @property string|null $email Эмаил
  * @property float|null $balans Баланс
  * @property string|null $org_name Наименование
- * @property int|null $company_id Компания
- * @property int|null $chek_advertising Виберыте реклами
- * @property string|null $date_cr Дата создания
  * @property string|null $access_token Токен
  * @property int|null $expiret_at
  * @property int|null $axpierat_at
@@ -74,13 +71,12 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             [['avatar'], 'string'],
-            [['type', 'company_id', 'chek_advertising', 'expiret_at'], 'integer'],
+            [['type', 'expiret_at'], 'integer'],
             [['balans'], 'number'],
             [['fio','login','phone',], 'required'],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
-            [['date_cr','image','new_password'], 'safe'],
-            [['login', 'password', 'fio', 'phone', 'email', 'access_token','language_id'], 'string', 'max' => 255],
-            [['company_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['company_id' => 'id']],
+            [['image','new_password'], 'safe'],
+            [['login', 'password', 'fio', 'phone', 'email', 'access_token'], 'string', 'max' => 255],
              
         ];
     }
@@ -105,7 +101,6 @@ class Users extends \yii\db\ActiveRecord
             'date_cr' => 'Дата создания',
             'access_token' => 'Токен',
             'expiret_at' => 'Expiret At',
-            'language_id'=>'Урл',
         ];
     }
 
@@ -115,8 +110,6 @@ class Users extends \yii\db\ActiveRecord
         {
             $user = Yii::$app->user->identity;
             $this->password = Yii::$app->security->generatePasswordHash($this->password);
-            $this->date_cr = date("Y-m-d H:i:s");
-
             $this->access_token = Yii::$app->getSecurity()->generateRandomString();
             $this->expiret_at = time() + $this::EXPIRE_TIME;
 
@@ -192,54 +185,4 @@ class Users extends \yii\db\ActiveRecord
             default: return "Неизвестно";
         }
     }
-
-
-     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChatMessages()
-    {
-        return $this->hasMany(ChatMessage::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChatUsers()
-    {
-        return $this->hasMany(ChatUsers::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGroupsOffers()
-    {
-        return $this->hasMany(GroupsOffer::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getGroupsUsers()
-    {
-        return $this->hasMany(GroupsUser::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getReytings()
-    {
-        return $this->hasMany(Reyting::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCompany()
-    {
-        return $this->hasOne(Companies::className(), ['id' => 'company_id']);
-    }
-    
 }

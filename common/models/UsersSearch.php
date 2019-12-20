@@ -18,8 +18,8 @@ class UsersSearch extends Users
    public function rules()
     {
         return [
-            [['id', 'type', 'company_id', 'expiret_at'], 'integer'],
-            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'chek_advertising', 'date_cr', 'access_token'], 'safe'],
+            [['id', 'type', 'expiret_at'], 'integer'],
+            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token'], 'safe'],
             [['balans'], 'number'],
         ];
     }
