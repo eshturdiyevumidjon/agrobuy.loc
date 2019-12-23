@@ -27,8 +27,8 @@ class m150207_210500_i18n_init extends Migration
 
         $this->createTable('{{%source_message}}', [
             'id' => $this->primaryKey(),
-            'category' => $this->string(),
-            'message' => $this->text(),
+            'category' => $this->string(255)->comment("Категория"),
+            'message'=> $this->text()->comment("Текст"),
         ], $tableOptions);
 
         $this->createTable('{{%message}}', [

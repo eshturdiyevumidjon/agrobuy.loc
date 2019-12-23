@@ -62,15 +62,15 @@ class m190715_194709_create_lang_table extends Migration
             ];
         $this->createTable('{{%lang}}', [
             'id' => $this->primaryKey(),
-            'url'=>$this->string(255)->comment("Тил коди"),
-            'local'=>$this->string(255)->comment("Махаллий номи"),
-            'name'=>$this->string(255)->comment("Номи"),
-            'image'=>$this->string(255)->comment("Байроқ"),
+            'url'=>$this->string(255)->comment("Код языка"),
+            'local'=>$this->string(255)->comment("Местное название"),
+            'name'=>$this->string(255)->comment("Наименование"),
+            'image'=>$this->string(255)->comment("Фотография"),
             'default'=>$this->integer()->defaultValue(0)->comment("Заметка"),
             'create'=>$this->integer()->defaultValue(0)->comment("Заметка"),
             'status'=>$this->integer()->defaultValue(0)->comment("Статус"),
-            'date_update'=>$this->integer()->comment("Ўзгартирилган вақти"),
-            'date_create'=>$this->integer()->comment("Яратилган вақти"),
+            'date_update'=>$this->integer()->comment("Дата изменение"),
+            'date_create'=>$this->integer()->comment("Дата создание"),
         ]);
 
         $this->insert('{{%lang}}',array(

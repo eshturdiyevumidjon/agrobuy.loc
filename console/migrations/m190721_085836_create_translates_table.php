@@ -14,11 +14,11 @@ class m190721_085836_create_translates_table extends Migration
     {
         $this->createTable('{{%translates}}', [
             'id' => $this->primaryKey(),
-            'table_name' => $this->string(255)->comment("Жадвал номи"),
-            'field_id' => $this->integer()->comment("ID сатр"),
-            'field_name' => $this->string(255)->comment("сатр номи"),
-            'field_value' => $this->text()->comment("Қиймфти"),
-            'language_code' => $this->string(255)->comment("Тил коди"),
+            'table_name' => $this->string(255)->comment("Наименование таблицы"),
+            'field_id' => $this->integer()->comment("ID строка"),
+            'field_name' => $this->string(255)->comment("Наименование строка"),
+            'field_value' => $this->text()->comment("Значение"),
+            'language_code' => $this->string(255)->comment("Код языка"),
         ]);
     }
 
