@@ -14,6 +14,11 @@ return [
     'timeZone' => 'Asia/Tashkent',
     'name' => 'MyTeacher',
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+            'translations' => [
+                'class' => 'common\modules\translations\modules\admin\Module'
+            ]
+    ],
     'components' => [
         'request' => [
             'baseUrl'=>'',

@@ -23,6 +23,9 @@ return [
         'gridview' => [
             'class' => '\kartik\grid\Module'
         ],
+        'translations' => [
+            'class' => 'common\modules\translations\modules\admin\Module'
+        ]
     ],
     'components' => [
 

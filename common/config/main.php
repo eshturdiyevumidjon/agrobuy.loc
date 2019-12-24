@@ -9,16 +9,16 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-         'i18n' => [
-            'translations' => [
-                 'app' => [
-                    'class' => 'yii\i18n\DbMessageSource',
-                    'sourceMessageTable'=>'{{%source_message}}',
-                    'messageTable'=>'{{%message}}',
-                    'sourceLanguage' => 'ru',
-                    'forceTranslation' => true,
-                ],
-            ],
-        ],
+        //  'i18n' => [
+        //     'translations' => [
+        //          'app' => [
+        //             'class' => 'yii\i18n\DbMessageSource',
+        //             'sourceMessageTable'=>'{{%source_message}}',
+        //             'messageTable'=>'{{%message}}',
+        //             'sourceLanguage' => 'ru',
+        //             'forceTranslation' => true,
+        //         ],
+        //     ],
+        // ],
     ],
 ];

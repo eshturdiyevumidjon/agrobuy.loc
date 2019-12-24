@@ -32,7 +32,7 @@ $count = 0;
         <div class="container-fluid container-fixed-lg m-t-20">
             <div class="panel-transparent">
 
-                <!-- <div class="panel-body no-padding">
+                <div class="panel-body no-padding">
 
                     <div class="panel panel-default">
 
@@ -46,7 +46,7 @@ $count = 0;
 
                     </div>
 
-                </div>  -->
+                </div>  
 
                 <div class="panel-body no-padding">
                     <div class="panel-body">
