@@ -17,11 +17,11 @@ class m191222_125504_create_advertising_items_table extends Migration
     {
         $this->createTable('{{%advertising_items}}', [
             'id' => $this->primaryKey(),
-            'advertising_id' => $this->integer()->comment("Рекламные баннеры"),
+            'advertising_id' => $this->integer()->comment("Рекламные баннеры"),//(advertisings jadvali bn bog'lanadi)
             'title' =>$this->string(255)->comment("Заголовок"),
             'text' =>$this->text()->comment("Текст"),
             'link' =>$this->string(255)->comment("Ссылка"),
-            'type' =>$this->integer()->comment("Тип рекламы"),
+            'type' =>$this->integer()->comment("Тип рекламы"),//(1 => Фотография, 2 => Видео)
             'file' =>$this->string(255)->comment("Файл"),
         ]);
 
@@ -37,7 +37,7 @@ class m191222_125504_create_advertising_items_table extends Migration
             '{{%fk-advertising_items-advertising_id}}',
             '{{%advertising_items}}',
             'advertising_id',
-            '{{%advertising}}',
+            '{{%advertisings}}',
             'id',
             'CASCADE'
         );

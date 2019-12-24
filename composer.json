@@ -25,7 +25,8 @@
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-widget-select2": "dev-master",
         "codemix/yii2-localeurls": "^1.7",
-        "katzz0/yii2-yandex-maps":"dev-master"
+        "katzz0/yii2-yandex-maps":"dev-master",
+        "mihaildev/yii2-ckeditor": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

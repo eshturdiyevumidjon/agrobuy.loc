@@ -17,6 +17,7 @@ class m190721_085836_create_translates_table extends Migration
             'table_name' => $this->string(255)->comment("Наименование таблицы"),
             'field_id' => $this->integer()->comment("ID строка"),
             'field_name' => $this->string(255)->comment("Наименование строка"),
+            'field_description'=> $this->string(255)->comment("Описание поля"),
             'field_value' => $this->text()->comment("Значение"),
             'language_code' => $this->string(255)->comment("Код языка"),
         ]);

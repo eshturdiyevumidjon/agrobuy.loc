@@ -17,7 +17,7 @@ class m191222_124742_create_assessment_table extends Migration
     {
         $this->createTable('{{%assessment}}', [
             'id' => $this->primaryKey(),
-            'user_id' => $this->integer()->comment("Пользователь"),
+            'user_id' => $this->integer()->comment("Пользователь"),//(users jadvali bn bog'lanadi)
             'ball' => $this->integer()->comment("Балл"),
             'date_cr' => $this->datetime()->comment("Дата создание"),
         ]);

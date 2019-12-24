@@ -11,7 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'language' =>'ru-RU',
+    'language' =>'ru',
     'name' => 'Study Club',
     'timeZone' =>'Europe/Moscow',
     'defaultRoute' =>'/users',
@@ -23,11 +23,23 @@ return [
         'gridview' => [
             'class' => '\kartik\grid\Module'
         ],
-        'translations' => [
-            'class' => 'common\modules\translations\modules\admin\Module'
-        ],
     ],
     'components' => [
+
+        'i18n' => [
+                'translations' => [
+                    'app*' => [
+                        'class' => 'yii\i18n\PhpMessageSource',
+                        'basePath' => '@backend/messages',
+                        //'sourceLanguage' => 'en-US',
+                        'fileMap' => [
+                            'app'       => 'app.php',
+                            'app/error' => 'error.php',
+                        ],
+                    ],
+                ],
+            ],
+
          'mailer' => [
             // 'viewPath' => '@common/mail', 
             'class' => 'yii\swiftmailer\Mailer',

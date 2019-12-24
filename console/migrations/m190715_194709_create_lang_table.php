@@ -97,11 +97,10 @@ class m190715_194709_create_lang_table extends Migration
             'date_create'=>time(),
         ));
         
-       
         $this->insert('{{%lang}}',array(
-            'url'=>'en',
-            'local'=>'en-En',
-            'name'=>'english - English',
+            'url'=>'kr',
+            'local'=>'ўз-Кр',
+            'name'=>'ўзбекча - Крилица',
             'default'=>1,
             'create' => 1,
             'status'=>0,
@@ -109,6 +108,18 @@ class m190715_194709_create_lang_table extends Migration
             'date_update'=>time(),
             'date_create'=>time(),
         ));
+
+        // $this->insert('{{%lang}}',array(
+        //     'url'=>'en',
+        //     'local'=>'en-En',
+        //     'name'=>'english - English',
+        //     'default'=>1,
+        //     'create' => 1,
+        //     'status'=>0,
+        //     'image'=>'/uploads/flags/en.png',
+        //     'date_update'=>time(),
+        //     'date_create'=>time(),
+        // ));
 
 
         

@@ -19,6 +19,13 @@ class m191221_101234_create_about_company_table extends Migration
             'mail' => $this->string(255)->comment("E-mail"),
             'phone' => $this->string(255)->comment("Телефон"),
         ]);
+
+        $this->insert('{{%about_company}}',array(
+          'id'=>1,
+          'name'=>'Super Company',
+          'mail'=>'sarvarakbarov0505@gmail.com',
+          'phone' => '+998905872536',
+        ));
     }
 
     /**

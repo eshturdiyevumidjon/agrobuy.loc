@@ -20,7 +20,6 @@ class UsersSearch extends Users
         return [
             [['id', 'type', 'expiret_at'], 'integer'],
             [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token'], 'safe'],
-            [['balans'], 'number'],
         ];
     }
 

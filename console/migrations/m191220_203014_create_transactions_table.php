@@ -13,7 +13,7 @@ class m191220_203014_create_transactions_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%transactions}}', [
-            'tranid' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'paycom_transaction_id' => $this->string(255),
             'param_id' => $this->string(255),
             'order_id' => $this->integer(),
