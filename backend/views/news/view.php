@@ -8,7 +8,7 @@ $langs=backend\models\Lang::getLanguages();
 
 ?>
 <div class="news-view">
- <ul class="nav nav-tabs" style="margin-top:2px;">
+ <ul class="nav nav-pills" style="margin-top:2px;">
     <?php foreach($langs as $lang):?>
     <li class="<?=($i==0)?'active':''?>">
        <a data-toggle="tab" href="#<?=$lang->url?>"><?=(isset(explode('-',$lang->name)[1])?explode('-',$lang->name)[1]:$lang->name)?></a>
@@ -39,14 +39,14 @@ $langs=backend\models\Lang::getLanguages();
                         'attribute'=>'title',
                         'format'=>'html',
                         'label'=>Yii::t('app','Title',null,$lang->url),
-                        'value'=>(($lang->url=="ru")?$model->title:$titles[$lang->url]),
+                        'value'=>(($lang->url=="kr")?$model->title:$titles[$lang->url]),
                     ],
                     [
                         'attribute'=>'text',
                         'format'=>'html',
                         'label'=>Yii::t('app','Text',null,$lang->url),
-                        'value'=>($lang->url=="ru")?$model->text:$texts[$lang->url],
-                        'contentOptions' => ['class' => 'bg-red','style'=>'word-break: break-all;'],
+                        'value'=>($lang->url=="kr")?$model->text:$texts[$lang->url],
+                        'contentOptions' => ['style'=>'word-break: break-all;'],
                     ],
                     'date',
                     

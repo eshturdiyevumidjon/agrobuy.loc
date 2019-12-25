@@ -36,7 +36,7 @@ class Lang extends \yii\db\ActiveRecord
     {
         return [
             [['url', 'name'], 'required'],
-            [['default', 'status', 'date_update','create', 'date_create'], 'integer'],
+            [['default', 'status', 'date_update', 'date_create'], 'integer'],
             [['url', 'local', 'name', 'image'], 'string', 'max' => 255],
             [['flag'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg',],
         ];
@@ -65,7 +65,6 @@ class Lang extends \yii\db\ActiveRecord
             'name' => 'Название',
             'image' => 'Флаг',
             'default' => 'Заметка',
-            'create' => 'Заметка',
             'status' => 'Статус',
             'date_update' => 'Ўзгартирилган вақти',
             'date_create' => 'Яратилган вақти',
@@ -74,12 +73,7 @@ class Lang extends \yii\db\ActiveRecord
     }
     public static function getLanguages()
     {
-        return Lang::find()->where(['create'=>1,'status'=>1])->all();
-    }
-
-    public static function getLanguagesCompany()
-    {
-            return Lang::find()->where(['create'=>1,'status'=>1])->all();
+        return Lang::find()->where(['status'=>1])->all();
     }
 
     //Получение текущего объекта языка
@@ -98,8 +92,5 @@ class Lang extends \yii\db\ActiveRecord
     {
         return ($this->status=='1')?'Активный':'Отключен';
     }
-    public static function getLaguagesList()
-    {
-        return Lang::find()->where(['create'=>0])->all();
-    }
+
 }

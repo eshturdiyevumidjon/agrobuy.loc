@@ -18,7 +18,8 @@ class Banners extends \yii\db\ActiveRecord
 {
     public $translation_title;
     public $translation_text;
-    public $image;
+    public $trash;
+
     /**
      * {@inheritdoc}
      */
@@ -35,8 +36,8 @@ class Banners extends \yii\db\ActiveRecord
     {
         return [
             [['text','title'],'required'],
-            [['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['text'], 'string'],
+            [['trash'], 'file'],
             [['translation_text','translation_title'],'safe'],
             [['title', 'link', 'image'], 'string', 'max' => 255],
         ];
@@ -53,7 +54,7 @@ class Banners extends \yii\db\ActiveRecord
             'text' => Yii::t('app','Text'),
             'link' => Yii::t('app','Link'),
             'image' => Yii::t('app','Image'),
-            'image' => Yii::t('app','Image'),
+            'trash' => Yii::t('app','Image'),
         ];
     }
     public static function NeedTranslation()
@@ -65,12 +66,11 @@ class Banners extends \yii\db\ActiveRecord
     }
     public function getImage($for='_form')
     {
-        
         $adminka = Yii::$app->params['adminka'];
         if($for=='_form')
-        return $this->image != null ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'uploads/banners/' . $this->image .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'uploads/noimg.jpg">';
+        return $this->image ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'/uploads/banners/' . $this->image .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
         if($for=='_columns')
-           return $this->image != null ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'uploads/banners/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'uploads/noimg.jpg">';
+           return $this->image  ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'/uploads/banners/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
     }
 
     

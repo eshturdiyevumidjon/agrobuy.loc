@@ -23,14 +23,14 @@ class m191221_102706_create_banners_table extends Migration
             'title' => 'Banner1 title',
             'text' => 'Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text',
             'image' => 'banner1.jpg',
-            'link' => $this->string(255)->comment("Ссылка"),
+            'link' => 'http://kun.uz/',
         ));
         
         $this->insert('{{%banners}}',array(
             'title' => 'Banner2 title',
             'text' => 'Banner2 tekst Banner2 tekstBanner2 tekstBanner2Banner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 Banner2 tekst',
             'image' => 'banner2.jpg',
-            'link' => $this->string(255)->comment("Ссылка"),
+            'link' => 'http://kun.uz/',
         ));
     }
 

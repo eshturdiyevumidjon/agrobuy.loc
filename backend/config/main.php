@@ -11,7 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'language' =>'ru',
+    'language' =>'ru-RU',
     'name' => 'Study Club',
     'timeZone' =>'Europe/Moscow',
     'defaultRoute' =>'/users',
@@ -95,6 +95,9 @@ return [
             'rules' => [
                 '' => 'site/index',
             ],
+            // 'class' => 'codemix\localeurls\UrlManager',
+            // 'languages' => ['kr','uz', 'ru'],
+            // 'on languageChanged' => '\common\models\PreferenceBooks::onLanguageChanged',
         ],
         
     ],

@@ -31,7 +31,7 @@ return [
     'Electronic copies of the document'=>'Hujjatning elektron nusxalari',
     'Complete successfully'=>'Muvaffaqqiyatli amalga oshirildi',
     'Are you sure?'=>'Tasdiqlaysizmi?',
-    'Are you sure want to delete this item?'=>'Rostdan ham belgilangan ma\'lumotni o\'chirmoqchimisiz?',
+    'Are you sure want to delete this item'=>'Rostdan ham belgilangan ma\'lumotni o\'chirmoqchimisiz?',
     'Ok'=>'Ha',
     'Cancel'=>'Bekor qilish',
     'Confirmation'=>'Tasdiqlsh',

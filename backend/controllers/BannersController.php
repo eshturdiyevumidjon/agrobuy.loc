@@ -109,48 +109,49 @@ class BannersController extends Controller
             $post = $request->post();
             if($model->load($post)){
                 $model->save();
-                $attr = Banners::NeedTranslation();
-                foreach ($langs as $lang) {
-                        $l = $lang->url;
-                        if($l == 'ru')
-                        {
-                            if(!$model->save())
-                              return [
-                                'title'=> Yii::t('app','Create'),
-                                'size'=>'large',
-                                'content'=>$this->renderAjax('create', [
-                                    'model' => $model,
-                                ]),
-                                'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                            Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-                    
-                            ]; 
-                           else continue;
-                        }
-                    foreach ($attr as $key=>$value) {
-                       $t=new Translates();
-                       $t->table_name=$model->tableName();
-                       $t->field_id=$model->id;
-                       $t->field_name=$key;
-                       $t->field_value=$post["Banners"][$value][$l];
-                       $t->field_description=$value;
-                       $t->language_code=$l;
-                       $t->save();
-                    }
-                }
-                $model->image = UploadedFile::getInstance($model,'image');
-                if(!empty($model->image))
-                {   
-                    if($model->image != null && file_exists('uploads/banners/'.$model->image))
-                    {
-                        unlink(('uploads/banners/'.$model->image));
-                    }
-                    $name = $model->id . '-' . time();
+                  $attr = Banners::NeedTranslation();
+                  foreach ($langs as $lang) {
+                          $l = $lang->url;
+                          if($l == 'kr')
+                          {
+                              if(!$model->save())
+                                return [
+                                  'title'=> Yii::t('app','Create'),
+                                  'size'=>'large',
+                                  'content'=>$this->renderAjax('create', [
+                                      'model' => $model,
+                                  ]),
+                                  'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                              Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
+                      
+                              ]; 
+                             else continue;
+                          }
+                      foreach ($attr as $key=>$value) {
+                         $t=new Translates();
+                         $t->table_name=$model->tableName();
+                         $t->field_id=$model->id;
+                         $t->field_name=$key;
+                         $t->field_value=$post["Banners"][$value][$l];
+                         $t->field_description=$value;
+                         $t->language_code=$l;
+                         $t->save();
+                      }
+                  }
+                  $model->trash = UploadedFile::getInstance($model,'trash');
+                  $dir = 'uploads/banners/';
+                  if(!empty($model->trash))
+                  {   
+                      if($model->trash != null && file_exists($dir.$model->trash))
+                      {
+                          unlink(($dir.$model->trash));
+                      }
+                      $name = $model->id . '-' . time();
 
-                    $model->image->saveAs('uploads/banners/' . $name.'.'.$model->image->extension);
+                      $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
 
-                    Yii::$app->db->createCommand()->update('banners', ['image' => $name.'.'.$model->image->extension], [ 'id' => $model->id ])->execute();
-                }
+                      Yii::$app->db->createCommand()->update('banners', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
+                  }
                 
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
@@ -223,24 +224,25 @@ class BannersController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post())){
                 $model->save();
-                $model->image = UploadedFile::getInstance($model,'image');
-                if(!empty($model->image))
+                $model->trash = UploadedFile::getInstance($model,'trash');
+                $dir = 'uploads/banners/';
+                if(!empty($model->trash))
                 {   
-                     if($model->image != null && file_exists('uploads/banners/'.$model->image))
+                     if($model->trash != null && file_exists($dir.$model->trash))
                     {
-                        unlink(('uploads/banners/'.$model->image));
+                        unlink(($dir.$model->trash));
                     }
                     $name = $model->id."-".time();
                   
-                  $model->image->saveAs('uploads/banners/' . $name.'.'.$model->image->extension);
-                    Yii::$app->db->createCommand()->update('banners', ['image' => $name.'.'.$model->image->extension], [ 'id' => $model->id ])->execute();
+                  $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
+                    Yii::$app->db->createCommand()->update('banners', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
                 }
                 $attr = Banners::NeedTranslation();
                 
                 foreach ($langs as $lang) {
                        
                         $l = $lang->url;
-                        if($l == 'ru')
+                        if($l == 'kr')
                         {
                            continue;
                         }
@@ -277,15 +279,7 @@ class BannersController extends Controller
             if($model->save())
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> Yii::t('app','Banners'),
-                    'size'=>'normal',
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                        'titles'=>$translation_title,
-                        'texts'=>$translation_text,
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'forceClose'=>true,
                 ];  
                 else{
                            
@@ -341,9 +335,9 @@ class BannersController extends Controller
         $request = Yii::$app->request;
         $model=$this->findModel($id);
         Translates::deleteAll(['table_name' => $model->tableName(),'field_id' => $id]);
-        if(file_exists('uploads/banners/'.$model->image)&&$model->image!=null)
+        if(file_exists($dir.$model->image)&&$model->image!=null)
         {
-            unlink('uploads/banners/'.$model->image);
+            unlink($dir.$model->image);
         }
         $model->delete();    
         if($request->isAjax){
@@ -376,9 +370,9 @@ class BannersController extends Controller
         foreach ( $pks as $pk ) {
             $model = $this->findModel($pk);
             Translates::deleteAll(['table_name' => $model->tableName(),'field_id' => $id]);
-            if(file_exists('uploads/banners/'.$model->image)&&$model->image!=null)
+            if(file_exists($dir.$model->image)&&$model->image!=null)
             {
-                unlink('uploads/banners/'.$model->image);
+                unlink($dir.$model->image);
             }
             $model->delete();
         }

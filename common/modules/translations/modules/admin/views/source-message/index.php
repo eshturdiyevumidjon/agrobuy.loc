@@ -5,10 +5,10 @@ use common\modules\translations\models\SourceMessage;
 use yii\helpers\Html;
 use kartik\editable\Editable;
 use kartik\select2\Select2;
-$langs=\backend\models\Lang::find()->where(['url'=>$id])->one();
 
+$langs=\backend\models\Lang::find()->where(['url'=>$id])->one();
 $sources = SourceMessage::find()->messages()->all();
-$data = \yii\helpers\ArrayHelper::map(\backend\models\Lang::getLaguagesList(),'url','name');
+$data = \yii\helpers\ArrayHelper::map(\backend\models\Lang::find()->all(),'url','name');
 
 $this->params['breadcrumbs'][] = ['label' => "Переводы", 'url' => ['/language/index']];
 

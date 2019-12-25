@@ -96,7 +96,7 @@ class SourceMessageController extends Controller
         $model->category = 'app';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $langs = \backend\models\Lang::getLaguagesList();
+            $langs = \backend\models\Lang::find()->all();
 
             foreach ($langs as $key => $value) {
                 $tr = new Message();
@@ -104,6 +104,9 @@ class SourceMessageController extends Controller
                 $tr->language = $value->url;
                 if($value->url == $id)
                     $tr->translation = $model->tr;
+                else{
+                    $tr->translation = "";
+                }
                 $tr->save();
             }
 

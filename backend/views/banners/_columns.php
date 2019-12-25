@@ -39,6 +39,10 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'link',
+        'format'=>'raw',
+          'content'=>function($data){
+            return '<a href="'.$data->link.'" target="_blank">'.$data->link.'</a>';
+        },
         'contentOptions'=>['class'=>'text-center'],
         'headerOptions'=>['class'=>'text-center'],
     ],

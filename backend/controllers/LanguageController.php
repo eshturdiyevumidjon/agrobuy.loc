@@ -84,20 +84,6 @@ class LanguageController extends Controller
         else {$model->status = 0;}
         $model->save();
     }
-
-    public function actionChangeValuesCompany()
-    {   
-        $user = Yii::$app->user->identity;
-        $id = $_POST['id'];
-        $model = CompanyLanguage::find()
-            ->where(['language_id' => $id,'company_id'=>$user->company_id])->one();
-        if($model->status == 1) {   $model->status = 0; }
-        else {
-            $model->status = 1;
-        }
-        $model->save();
-    }
-
     /**
      * Displays a single Lang model.
      * @param integer $id
@@ -113,8 +99,8 @@ class LanguageController extends Controller
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
-                    'footer'=> Html::button('Ёпиш',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Ўзгартириш',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
         }else{
             return $this->render('view', [
@@ -133,39 +119,32 @@ class LanguageController extends Controller
     {
        $request = Yii::$app->request;
        $model = new Lang(); 
-       $model->create = 1;
        if($request->isAjax){
            /*
            *  Process for ajax request
            */
            Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
-               $src = \common\modules\translations\models\SourceMessage::find()->all();
+                $src = \common\modules\translations\models\SourceMessage::find()->all();
                 foreach ($src as $value) {
                    Yii::$app->db->createCommand()->insert('message', ['id' => $value->id,'language'=>$model->url])->execute();
-                }
-               $model->flag = UploadedFile::getInstance($model,'flag');
-                if(!empty($model->flag))
-                {
-                    $model->flag->saveAs('uploads/flags/' . $model->id.'.'.$model->flag->extension);
-                    Yii::$app->db->createCommand()->update('lang', ['image' =>'/uploads/flags/'. $model->id.'.'.$model->flag->extension], [ 'id' => $model->id ])->execute();
                 }
                return [
                    'forceReload'=>'#crud-datatable-pjax',
                    'title'=> Yii::t('app','Create'),
                    'content'=>'<span class="text-success">'.Yii::t('app','Complete successfully').'</span>',
-                   'footer'=> Html::button('Ёпиш',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                           Html::a('Яна яратиш',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                   'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                           Html::a(Yii::t('app','Create More'),['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
        
                ];       
            }else{         
                return [
-                   'title'=> "Яратиш",
+                   'title'=> Yii::t('app','Create'),
                    'content'=>$this->renderAjax('create', [
                        'model' => $model,
                    ]),
-                   'footer'=> Html::button('Ёпиш',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                               Html::button('Сақлаш',['class'=>'btn btn-primary','type'=>"submit"])
+                   'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                               Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
        
                ];       
            }
@@ -202,33 +181,23 @@ class LanguageController extends Controller
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
-                $model->flag = UploadedFile::getInstance($model,'flag');
-                if(!empty($model->flag))
-                {
-                    if($model->image!=null&&file_exists('uploads/flags/'.$model->image))
-                    {
-                        unlink(('uploads/flags/'.$model->image));
-                    }
-                    $model->flag->saveAs('uploads/flags/' . $model->id.'.'.$model->flag->extension);
-                    Yii::$app->db->createCommand()->update('user', ['image' =>'/uploads/flags/'. $model->id.'.'.$model->flag->extension], [ 'id' => $model->id ])->execute();
-                }
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Тил",
+                    'title'=> Yii::t('app','Language'),
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Ёпиш',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Ўзгартириш',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
             }else{
                  return [
-                    'title'=> 'Ўзгартириш',
+                    'title'=> Yii::t('app','Edit'),
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Ёпиш',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Сақлаш',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
                 ];        
             }
         }else{
@@ -256,11 +225,6 @@ class LanguageController extends Controller
     {
         $request = Yii::$app->request;
         $model=$this->findModel($id);
-        if(file_exists('uploads/flags/'.$model->image)&&$model->image!=null)
-        {
-            unlink('uploads/flags/'.$model->image);
-        }        
-       
         Yii::$app->db->createCommand()->delete('message', ['language'=>$model->url])->execute();
         $model->delete();
         if($request->isAjax){
@@ -291,12 +255,7 @@ class LanguageController extends Controller
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            if($model->image!=null&&file_exists('uploads/flags/'.$model->image))
-            {
-                unlink(('uploads/flags/'.$model->image));
-            }
-            $model->delete();
+            $this->findModel($pk)->delete();
         }
 
         if($request->isAjax){

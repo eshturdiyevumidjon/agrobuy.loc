@@ -20,11 +20,11 @@ use yii\widgets\ActiveForm;
         <div class="row">
 
             <div class="col-md-6">
-                <?= $form->field($model, 'message')->textarea(['rows' => 6]) ?>
+                <?= $form->field($model, 'message')->textarea(['rows' => 6,'required'=>true]) ?>
             </div>
 
             <div class="col-md-6">
-                <?= $form->field($model, 'tr')->textarea(['rows' => 6]) ?>
+                <?= $form->field($model, 'tr')->textarea(['rows' => 6,'required'=>true]) ?>
             </div>
 
         </div>

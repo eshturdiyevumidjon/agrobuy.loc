@@ -36,16 +36,16 @@ $langs=backend\models\Lang::getLanguages();
 
                     [
                         'attribute'=>'title',
-                        'format'=>'html',
+                        'format'=>'raw',
                         'label'=>Yii::t('app','Title',null,$lang->url),
-                        'value'=>(($lang->url=="ru")?$model->title:$titles[$lang->url]),
+                        'value'=>(($lang->url=="kr")?$model->title:$titles[$lang->url]),
                     ],
                     [
                         'attribute'=>'text',
-                        'format'=>'html',
+                        'format'=>'raw',
                         'label'=>Yii::t('app','Text',null,$lang->url),
-                        'value'=>($lang->url=="ru")?$model->text:$texts[$lang->url],
-                        'contentOptions' => ['class' => 'bg-red','style'=>'word-break: break-all;'],
+                        'value'=>($lang->url=="kr")?$model->text:$texts[$lang->url],
+                        'contentOptions' => ['style'=>'word-break: break-all;'],
                     ],
                     'link',
         ],

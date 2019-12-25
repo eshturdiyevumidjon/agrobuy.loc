@@ -15,11 +15,11 @@ class PreferenceBooks
         $session = Yii::$app->session;
         // Yii::$app->language = $event->language;
         $session['language'] = $event->language;
-        $user = Yii::$app->user;
-        if (!$user->isGuest) {
-            $user->identity->language = $event->language;
-            $user->identity->save();
-        }
+        // $user = Yii::$app->user;
+        // if (!$user->isGuest) {
+        //     $user->identity->language = $event->language;
+        //     $user->identity->save();
+        // }
     }
 
     public function getLanguageValue($key)

@@ -16,6 +16,9 @@ use yii\data\ActiveDataProvider;
  */
 class Categories extends \yii\db\ActiveRecord
 {
+    public $translation_title;
+    public $trash;
+    
     /**
      * {@inheritdoc}
      */
@@ -31,10 +34,17 @@ class Categories extends \yii\db\ActiveRecord
     {
          return [
             [['title', 'image'], 'string', 'max' => 255],
-            ['title','required']
+            [['trash'], 'file'],
+            ['title','required'],
+            [['translation_title'],'safe'],
         ];
     }
-
+    public static function NeedTranslation()
+    {
+        return [
+            'title'=>'translation_title',
+        ];
+    }
     /**
      * {@inheritdoc}
      */
@@ -42,7 +52,9 @@ class Categories extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Наименование',
+            'title' => Yii::t('app','Title'),
+            'image' => Yii::t('app','Image'),
+            'trash' => Yii::t('app','Image'),
         ];
     }
 
@@ -74,6 +86,44 @@ class Categories extends \yii\db\ActiveRecord
         return $this->image != null ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'uploads/category/' . $this->image .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'uploads/noimg.jpg">';
         if($for=='_columns')
            return $this->image != null ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'uploads/category/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'uploads/noimg.jpg">';
+    }
+
+
+    public static function TranslatesTitle($value, $lang)
+    {
+        $title = Translates::find()
+            ->where(['table_name' => $value->tableName(),'field_id' => $value->id,'field_name'=>'title', 'language_code' => $lang])
+            ->one()->field_value;
+
+            if($title == null){
+                $title = $value->title;
+            }
+
+        return $title;
+    }
+
+    public static function getTranslates($news_all)
+    {
+        $news  = [];
+        foreach ($news_all as  $value) {
+                if(Yii::$app->language == 'kr'){
+                        $news[] = [
+                        'id' => $value->id,
+                        'title' => $value->title,
+                        'image' => $value->image,
+                    ];
+                }
+                else {
+                        $title = self::TranslatesTitle($value, Yii::$app->language);
+                        $news[] = [
+                        'id' => $value->id,
+                        'title' => $title,
+                        'image' => $value->image,
+                    ];
+                    
+                }
+        }
+        return $news;
     }
 
 }

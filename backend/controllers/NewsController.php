@@ -113,7 +113,7 @@ class NewsController extends Controller
                 $attr = News::NeedTranslation();
                 foreach ($langs as $lang) {
                         $l = $lang->url;
-                        if($l == 'ru')
+                        if($l == 'kr')
                         {
                             if(!$model->save())
                               return [
@@ -239,7 +239,7 @@ class NewsController extends Controller
                 foreach ($langs as $lang) {
                        
                         $l = $lang->url;
-                        if($l == 'ru')
+                        if($l == 'kr')
                         {
                            continue;
                         }

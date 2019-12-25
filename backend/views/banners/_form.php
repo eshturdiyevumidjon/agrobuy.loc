@@ -22,7 +22,7 @@ $langs=backend\models\Lang::getLanguages();
             </div>
             <br>
             <div class="col-md-12">
-                <?= $form->field($model, 'image')->fileInput(['class'=>"image_input",'accept'=>'image/*']); ?>
+                <?= $form->field($model, 'trash')->fileInput(['class'=>"image_input",'accept'=>'image/*']); ?>
             </div>
         </div>
      
@@ -40,15 +40,15 @@ $langs=backend\models\Lang::getLanguages();
                 <?php $i=0; foreach($langs as $lang):?>
                  <div id="<?=$lang->url?>" class="tab-pane fade <?=($i==0)?'in active':''?>">
                     <p>
-                        <?php if($lang->url=='ru'): ?>
+                        <?php if($lang->url=='kr'): ?>
                              <div class="row">
                          <?= $form->field($model, 'title')->textInput()->label(Yii::t('app','Title',null/*,$lang->url*/)) ?>
                          <?= $form->field($model, 'text')->textarea(['rows' => 6])->label(Yii::t('app','Text',null/*,$lang->url*/)) ?>
                         </div>
                         <?php else: ?>
                             <div class="row">
-                         <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value'=>$titles[$lang->url]])->label(Yii::t('app','Title',null,$lang->url)) ?>
-                         <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows'=>6,'value'=>$texts[$lang->url]])->label(Yii::t('app','Text',null,$lang->url)) ?>
+                         <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value'=>$titles[$lang->url]])->label(Yii::t('app','Title',null/*,$lang->url*/)) ?>
+                         <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows'=>6,'value'=>$texts[$lang->url]])->label(Yii::t('app','Text',null/*,$lang->url*/)) ?>
                         </div>
                         <?php endif;?>    
                     </p>

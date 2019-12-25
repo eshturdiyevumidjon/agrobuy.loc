@@ -39,7 +39,7 @@ if (!file_exists('uploads/about-company/' . $model->logo) || $model->logo == nul
                 <div class="col-md-6">
                     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                      <?= $form->field($model, 'mail')->textInput(['maxlength' => true]) ?>
                 </div>
             </div>

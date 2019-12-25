@@ -6,9 +6,8 @@ use yii\helpers\Html;
 /* @var $model backend\models\Categories */
 ?>
 <div class="categories-update">
-
     <?= $this->render('_form', [
         'model' => $model,
+        'titles'=>$titles,
     ]) ?>
-
 </div>

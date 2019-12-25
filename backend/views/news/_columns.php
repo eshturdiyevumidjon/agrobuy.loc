@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 return [
     [
@@ -11,8 +12,7 @@ return [
         'width' => '30px',
     ],
     [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'fone',
+        'label'=>Yii::t('app','Image'),
         'format'=>'raw',
         'content'=>function($data){
             return $data->getImage('_columns');
@@ -25,6 +25,19 @@ return [
         'attribute'=>'title',
         'contentOptions'=>['class'=>'text-center'],
         'headerOptions'=>['class'=>'text-center'],
+    ],
+     [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'text',
+        'format'=>'raw',
+        'value'=>function($data){
+            if(strlen($data->text) > 200){
+                return substr($data->text,0,200).Html::a('...', ['view','id'=>$data->id],
+                    ['role'=>'modal-remote','title'=> Yii::t('app','More'),'class'=>'btn btn-link']);
+            }
+            else
+                return $data->text;
+        },
     ],
    
     [
