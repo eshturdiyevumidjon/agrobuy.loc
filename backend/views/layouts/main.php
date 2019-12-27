@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use app\assets\ColorAdminAsset;
 
+$this->title = Yii::$app->name;
 
 
     if (Yii::$app->controller->action->id === 'login' || Yii::$app->controller->action->id === 'register' || Yii::$app->controller->action->id === 'reset-password' ) { 

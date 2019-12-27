@@ -210,19 +210,18 @@ class CategoriesController extends Controller
                     $dir = 'uploads/category/';
                     if(!empty($model->trash))
                     {   
-                         if($model->trash != null && file_exists($dir.$model->trash))
+                        if($model->trash != null && file_exists($dir.$model->trash))
                         {
                             unlink(($dir.$model->trash));
                         }
                         $name = $model->id."-".time();
                       
-                      $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
+                        $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
                         Yii::$app->db->createCommand()->update('category', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
                     }
 
                 $attr = Categories::NeedTranslation();
                 foreach ($langs as $lang) {
-                       
                         $l = $lang->url;
                         if($l == 'kr')
                         {

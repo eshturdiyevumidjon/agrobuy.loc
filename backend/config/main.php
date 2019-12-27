@@ -12,7 +12,7 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'language' =>'ru-RU',
-    'name' => 'Study Club',
+    'name' => 'AgroBuy',
     'timeZone' =>'Europe/Moscow',
     'defaultRoute' =>'/users',
     'aliases' => [
