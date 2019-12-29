@@ -21,10 +21,11 @@ class m191221_101234_create_about_company_table extends Migration
         ]);
 
         $this->insert('{{%about_company}}',array(
-          'id'=>1,
-          'name'=>'Super Company',
-          'mail'=>'sarvarakbarov0505@gmail.com',
-          'phone' => '+998905872536',
+          'id' => 1,
+          'logo' => 'logo.png',
+          'name' => 'AgroBuy',
+          'mail' => 'agro@gmail.com',
+          'phone' => '+998-90-999-99-99',
         ));
     }
 

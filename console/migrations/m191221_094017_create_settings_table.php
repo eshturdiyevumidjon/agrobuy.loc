@@ -23,6 +23,9 @@ class m191221_094017_create_settings_table extends Migration
 
         $this->insert('{{%settings}}',array(
             'name' => 'Пользовательское соглашение',
+            'key' => 'terms_of_use',
+            'priority' => null,
+            'view_in_footerser_id' => 0,
             'value' => 'Основания возникновения ответственности
 
 1. Распространение запрещенной информации и материалов
@@ -154,6 +157,9 @@ class m191221_094017_create_settings_table extends Migration
 
         $this->insert('{{%settings}}',array(
             'name' => 'Политика конфиденциальности',
+            'key' => 'privacy_policy',
+            'priority' => 1,
+            'view_in_footerser_id' => 1,
             'value' => 'Политика конфиденциальности приложения «Payme» (мобильные приложения для платформ iOS, Android и веб-версии www.payme.uz)
 
  
@@ -213,18 +219,27 @@ class m191221_094017_create_settings_table extends Migration
 
         $this->insert('{{%settings}}',array(
             'name' => 'Быстрая продажа',
+            'key' => 'quick_sale',
+            'priority' => 2,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
 
         $this->insert('{{%settings}}',array(
             'name' => 'Турбо-продажа',
+            'key' => 'turbo',
+            'priority' => 3,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
 
         $this->insert('{{%settings}}',array(
             'name' => 'Премиум-объявления',
+            'key' => 'premium',
+            'priority' => 4,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
@@ -232,36 +247,54 @@ class m191221_094017_create_settings_table extends Migration
 
         $this->insert('{{%settings}}',array(
             'name' => 'VIP-объявлений',
+            'key' => 'vip',
+            'priority' => 5,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
 
         $this->insert('{{%settings}}',array(
             'name' => 'Выделение объявлений',
+            'key' => 'highlight_ads',
+            'priority' => 6,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
 
         $this->insert('{{%settings}}',array(
             'name' => 'Поднятие объявлений',
+            'key' => 'raising_ads',
+            'priority' => 7,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
 
         $this->insert('{{%settings}}',array(
             'name' => 'Продление срока публикации',
+            'key' => 'extension_of_publication',
+            'priority' => 8,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
 
         $this->insert('{{%settings}}',array(
             'name' => 'Лимит объявлений',
+            'key' => 'ad_limit',
+            'priority' => 10,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));
 
         $this->insert('{{%settings}}',array(
             'name' => 'Правила проведения сделок',
+            'key' => 'transaction_rules',
+            'priority' => 11,
+            'view_in_footerser_id' => 1,
             'value' => 'Приобрестите сейчас VIP на неделю пакет и получите с возможностью
             оставлять неограниченное количество объявлений в течении 10 дней',
         ));

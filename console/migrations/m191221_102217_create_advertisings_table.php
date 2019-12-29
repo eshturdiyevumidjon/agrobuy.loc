@@ -24,37 +24,37 @@ class m191221_102217_create_advertisings_table extends Migration
             'key' => 'user_catalog',
         ));
 
-         $this->insert('{{%advertisings}}',array(
+        $this->insert('{{%advertisings}}',array(
             'id' => 2,
             'name' => 'Новости',
             'key' => 'news',
         ));
 
-          $this->insert('{{%advertisings}}',array(
+        $this->insert('{{%advertisings}}',array(
             'id' => 3,
-            'name' => 'Поиск болшой',
+            'name' => 'Поиск большой',
             'key' => 'search_big',
         ));
 
-           $this->insert('{{%advertisings}}',array(
+        $this->insert('{{%advertisings}}',array(
             'id' => 4,
             'name' => 'Поиск маленький',
             'key' => 'search_small',
         ));
 
-            $this->insert('{{%advertisings}}',array(
+        $this->insert('{{%advertisings}}',array(
             'id' => 5,
             'name' => 'Главная',
             'key' => 'main',
         ));
 
-             $this->insert('{{%advertisings}}',array(
+        $this->insert('{{%advertisings}}',array(
             'id' => 6,
             'name' => 'В категории',
             'key' => 'category',
         ));
 
-              $this->insert('{{%advertisings}}',array(
+        $this->insert('{{%advertisings}}',array(
             'id' => 7,
             'name' => 'В типовых карточках',
             'key' => 'in_news_card',

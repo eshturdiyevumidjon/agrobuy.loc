@@ -33,7 +33,7 @@ class m191221_103028_create_category_table extends Migration
         $this->insert('category',array(
             'id' => 3,
             'title' => 'Зелень',
-            'image' => 'Greens  .png',
+            'image' => 'Greens.png',
         ));
 
         $this->insert('category',array(
