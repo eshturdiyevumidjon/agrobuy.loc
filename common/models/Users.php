@@ -10,73 +10,27 @@ use yii\web\ForbiddenHttpException;
 use backend\models\Companies;
 use yii\helpers\ArrayHelper;
 
-/**
- * This is the model class for table "users".
- *
- * @property int $id
- * @property string|null $login Логин
- * @property string|null $password Пароль
- * @property string|null $fio ФИО
- * @property string|null $avatar Фото
- * @property string|null $phone Телефон
- * @property int|null $type Тип
- * @property string|null $email Эмаил
- * @property float|null $balans Баланс
- * @property string|null $org_name Наименование
- * @property string|null $access_token Токен
- * @property int|null $expiret_at
- * @property int|null $axpierat_at
- *
- * @property ChatMessage[] $chatMessages
- * @property ChatUsers[] $chatUsers
- * @property GroupsOffer[] $groupsOffers
- * @property GroupsUser[] $groupsUsers
- * @property Reyting[] $reytings
- * @property Companies $company
- */
 class Users extends \yii\db\ActiveRecord
 {
-     public $new_password;
-     public $image;
-     const EXPIRE_TIME = 3600*24*7;
+    public $new_password;
+    public $image;
+    const EXPIRE_TIME = 3600*24*7;
 
-    /**
-     * {@inheritdoc}
-     */
-    
     public static function tableName()
     {
         return 'users';
     }
 
-    public static function find()
-    {
-
-        if(isset(Yii::$app->user->identity->id))
-        {   
-
-            if(Yii::$app->user->identity->type === 4)
-            {   
-                $companyId = Yii::$app->user->identity->company_id;
-            }
-            else $companyId = null;
-        } 
-        else $companyId = null;
-        return new AppActiveQuery(get_called_class(), [
-           'companyId' => $companyId,
-        ]);
-    }
-
     public function rules()
     {
         return [
-            [['type', 'expiret_at', 'legal_status', 'chesk_phone', 'chesk_mail', 'chesk_passport', 'chesk_car'], 'integer'],
+            [['type', 'expiret_at', 'legal_status', 'check_phone', 'check_mail', 'check_passport', 'check_car'], 'integer'],
             [['balance'], 'number'],
             [['birthday'], 'safe'],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
             [['image','new_password'], 'safe'],
             [['company_files', 'passport_issue'], 'string'],
-            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'inn', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone'], 'string', 'max' => 255],
+            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'inn', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site'], 'string', 'max' => 255],
         ];
     }
 
@@ -87,13 +41,13 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'login' => Yii::t('app', 'Login'),
+            'login' => Yii::t('app', 'Login '),
             'password' => Yii::t('app', 'Password'),
             'fio' => Yii::t('app', 'Fio'),
             'avatar' => Yii::t('app', 'Avatar'),
             'phone' => Yii::t('app', 'Phone'),
             'type' => Yii::t('app', 'Type'),
-            'email' => Yii::t('app', 'Email'),
+            'email' => Yii::t('app', 'E-mail'),
             'balance' => Yii::t('app', 'Balance'),
             'access_token' => Yii::t('app', 'Access Token'),
             'expiret_at' => Yii::t('app', 'Expiret At'),
@@ -106,15 +60,16 @@ class Users extends \yii\db\ActiveRecord
             'company_files' => Yii::t('app', 'Company Files'),
             'legal_status' => Yii::t('app', 'Legal Status'),
             'inn' => Yii::t('app', 'Inn'),
+            'web_site' => Yii::t('app', 'Web Site'),
             'passport_serial_number' => Yii::t('app', 'Passport Serial Number'),
             'passport_number' => Yii::t('app', 'Passport Number'),
             'passport_date' => Yii::t('app', 'Passport Date'),
             'passport_issue' => Yii::t('app', 'Passport Issue'),
-            'passport_file' => Yii::t('app', 'Passport File'),
-            'chesk_phone' => Yii::t('app', 'Chesk Phone'),
-            'chesk_mail' => Yii::t('app', 'Chesk Mail'),
-            'chesk_passport' => Yii::t('app', 'Chesk Passport'),
-            'chesk_car' => Yii::t('app', 'Chesk Car'),
+            '   ' => Yii::t('app', 'Passport File'),
+            'check_phone' => Yii::t('app', 'Chesk Phone'),
+            'check_mail' => Yii::t('app', 'Chesk Mail'),
+            'check_passport' => Yii::t('app', 'Chesk Passport'),
+            'check_car' => Yii::t('app', 'Chesk Car'),
             'code_for_phone' => Yii::t('app', 'Code For Phone'),
         ];
     }

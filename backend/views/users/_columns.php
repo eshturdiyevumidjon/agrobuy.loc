@@ -53,8 +53,8 @@ return [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
-        'template' => '{update} {leadDelete}',
-        'buttons'  => [
+        'template' => '{view} {delete}',
+        /*'buttons'  => [
             'leadDelete' => function ($url, $model) {
                 if($model->id != 1){
                     $url = Url::to(['/users/delete', 'id' => $model->id]);
@@ -68,11 +68,11 @@ return [
                     ]);
                 }
             },
-        ],
+        ],*/
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },
-        'viewOptions'=>['role'=>'modal-remote','title'=>'Просмотр','data-toggle'=>'tooltip'],
+        'viewOptions'=>['data-pjax'=>'0','title'=>'Просмотр','data-toggle'=>'tooltip'],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Изменить', 'data-toggle'=>'tooltip'],
         'deleteOptions'=>['role'=>'modal-remote','title'=>'Удалить', 
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api

@@ -66,24 +66,12 @@ class UsersController extends Controller
     public function actionView($id)
     {   
         $request = Yii::$app->request;
-        if($request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                    'title'=> "Пользователь #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Изменить',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-            ]);
-        }
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
-     public function actionChangeAvatar()
+    public function actionChangeAvatar()
     {
         $path = 'uploads/avatars/';  
         $img = $_POST['name'];
@@ -152,43 +140,13 @@ class UsersController extends Controller
         $request = Yii::$app->request;
         $model = new Users();  
 
-        if( Yii::$app->user->identity->type == 4 ){
-            $model->company_id = Yii::$app->user->identity->company_id;
-            $model->type = 4;
-        }
-
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-           if($model->load($request->post()) && $model->save()){
-            $model->image = UploadedFile::getInstance($model, 'image');
-            $model->upload();
-                return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];        
-            }else{           
-                return [
-                    'title'=> "Создать нового пользователя",
-                    'size' =>'large',
-                    'content'=>$this->renderAjax('create', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
+        if ($model->load($request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } 
+        else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
        
     }
@@ -200,43 +158,33 @@ class UsersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionChangePersonal($id, $type)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
-
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-           if($model->load($request->post()) && $model->save()){
+        $model = $this->findModel($id);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if($model->load($request->post()) && $model->save()){
             $model->image = UploadedFile::getInstance($model, 'image');
             $model->upload();
-                return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];    
-            }else{
-                 return [
-                    'title'=> "Изменить пользователя",
-                    'size' =>'large',
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];    
+        }
+        else{
+            $fileName = '';
+            if($type == 1) $fileName = 'forms/personal';
+            if($type == 2) $fileName = 'forms/legal';
+            if($type == 3) $fileName = 'forms/passport';
+            if($type == 4) $fileName = 'forms/fiz_yur';
+            if($type == 5) $fileName = 'forms/request';
+            return [
+                 'title'=> "Изменить пользователя",
+                 'size' =>'large',
+                 'content'=>$this->renderAjax($fileName, [
+                     'model' => $model,
+                 ]),
                     'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
                 ];        
             }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
-        }
     }
 
     /**
