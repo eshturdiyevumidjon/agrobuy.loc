@@ -38,7 +38,7 @@ class AboutCompanyController extends Controller
         ];
     }
 
-     public function actionChangeLogo()
+    public function actionChangeLogo()
     {
         $path = 'uploads/about-company/';  
         $img = $_POST['name'];
@@ -56,7 +56,7 @@ class AboutCompanyController extends Controller
     }
 
     
-   public function actionView($id = null)
+    public function actionView($id = null)
     {    
         $model = AboutCompany::findOne($id);
         return $this->render('view', [

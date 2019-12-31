@@ -41,7 +41,7 @@ $langs=backend\models\Lang::getLanguages();
                     </div>
                     <?php else: ?>
                         <div class="row">
-                     <?= $form->field($model, 'translation_name['.$lang->url.']')->textInput(['value'=>$names[$lang->url]])->label(Yii::t('app','Title',null,$lang->url)) ?>
+                     <?= $form->field($model, 'translation_name['.$lang->url.']')->textInput(['value'=>$names[$lang->url]])->label(Yii::t('app','Title'/*,null,$lang->url*/)) ?>
                      <?= $form->field($model, 'translation_value['.$lang->url.']')->widget(CKEditor::className(),[
                         'options'=>[
                           'value'=> $values[$lang->url],
@@ -50,7 +50,7 @@ $langs=backend\models\Lang::getLanguages();
                             'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
                             'inline' => false, //по умолчанию false
                         ],
-                    ])->label(Yii::t('app','Text',null,$lang->url));?>
+                    ])->label(Yii::t('app','Text'/*,null,$lang->url*/));?>
                     
                     </div>
                     <?php endif;?>    
@@ -59,8 +59,6 @@ $langs=backend\models\Lang::getLanguages();
              </div>
             <?php $i++; endforeach;?>
           </div>
-    
-        <?= $form->field($model, 'key')->textInput(['maxlength' => true,'disabled'=>($model->isNewRecord)?false:true]) ?>
         <?= $form->field($model, 'priority')->textInput() ?>
         <?= $form->field($model, 'view_in_footerser_id')->textInput() ?>
       </div>

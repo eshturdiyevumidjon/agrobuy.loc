@@ -12,7 +12,6 @@ $langs=backend\models\Lang::getLanguages();
 <div class="categories-form">
 
     <?php $form = ActiveForm::begin([ 'options' => ['method' => 'post', 'enctype' => 'multipart/form-data']]); ?>
-   
     <div class="row">
         <div class="col-md-5">
             <div class="col-md-12">

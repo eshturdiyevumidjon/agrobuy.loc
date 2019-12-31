@@ -94,7 +94,6 @@ class CategoriesController extends Controller
             
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($post) && $model->save()){
-                
                 $attr = Categories::NeedTranslation();
                 foreach ($langs as $lang) {
                         $l = $lang->url;
@@ -112,34 +111,45 @@ class CategoriesController extends Controller
                             ]; 
                            else continue;
                         }
-                    foreach ($attr as $key=>$value) {
-                       $t=new Translates();
-                       $t->table_name=$model->tableName();
-                       $t->field_id=$model->id;
-                       $t->field_name=$key;
-                       $t->field_value=$post["Categories"][$value][$l];
-                       $t->field_description=$value;
-                       $t->language_code=$l;
-                       $t->save();
-                    }
+                        foreach ($attr as $key=>$value) {
+                           $t=new Translates();
+                           $t->table_name=$model->tableName();
+                           $t->field_id=$model->id;
+                           $t->field_name=$key;
+                           $t->field_value=$post["Categories"][$value][$l];
+                           $t->field_description=$value;
+                           $t->language_code=$l;
+                           $t->save();
+                        }
                 }
-                $model->image = UploadedFile::getInstance($model,'image');
+                
+                $model->trash = UploadedFile::getInstance($model,'trash');
                 $dir = 'uploads/category/';
-                if(!empty($model->image))
+                if(!empty($model->trash))
                 {   
-                    if($model->image != null && file_exists($dir.$model->image))
+                    if($model->trash != null && file_exists($dir.$model->trash))
                     {
-                        unlink(($dir.$model->image));
+                        unlink(($dir.$model->trash));
                     }
-                    $name = $model->id . '-' . time();
-                    $model->image->saveAs($dir . $name.'.'.$model->image->extension);
-                    Yii::$app->db->createCommand()->update('category', ['image' => $name.'.'.$model->image->extension], [ 'id' => $model->id ])->execute();
+                    $name = $model->id."-".time();
+                  
+                    $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
+                    Yii::$app->db->createCommand()->update('category', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
                 }
-
+                // return [
+                //         'title'=> Yii::t('app','Create'),
+                //         'content'=>$this->renderAjax('create', [
+                //             'model' => $model,
+                //             'post' => $_POST,
+                //         ]),
+                //         'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                //                     Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
+            
+                //     ];
                 return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];         
             }else{           
                 return [
-                    'title'=> "Создать",
+                    'title'=> Yii::t('app','Create'),
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -337,7 +347,7 @@ class CategoriesController extends Controller
             ];         
         }else{           
             return [
-                'title'=> "Создать",
+                'title'=> Yii::t('app','Create'),
                 'content'=>$this->renderAjax('_add_sub_category_form', [
                     'model' => $model,
                     'translation_name'=>$translation_name,
@@ -411,7 +421,7 @@ class CategoriesController extends Controller
                     ];        
         }else{           
             return [
-                'title'=> "Создать",
+                'title'=> Yii::t('app','Create'),
                 'content'=>$this->renderAjax('_add_sub_category_form', [
                     'model' => $model,
                     'translation_name'=>$translation_name,

@@ -27,7 +27,7 @@ class m190715_194709_create_lang_table extends Migration
          $this->insert('{{%lang}}',array(
             'url'=>'kr',
             'local'=>'ЎЗБ',
-            'name'=>'ўзбекча - Крилица',
+            'name'=>'ўзбекча - Кирилица',
             'default'=>1,
             'status'=>1,
             'date_update'=>time(),

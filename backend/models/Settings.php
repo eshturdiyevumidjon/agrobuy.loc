@@ -31,7 +31,7 @@ class Settings extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['value','name','key'],'required'],
+            [['value','name'],'required'],
             [['value'], 'string'],
             [['priority', 'view_in_footerser_id'], 'integer'],
             [['translation_name','translation_value'],'safe'],
@@ -50,6 +50,15 @@ class Settings extends \yii\db\ActiveRecord
             'key' => Yii::t('app','Key'),
             'value' => Yii::t('app','Text'),
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if($this->isNewRecord){
+            $this->key = strtolower(str_replace(' ', '', $this->name)).time();
+        }
+        
+        return parent::beforeSave($insert);
     }
 
     public static function NeedTranslation()
