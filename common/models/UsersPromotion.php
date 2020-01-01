@@ -58,7 +58,7 @@ class UsersPromotion extends \yii\db\ActiveRecord
      */
     public function getPromotion()
     {
-        return $this->hasOne(Promotions::className(), ['id' => 'promotion_id']);
+        return $this->hasOne(\backend\models\Promotions::className(), ['id' => 'promotion_id']);
     }
 
     /**

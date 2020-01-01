@@ -31,6 +31,11 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'fio',
+        'format'=>'raw',
+        'contentOptions' => ['class' => 'text-left'],
+        'content' => function ($data) {
+            return '<a href="'.Url::toRoute(['/users/view','id' => $data->id]).'" class="btn btn-warning btn-xs pull-left" data-pjax="0">'.$data->fio.'</a>';
+         }
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -43,18 +48,18 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'type',
-        'visible'=> (Yii::$app->user->identity->id == 1) ? true : false,
-        'filter' => [1 => 'Администратор',2 => 'Модератор',3 => 'Ползователь',4 => 'Образование'],
+        //'visible'=> (Yii::$app->user->identity->id == 1) ? true : false,
+        'filter' => [ 1 => "Администратор", 2 => "Модератор", 3 => "Пользователь", ],
         'content' => function ($data) {
-           return $data->getTypeDescription();
-       },
+            return $data->getTypeDescription();
+        },
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
-        'template' => '{view} {delete}',
-        /*'buttons'  => [
+        'template' => '{view} {leadDelete}',
+        'buttons'  => [
             'leadDelete' => function ($url, $model) {
                 if($model->id != 1){
                     $url = Url::to(['/users/delete', 'id' => $model->id]);
@@ -68,18 +73,10 @@ return [
                     ]);
                 }
             },
-        ],*/
+        ],
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },
-        'viewOptions'=>['data-pjax'=>'0','title'=>'Просмотр','data-toggle'=>'tooltip'],
-        'updateOptions'=>['role'=>'modal-remote','title'=>'Изменить', 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>'Удалить', 
-                          'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                          'data-request-method'=>'post',
-                          'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Подтвердите действие',
-                          'data-confirm-message'=>'Вы уверены что хотите удалить этого элемента?'], 
     ],
 
 ];   

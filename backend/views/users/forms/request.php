@@ -7,20 +7,14 @@ use yii\widgets\ActiveForm;
 <div class="users-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    <div class="row">
-        
-            <div class="col-md-6">
-                <?= $model->isNewRecord ? $form->field($model, 'company_name')->textInput(['maxlength' => true]) : $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
+        <div class="row">
+            <div class="col-md-12">
+                <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
             </div>
-            <div class="col-md-6">
-                <?= $model->isNewRecord ? $form->field($model, 'company_files')->textInput(['maxlength' => true]) : $form->field($model, 'company_files')->textInput(['maxlength' => true]) ?>
+            <div class="col-md-12">
+                <?= $form->field($model, 'company_image')->fileInput([ /*'class'=>"image_input", 'id'=>'inputFile'*/ ]); ?>
             </div>
-            <div class="col-md-6">
-                <?php if( $user->type == 1) { ?>
-                    <?= $form->field($model, 'type')->dropDownList(($model->type == 4 || $model->type == 3) ? $model->getTypeEdu() : $model->getType(), ['prompt' => 'Выберите должность','disabled'=>($model->type == 4 || $model->type == 3)? true : false ]) ?>
-                <?php } ?>
         </div>
-    </div>
   
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">

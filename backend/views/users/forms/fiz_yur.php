@@ -8,14 +8,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col-md-9">
-            <div>
-                <?= $form->field($model, 'inn')->textInput(['maxlength' => true]) ?>
-            <div class="col-md-6">
-                <?php if( $user->type == 1) { ?>
-                    <?= $form->field($model, 'type')->dropDownList(($model->type == 4 || $model->type == 3) ? $model->getTypeEdu() : $model->getType(), ['prompt' => 'Выберите должность','disabled'=>($model->type == 4 || $model->type == 3)? true : false ]) ?>
-                <?php } ?>
-            </div>
+        <div class="col-md-12">
+            <?= $form->field($model, 'inn')->widget(\yii\widgets\MaskedInput::className(), [
+                    'mask' => '999999999',
+                ]) ?>
         </div>
     </div>
   

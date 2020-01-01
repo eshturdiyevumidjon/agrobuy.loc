@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "ads".
@@ -22,6 +23,8 @@ use Yii;
  * @property int|null $treaty Договорная
  * @property string|null $date_cr Дата создание
  *
+ * @property Category $category
+ * @property Subcategory $subcategory
  * @property Users $user
  * @property Complaints[] $complaints
  * @property UsersCatalog[] $usersCatalogs
@@ -47,6 +50,8 @@ class Ads extends \yii\db\ActiveRecord
             [['price', 'old_price'], 'number'],
             [['date_cr'], 'safe'],
             [['title', 'unit_price'], 'string', 'max' => 255],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -77,6 +82,22 @@ class Ads extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubcategory()
+    {
+        return $this->hasOne(Subcategory::className(), ['id' => 'subcategory_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
@@ -96,5 +117,39 @@ class Ads extends \yii\db\ActiveRecord
     public function getUsersCatalogs()
     {
         return $this->hasMany(UsersCatalog::className(), ['ads_id' => 'id']);
+    }
+
+    public function getType()
+    {
+        return [
+            1 => "Куплю",
+            2 => "Продам",
+        ];
+    }
+
+    public function getCategoryList()
+    {
+        $categories = Category::find()->all();
+        return ArrayHelper::map($categories, 'id', 'title');
+    }
+
+    public function getSubcategoryList()
+    {
+        $subcategories = Subcategory::find()->all();
+        return ArrayHelper::map($subcategories, 'id', 'name');
+    }
+
+    public function getTreaty()
+    {
+        return [
+            1 => "Да",
+            2 => "Нет",
+        ];
+    }
+
+    public function getDate($date)
+    {
+        if($date != null) return date('d.m.Y', strtotime($date) );
+        else $date;
     }
 }

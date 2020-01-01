@@ -7,45 +7,43 @@ use johnitvn\ajaxcrud\CrudAsset;
 use yii\widgets\Pjax;
 
 $this->title = "Карточка пользователя";
-//$this->params['breadcrumbs']['users'] = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
-
-if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null) {
-    $path = 'http://' . $_SERVER['SERVER_NAME'].'/backend/web/img/nouser.png';
-} else {
-    $path = 'http://' . $_SERVER['SERVER_NAME'].'/backend/web/uploads/avatars/'.$model->avatar;
-}
-
 ?>
 
 <div class="row">
     <div class="col-md-12">
-          <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs">
             <li class="active"><a href="#default-tab-1" data-toggle="tab" aria-expanded="true">Информация</a></li>
-            <li class=""><a href="#default-tab-2" data-toggle="tab" aria-expanded="false">Default Tab 2</a></li>
-            <li class=""><a href="#default-tab-3" data-toggle="tab" aria-expanded="false">Default Tab 3</a></li>
-          </ul>
-          <div class="tab-content">
+            <li class=""><a href="#default-tab-2" data-toggle="tab" aria-expanded="false">Продвижение</a></li>
+            <li class=""><a href="#default-tab-3" data-toggle="tab" aria-expanded="false">Каталог пользователя</a></li>
+            <li class=""><a href="#default-tab-4" data-toggle="tab" aria-expanded="false">История оплат</a></li>
+        </ul>
+        <div class="tab-content">
             <div class="tab-pane fade active in" id="default-tab-1">
-              <?= $this->render('basic', [
-                'model' => $model,
+                <?= $this->render('tabs/basic', [
+                    'model' => $model,
                 ]) ?>
             </div>
             <div class="tab-pane fade" id="default-tab-2">
-              
+                <?= $this->render('tabs/promotions', [
+                    'promotions' => $promotions,
+                ]) ?>
             </div>
             <div class="tab-pane fade" id="default-tab-3">
-              
+                <?= $this->render('tabs/catalog', [
+                    'catalogProvider' => $catalogProvider,
+                ]) ?>
             </div>
-          </div>
+            <div class="tab-pane fade" id="default-tab-4">
+                <?= $this->render('tabs/history_payment', [
+                    //'catalogProvider' => $catalogProvider,
+                ]) ?>
+            </div>
         </div>
     </div>
-
-
-
-
+</div>
 
 <?php Modal::begin([
     "id"=>"ajaxCrudModal",

@@ -20,7 +20,7 @@ CrudAsset::register($this);
             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
         </div>
-        <h4 class="panel-title">Спиок языки</h4>
+        <h4 class="panel-title">Список языков</h4>
     </div>
     <div class="panel-body">
         <div id="ajaxCrudDatatable">

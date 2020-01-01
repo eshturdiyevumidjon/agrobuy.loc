@@ -25,7 +25,7 @@ $user = Yii::$app->user->identity;
             </div>
             <br>
             <div class="col-md-12">
-               <?= $form->field($model, 'image')->fileInput(['class'=>"image_input",'id'=>'inputFile']); ?>
+                <?= $form->field($model, 'image')->fileInput(['class'=>"image_input",'id'=>'inputFile']); ?>
                 <?= $form->field($model, 'avatar')->hiddenInput(['id'=>'avatar'])->label(false); ?>
             </div>
         </div>

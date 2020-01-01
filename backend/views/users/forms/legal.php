@@ -8,15 +8,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col-md-9">
-            </div>
-            
-            
-            <div class="col-md-6">
-                <?php if( $user->type == 1) { ?>
-                    <?= $form->field($model, 'type')->dropDownList(($model->type == 4 || $model->type == 3) ? $model->getTypeEdu() : $model->getType(), ['prompt' => 'Выберите должность','disabled'=>($model->type == 4 || $model->type == 3)? true : false ]) ?>
-                <?php } ?>
-            </div>
+        <div class="col-md-12">
+            <?= $form->field($model, 'legal_status')->dropDownList($model->getLegal(), [ 'prompt' => 'Выберите ...',]) ?>
         </div>
     </div>
   

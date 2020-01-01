@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
+use common\models\AdsSearch;
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -66,8 +67,17 @@ class UsersController extends Controller
     public function actionView($id)
     {   
         $request = Yii::$app->request;
+        $model = $this->findModel($id);
+        $promotions = $model->getPromotions();
+
+        $searchModel = new AdsSearch();
+        $catalogProvider = $searchModel->searchByUser(Yii::$app->request->queryParams, $id);
+        
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'promotions' => $promotions,
+            'catalogProvider' => $catalogProvider,
         ]);
     }
 
@@ -162,23 +172,43 @@ class UsersController extends Controller
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
-        if($model->birthday != null) $model->birthday = date("d.m.Y", strtotime($model->birthday ));
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if($model->load($request->post()) && $model->save()){
+
+        if($model->birthday != null) $model->birthday = date("d.m.Y", strtotime($model->birthday ));
+        if($model->passport_date != null) $model->passport_date = date("d.m.Y", strtotime($model->passport_date ));
+
+        if($model->load($request->post()) && $model->save()) {
             $model->image = UploadedFile::getInstance($model, 'image');
             $model->upload();
+
+            $model->passport_image = UploadedFile::getInstance($model, 'passport_image');
+            $model->uploadPassport();
+
+            $model->company_image = UploadedFile::getInstance($model, 'company_image');
+            $model->uploadCompanyFiles();
+
             return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];    
         }
         else{
-            $fileName = '';
-            if($type == 1) $fileName = 'forms/personal';
-            if($type == 2) $fileName = 'forms/legal';
-            if($type == 3) $fileName = 'forms/passport';
-            if($type == 4) $fileName = 'forms/fiz_yur';
-            if($type == 5) $fileName = 'forms/request';
+            $fileName = ''; $size = 'large';
+            if($type == 1) { $fileName = 'forms/personal';
+                $size = 'large';
+            }
+            if($type == 2) { $fileName = 'forms/legal';
+                $size = 'normal';
+            }
+            if($type == 3) { $fileName = 'forms/passport';
+                $size = 'normal';
+            }
+            if($type == 4) { $fileName = 'forms/fiz_yur';
+                $size = 'normal';
+            }
+            if($type == 5) { $fileName = 'forms/request';
+                $size = 'normal';
+            }
             return [
                  'title'=> "Изменить пользователя",
-                 'size' =>'large',
+                 'size' => $size,
                  'content'=>$this->renderAjax($fileName, [
                      'model' => $model,
                  ]),
@@ -271,5 +301,10 @@ class UsersController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionSendFile($file)
+    {
+        return \Yii::$app->response->sendFile('uploads/avatars/' . $file);
     }
 }

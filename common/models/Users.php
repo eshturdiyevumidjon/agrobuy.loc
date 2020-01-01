@@ -2,19 +2,21 @@
 
 namespace common\models;
 
-use backend\base\AppActiveQuery;
 use Yii;
-
+use backend\base\AppActiveQuery;
 use yii\behaviors\BlameableBehavior;
 use yii\web\ForbiddenHttpException;
 use backend\models\Companies;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 class Users extends \yii\db\ActiveRecord
 {
     public $new_password;
     public $image;
-    const EXPIRE_TIME = 3600*24*7;
+    public $passport_image;
+    public $company_image;
+    const EXPIRE_TIME = 3600 * 24 * 7;
 
     public static function tableName()
     {
@@ -29,7 +31,7 @@ class Users extends \yii\db\ActiveRecord
             [['birthday'], 'safe'],
             [['email'], 'email'],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
-            [['image','new_password'], 'safe'],
+            [['image','new_password', 'passport_image', 'company_image'], 'safe'],
             [['company_files', 'passport_issue'], 'string'],
             [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'inn', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site'], 'string', 'max' => 255],
         ];
@@ -66,13 +68,40 @@ class Users extends \yii\db\ActiveRecord
             'passport_number' => Yii::t('app', 'Passport Number'),
             'passport_date' => Yii::t('app', 'Passport Date'),
             'passport_issue' => Yii::t('app', 'Passport Issue'),
-            '   ' => Yii::t('app', 'Passport File'),
+            'passport_file' => Yii::t('app', 'Passport File'),
             'check_phone' => Yii::t('app', 'Chesk Phone'),
             'check_mail' => Yii::t('app', 'Chesk Mail'),
             'check_passport' => Yii::t('app', 'Chesk Passport'),
             'check_car' => Yii::t('app', 'Chesk Car'),
             'code_for_phone' => Yii::t('app', 'Code For Phone'),
+            'passport_image' => Yii::t('app', 'Passport File'),
+            'company_image' => Yii::t('app', 'Company Files'),
         ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            $this->access_token = Yii::$app->getSecurity()->generateRandomString();
+            $this->expiret_at = time() + $this::EXPIRE_TIME;
+        }
+
+        if($this->new_password != null) $this->password = Yii::$app->security->generatePasswordHash($this->new_password);
+        if($this->birthday != null) $this->birthday = date("Y-m-d", strtotime($this->birthday ));
+        if($this->passport_date != null) $this->passport_date = date("Y-m-d", strtotime($this->passport_date ));
+        
+        return parent::beforeSave($insert);
+    }
+
+    /**
+     * @return bool
+     */
+
+    public function beforeDelete()
+    {
+        return parent::beforeDelete();
     }
 
     /**
@@ -162,74 +191,86 @@ class Users extends \yii\db\ActiveRecord
     {
         return $this->hasMany(UsersPromotion::className(), ['user_id' => 'id']);
     }
-    // public function attributeLabels()
-    // {
-    //     return [
-    //         'id' => 'ID',
-    //         'login' => 'Логин',
-    //         'password' => 'Пароль',
-    //         'fio' => 'ФИО',
-    //         'avatar' => 'Фото',
-    //         'image' => 'Фото',
-    //         'phone' => 'Телефон',
-    //         'type' => 'Тип',
-    //         'email' => 'Email',
-    //         'new_password'=>'Новый пароль',
-    //         'balans' => 'Баланс',
-    //         'company_id' => 'Компания',
-    //         'chek_advertising' => 'Виберыте реклами',
-    //         'date_cr' => 'Дата создания',
-    //         'access_token' => 'Токен',
-    //         'expiret_at' => 'Expiret At',
-    //     ];
-    // }
 
-    public function beforeSave($insert)
-    {
-        if ($this->isNewRecord)
-        {
-            $user = Yii::$app->user->identity;
-            $this->password = Yii::$app->security->generatePasswordHash($this->password);
-            $this->access_token = Yii::$app->getSecurity()->generateRandomString();
-            $this->expiret_at = time() + $this::EXPIRE_TIME;
-        }
-
-        if($this->new_password != null) $this->password = Yii::$app->security->generatePasswordHash($this->new_password);
-        
-        if($this->birthday != null) $this->birthday = date("Y-m-d", strtotime($this->birthday ));
-        return parent::beforeSave($insert);
-    }
-
+    /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
     public function upload()
     {
         if(!empty($this->image))
         {   
             if(file_exists('uploads/avatars/'.$this->avatar) && $this->avatar != null)
-          {
-              unlink('uploads/avatars/'.$this->avatar);
-          }
+            {
+                unlink('uploads/avatars/'.$this->avatar);
+            }
 
-            $this->image->saveAs('uploads/avatars/'.$this->image->baseName.'.'.$this->image->extension);
-            Yii::$app->db->createCommand()->update('users', ['avatar' => $this->image->baseName.'.'.$this->image->extension], [ 'id' => $this->id ])->execute();
+            $fileName = time() . '_' . $this->image->baseName . '.' . $this->image->extension;
+            $this->image->saveAs('uploads/avatars/' . $fileName);
+            Yii::$app->db->createCommand()->update('users', ['avatar' => $fileName], [ 'id' => $this->id ])->execute();
         }
     }
 
-    /**
-     * @return bool
-     */
-
-    public function beforeDelete()
+    /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
+    public function uploadPassport()
     {
-        return parent::beforeDelete();
+        if(!empty($this->passport_image))
+        {   
+            if(file_exists('uploads/avatars/'.$this->passport_file) && $this->passport_file != null)
+            {
+                unlink('uploads/avatars/'.$this->passport_file);
+            }
+
+            $fileName = time() . '_' . $this->passport_image->baseName . '.' . $this->passport_image->extension;
+            $this->passport_image->saveAs('uploads/avatars/' . $fileName);
+            Yii::$app->db->createCommand()->update('users', ['passport_file' => $fileName], [ 'id' => $this->id ])->execute();
+        }
     }
+
+    /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
+    public function uploadCompanyFiles()
+    {
+        if(!empty($this->company_image))
+        {   
+            if(file_exists('uploads/avatars/'.$this->company_files) && $this->company_files != null)
+            {
+                unlink('uploads/avatars/'.$this->company_files);
+            }
+
+            $fileName = time() . '_' . $this->company_image->baseName . '.' . $this->company_image->extension;
+            $this->company_image->saveAs('uploads/avatars/' . $fileName);
+            Yii::$app->db->createCommand()->update('users', ['company_files' => $fileName], [ 'id' => $this->id ])->execute();
+        }
+    }
+
+    public function downloadPassport()
+    {
+        if($this->passport_file == '' || $this->passport_file == null) {
+            return null; 
+        } else {
+            return Html::a($this->passport_file . ' <i class="fa fa-download"></i>', ['/users/send-file', 'file' => $this->passport_file],[ 'title'=> 'Скачать', 'data-pjax' => 0]); 
+        }
+    }
+
+    public function downloadCompanyFiles()
+    {
+        if($this->company_files == '' || $this->company_files == null) {
+            return null; 
+        } else {
+            return Html::a($this->company_files . ' <i class="fa fa-download"></i>', ['/users/send-file', 'file' => $this->company_files],[ 'title'=> 'Скачать', 'data-pjax' => 0]); 
+        }
+    }
+
+    public function getDate($date)
+    {
+        if($date != null) return date('d.m.Y', strtotime($date) );
+        else $date;
+    }
+
 
     public static function getType()
     {
         return [
             1 => "Администратор",
             2 => "Модератор",
-            // 3 => "Ползователь",
-            // 4 => "Образование",
+            3 => "Пользователь",
         ];
     }
 
@@ -239,8 +280,7 @@ class Users extends \yii\db\ActiveRecord
         return [
             1 => "Администратор",
             2 => "Модератор",
-            3 => "Ползователь",
-            4 => "Образование",
+            3 => "Пользователь",
         ];
     }
 
@@ -250,19 +290,30 @@ class Users extends \yii\db\ActiveRecord
             case 1: return "Администратор";
             case 2: return "Модератор";
             case 3: return "Пользователь";
-            case 4: return "Образование";
             default: return "Неизвестно";
         }
     }
 
-     public static function getPerDescription($type = null)
+    public static function getPerDescription($type = null)
     {
         switch ($type) {
             case 1: return "Администратор";
             case 2: return "Модератор";
             case 3: return "Пользователь";
-            case 4: return "Образование";
             default: return "Неизвестно";
         }
+    }
+
+    public static function getLegal()
+    {
+        return [
+            1 => "Физ. лицо",
+            2 => "ИП или Юр. лицо",
+        ];
+    }
+
+    public function getPromotions()
+    {
+        return UsersPromotion::find()->where(['user_id' => $this->id])->all();
     }
 }
