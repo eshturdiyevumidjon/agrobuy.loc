@@ -30,6 +30,7 @@ $user = Yii::$app->user->identity;
             </div>
         </div>
         <div class="col-md-9">
+            <div class="row">
             <div class="col-md-6">
                 <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
             </div>
@@ -42,19 +43,25 @@ $user = Yii::$app->user->identity;
                  ]
                 ]) ?>
             </div>
-            <div class="col-md-6">
+            </div>
+            <div class="row">
+            <div class="col-md-6 ">
                 <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
             </div>
 
             <div class="col-md-6">
                 <?= $form->field($model, 'facebook')->textInput(['maxlength' => true]) ?>
             </div>
+        </div>
+            <div class="row">
              <div class="col-md-6">
                 <?= $form->field($model, 'instagram')->textInput(['maxlength' => true]) ?>
             </div>
              <div class="col-md-6">
                 <?= $form->field($model, 'telegram')->textInput(['maxlength' => true]) ?>
             </div>
+        </div>
+        <div class="row">
              <div class="col-md-6">
                 
                    <?= $form->field($model, 'birthday')->widget(
@@ -64,7 +71,7 @@ $user = Yii::$app->user->identity;
                     'clientOptions' => [
                             'autoclose' => true,
                         'maxlength' => true,
-                        'format' => 'yyyy-mm-dd'
+                        'format' => 'dd.mm.yyyy'
                     ]
                 ])
             ?>
@@ -72,6 +79,8 @@ $user = Yii::$app->user->identity;
             <div class="col-md-6">
                 <?= $form->field($model, 'login')->textInput(['maxlength' => true]) ?>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-6">
                 <?= $model->isNewRecord ? $form->field($model, 'password')->textInput(['maxlength' => true]) : $form->field($model, 'new_password')->textInput(['maxlength' => true]) ?>
             </div>
@@ -80,9 +89,12 @@ $user = Yii::$app->user->identity;
                     <?= $form->field($model, 'type')->dropDownList(($model->type == 4 || $model->type == 3) ? $model->getTypeEdu() : $model->getType(), ['prompt' => 'Выберите должность','disabled'=>($model->type == 4 || $model->type == 3)? true : false ]) ?>
                 <?php } ?>
             </div>
+        </div>
+        <div class="row">
              <div class="col-md-12">
                 <?= $form->field($model, 'web_site')->textInput(['maxlength' => true]) ?>
             </div>
+        </div>
         </div>
     </div>
   

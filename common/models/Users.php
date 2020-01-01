@@ -27,6 +27,7 @@ class Users extends \yii\db\ActiveRecord
             [['type', 'expiret_at', 'legal_status', 'check_phone', 'check_mail', 'check_passport', 'check_car'], 'integer'],
             [['balance'], 'number'],
             [['birthday'], 'safe'],
+            [['email'], 'email'],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
             [['image','new_password'], 'safe'],
             [['company_files', 'passport_issue'], 'string'],
@@ -194,6 +195,8 @@ class Users extends \yii\db\ActiveRecord
         }
 
         if($this->new_password != null) $this->password = Yii::$app->security->generatePasswordHash($this->new_password);
+        
+        if($this->birthday != null) $this->birthday = date("Y-m-d", strtotime($this->birthday ));
         return parent::beforeSave($insert);
     }
 

@@ -162,6 +162,7 @@ class UsersController extends Controller
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
+        if($model->birthday != null) $model->birthday = date("d.m.Y", strtotime($model->birthday ));
         Yii::$app->response->format = Response::FORMAT_JSON;
         if($model->load($request->post()) && $model->save()){
             $model->image = UploadedFile::getInstance($model, 'image');
