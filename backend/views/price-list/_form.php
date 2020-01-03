@@ -11,9 +11,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'price')->textInput() ?>
+    <?= $form->field($model, 'price')->textInput(['type'=>'number']) ?>
 
-    <?= $form->field($model, 'number')->textInput() ?>
+    <?= $form->field($model, 'number')->textInput(['type'=>'number']) ?>
 
   
 	<?php if (!Yii::$app->request->isAjax){ ?>

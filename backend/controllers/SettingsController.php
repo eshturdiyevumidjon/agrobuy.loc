@@ -166,70 +166,7 @@ class SettingsController extends Controller
                     break;
             }                
         }
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-           if($model->load($request->post()) && $model->save()){
-              $attr = Settings::NeedTranslation();
-                
-                foreach ($langs as $lang) {
-                        $l = $lang->url;
-                        if($l == 'kr')
-                        {
-                           continue;
-                        }
-                        foreach ($attr as $key=>$value) {
-                          $t = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id,'language_code' => $l,'field_name'=>$key]);
-                          if($t->count() == 1){
-                             $tt = $t->one();
-                             $tt->field_value=$post["Settings"][$value][$l];
-                             $tt->save();
-                           }
-                           else{
-                               $tt=new Translates();
-                               $tt->table_name=$model->tableName();
-                               $tt->field_id=$model->id;
-                               $tt->field_name=$key;
-                               $tt->field_value=$post["Settings"][$value][$l];
-                               $tt->field_description=$value;
-                               $tt->language_code=$l;
-                               $tt->save();
-                           }
-                        }
-                }
 
-               $translations=Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id])->all();
-                foreach ($translations as $key => $value) {
- 
-                switch ($value->field_name) {
-                    case 'name':
-                        $translation_name[$value->language_code] = $value->field_value;
-                        break;
-                    default:
-                        $translation_value[$value->language_code] = $value->field_value;
-                        break;
-                }
-            } 
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'forceClose'=>true,
-               ];    
-            }else{
-                 return [
-                    'title'=> Yii::t('app','Update'),
-                    'size'=>'large',
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                        'names'=>$translation_name,
-                        'values'=>$translation_value,
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
-            }
-        }else{
             /*
             *   Process for non-ajax request
             */
@@ -273,7 +210,7 @@ class SettingsController extends Controller
                             break;
                     }
                 }
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             } else {
                 return $this->render('update', [
                     'model' => $model,
@@ -281,7 +218,6 @@ class SettingsController extends Controller
                     'values'=>$translation_value,
                 ]);
             }
-        }
     }
 
     /**

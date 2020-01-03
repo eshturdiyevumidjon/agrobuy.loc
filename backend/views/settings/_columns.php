@@ -2,10 +2,10 @@
 use yii\helpers\Url;
 
 return [
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
+   // [
+        //'class' => 'kartik\grid\CheckboxColumn',
+        //'width' => '20px',
+    //],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -25,6 +25,7 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'value',
+        'format' => 'html',
         'value'=>function($data){
             if(strlen($data->value) > 200){
                 return substr($data->value,0,200)."...";
@@ -40,12 +41,15 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'view_in_footerser_id',
+        'content' => function ($data) {
+            return $data->getType()[$data->view_in_footerser_id];
+        },
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
-        'template' => '{view} {update}',
+        'template' => '{update}',
     ],
 ];   
 

@@ -49,6 +49,10 @@ class Settings extends \yii\db\ActiveRecord
             'name' => Yii::t('app','Name'),
             'key' => Yii::t('app','Key'),
             'value' => Yii::t('app','Text'),
+            'priority' =>Yii::t('app','Priority'),
+            'view_in_footerser_id' =>Yii::t('app','View in footerser id'),
+            'translation_name' =>Yii::t('app','Translation name'),
+            'translation_value' =>Yii::t('app','Translation value'),
         ];
     }
 
@@ -94,6 +98,14 @@ class Settings extends \yii\db\ActiveRecord
         return $title;
     }
 
+ public static function getView()
+    {
+        return [
+            1 => "Да",
+            0 => "Нет",
+        ];
+    }
+
     public static function getTranslates($news_all)
     {
         $news  = [];
@@ -118,6 +130,14 @@ class Settings extends \yii\db\ActiveRecord
             }
         }
         return $news;
+    }
+
+    public function getType()
+    {
+        return [
+            1 => 'Да',
+            0 => 'Нет',
+        ];
     }
 
 }

@@ -83,9 +83,9 @@ class Categories extends \yii\db\ActiveRecord
     {
         $adminka = Yii::$app->params['adminka'];
         if($for=='_form')
-        return $this->image != null ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'uploads/category/' . $this->image .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'uploads/noimg.jpg">';
+        return $this->image != null ? '<img style="width:100%;height:100px;border-radius:10%;" src="/'.$adminka.'uploads/category/' . $this->image .'">' : '<img style="width:100%; height:100px;border-radius:10%;" src="/'.$adminka.'uploads/noimg.jpg">';
         if($for=='_columns')
-           return $this->image != null ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'uploads/category/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'uploads/noimg.jpg">';
+           return $this->image != null ? '<img style="width:60px; height:60px; border-radius:10%;" src="/'.$adminka.'uploads/category/' . $this->image .' ">' : '<img style="width:60px; height:60px;" src="/'.$adminka.'uploads/noimg.jpg">';
     }
 
 

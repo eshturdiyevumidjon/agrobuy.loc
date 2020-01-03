@@ -26,7 +26,7 @@ class m190715_194709_create_lang_table extends Migration
 
          $this->insert('{{%lang}}',array(
             'url'=>'kr',
-            'local'=>'ЎЗБ',
+            'local'=>'Ўзб',
             'name'=>'ўзбекча - Кирилица',
             'default'=>1,
             'status'=>1,
@@ -36,7 +36,7 @@ class m190715_194709_create_lang_table extends Migration
 
         $this->insert('{{%lang}}',array(
             'url'=>'uz',
-            'local'=>'UZB',
+            'local'=>'Uzb',
             'name'=>'o\'zbekcha - O\'zbekcha',
             'default'=>1,
             'status'=>1,
@@ -46,7 +46,7 @@ class m190715_194709_create_lang_table extends Migration
 
         $this->insert('{{%lang}}',array(
             'url'=>'ru',
-            'local'=>'РУС',
+            'local'=>'Рус',
             'name'=>'russian - Russian',
             'default'=>1,
             'status'=>1,
@@ -56,11 +56,11 @@ class m190715_194709_create_lang_table extends Migration
 
 
         $this->insert('{{%lang}}',array(
-            'url'=>'ru',
-            'local'=>'ENG',
+            'url'=>'en',
+            'local'=>'Eng',
             'name'=>'english - English',
             'default'=>0,
-            'status'=>1,
+            'status'=>0,
             'date_update'=>time(),
             'date_create'=>time(),
         ));
