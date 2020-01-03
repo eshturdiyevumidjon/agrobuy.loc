@@ -10,7 +10,7 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 /* @var $searchModel backend\models\PriceListSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Price Lists');
+$this->title = 'Суммы пополнение счета';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);

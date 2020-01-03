@@ -10,7 +10,7 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 /* @var $searchModel backend\models\AdvertisingsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Advertisings');
+$this->title = "Реклама";
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);

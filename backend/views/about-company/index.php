@@ -10,7 +10,7 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 /* @var $searchModel backend\models\AboutCompanySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'About Companies';
+$this->title = 'О компании';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);

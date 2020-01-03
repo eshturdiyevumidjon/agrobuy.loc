@@ -6,7 +6,7 @@ use kartik\grid\GridView;
 use johnitvn\ajaxcrud\CrudAsset; 
 use johnitvn\ajaxcrud\BulkButtonWidget;
 
-$this->title = Yii::t('app', 'Promotions');
+$this->title = 'Продвижения';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
