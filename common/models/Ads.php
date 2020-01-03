@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "ads".
@@ -31,6 +32,7 @@ use yii\helpers\ArrayHelper;
  */
 class Ads extends \yii\db\ActiveRecord
 {
+    public $imageFiles;
     /**
      * {@inheritdoc}
      */
@@ -46,7 +48,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty'], 'integer'],
-            [['images', 'city_name', 'text'], 'string'],
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 10],
             [['price', 'old_price'], 'number'],
             [['date_cr'], 'safe'],
             [['title', 'unit_price'], 'string', 'max' => 255],
@@ -76,6 +78,7 @@ class Ads extends \yii\db\ActiveRecord
             'unit_price' => 'Цена за единицу',
             'treaty' => 'Договорная',
             'date_cr' => 'Дата создание',
+            'imageFiles' => 'Фотографии',
         ];
     }
 
@@ -133,6 +136,15 @@ class Ads extends \yii\db\ActiveRecord
         return ArrayHelper::map($categories, 'id', 'title');
     }
 
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) 
+        {
+            $this->date_cr = date('Y-m-d');
+        }
+        return parent::beforeSave($insert);
+    }
+
     public function getSubcategoryList()
     {
         $subcategories = Subcategory::find()->all();
@@ -151,5 +163,32 @@ class Ads extends \yii\db\ActiveRecord
     {
         if($date != null) return date('d.m.Y', strtotime($date) );
         else $date;
+    }
+
+    public function getImage($for = '_form')
+    {
+        $adminka = Yii::$app->params['adminka'];
+        if($for =='_form') {
+            return $this->images ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
+        }
+        if($for == '_columns') {
+           return $this->images  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
+        }
+    }
+
+    public function upload()
+    {
+        $this->imageFiles = UploadedFile::getInstance($this,'imageFiles');
+        if(!empty($this->imageFiles))
+        {
+            $name = $this->id . '-' . time();
+            $this->imageFiles->saveAs('uploads/ads/' . $name.'.'.$this->imageFiles->extension);
+            Yii::$app->db->createCommand()->update('ads', ['images' => $name.'.'.$this->imageFiles->extension], [ 'id' => $this->id ])->execute();
+        }
+    }
+
+    public function unlinkFile($file)
+    {
+        if( file_exists('uploads/ads/' . $file) ) unlink('uploads/ads/' . $file);
     }
 }

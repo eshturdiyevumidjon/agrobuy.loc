@@ -16,6 +16,16 @@ return [
     // ],
     [
         'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'images',
+        'format'=>'raw',
+        'content'=>function($data){
+            return $data->getImage('_columns');
+        },
+        'contentOptions'=>['class'=>'text-center'],
+        'headerOptions'=>['class'=>'text-center'],
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'user_id',
     ],
     [
@@ -25,10 +35,6 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'title',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'images',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
