@@ -26,4 +26,16 @@ class PreferenceBooks
     {
         $session = Yii::$app->session;
     }
+
+    public function getDate($date)
+    {
+        if($date != null) return date('d.m.Y', strtotime($date) );
+        else $date;
+    }
+
+    public function getDateTime($date)
+    {
+        if($date != null) return date('H:i d.m.Y', strtotime($date) );
+        else $date;
+    }
 }

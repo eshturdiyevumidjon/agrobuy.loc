@@ -62,4 +62,21 @@ class HistoryOperations extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
+
+    public static function getType()
+    {
+        return [
+            1 => "Пополнение счета",
+            2 => "Платная услуга",
+        ];
+    }
+
+    public function getTypeDescription()
+    {
+        switch ($this->type) {
+            case 1: return "Пополнение счета";
+            case 2: return "Платная услуга";
+            default: return "Неизвестно";
+        }
+    }
 }

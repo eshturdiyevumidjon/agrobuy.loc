@@ -38,7 +38,7 @@ CrudAsset::register($this);
             </div>
             <div class="tab-pane fade" id="default-tab-4">
                 <?= $this->render('tabs/history_payment', [
-                    //'catalogProvider' => $catalogProvider,
+                    'histories' => $histories,
                 ]) ?>
             </div>
         </div>

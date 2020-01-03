@@ -44,12 +44,12 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'login' => Yii::t('app', 'Login '),
+            'login' => 'Логин',
             'password' => Yii::t('app', 'Password'),
-            'fio' => Yii::t('app', 'Fio'),
-            'avatar' => Yii::t('app', 'Avatar'),
-            'phone' => Yii::t('app', 'Phone'),
-            'type' => Yii::t('app', 'Type'),
+            'fio' => 'ФИО',
+            'avatar' => 'Аватар',
+            'phone' => 'Телефон',
+            'type' => 'Должность',
             'email' => Yii::t('app', 'E-mail'),
             'balance' => Yii::t('app', 'Balance'),
             'access_token' => Yii::t('app', 'Access Token'),
@@ -315,5 +315,10 @@ class Users extends \yii\db\ActiveRecord
     public function getPromotions()
     {
         return UsersPromotion::find()->where(['user_id' => $this->id])->all();
+    }
+
+    public function getHistories()
+    {
+        return HistoryOperations::find()->where(['user_id' => $this->id])->all();
     }
 }

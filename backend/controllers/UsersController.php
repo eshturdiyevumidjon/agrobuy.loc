@@ -69,6 +69,7 @@ class UsersController extends Controller
         $request = Yii::$app->request;
         $model = $this->findModel($id);
         $promotions = $model->getPromotions();
+        $histories = $model->getHistories();
 
         $searchModel = new AdsSearch();
         $catalogProvider = $searchModel->searchByUser(Yii::$app->request->queryParams, $id);
@@ -78,6 +79,7 @@ class UsersController extends Controller
             'model' => $model,
             'promotions' => $promotions,
             'catalogProvider' => $catalogProvider,
+            'histories' => $histories,
         ]);
     }
 
