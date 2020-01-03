@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 return [
     [
@@ -31,22 +32,30 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'type',
+        'content'=>function($data){
+            return $data->getType()[$data->type];
+        },
     ],
     [
-        'class' => 'kartik\grid\ActionColumn',
-        'dropdown' => false,
-        'vAlign'=>'middle',
-        'urlCreator' => function($action, $model, $key, $index) { 
-                return Url::to([$action,'id'=>$key]);
-        },
-        'viewOptions'=>['role'=>'modal-remote','title'=>'Просмотр','data-toggle'=>'tooltip'],
-        'updateOptions'=>['role'=>'modal-remote','title'=>'Изменить', 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>'Удалить', 
-                          'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                          'data-request-method'=>'post',
-                          'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Подтвердите действие',
-                          'data-confirm-message'=>'Вы уверены что хотите удалить этого элемента?'], 
-    ],
+        'class'    => 'kartik\grid\ActionColumn',
+        'template' => '{leadUpdate} {leadDelete}',
+        'buttons'  => [
+            'leadUpdate' => function ($url, $model) {
+                $url = Url::to(['/advertisings/update-item', 'id' => $model->id]);
+                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [ 'role'=>'modal-remote', 'data-toggle'=>'tooltip','title'=>'Изменить',]);
+            },
+            'leadDelete' => function ($url, $model) {
+                $url = Url::to(['/advertisings/delete-item', 'id' => $model->id]);
+                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                    'role'=>'modal-remote','title'=>'Удалить', 
+                    'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
+                    'data-request-method'=>'post',
+                    'data-toggle'=>'tooltip',
+                    'data-confirm-title'=>'Подтвердите действие',
+                    'data-confirm-message'=>'Вы уверены что хотите удалить этого элемента?',
+                ]);
+            },
+        ]
+    ]
 
 ];   
