@@ -40,8 +40,8 @@ class Advertisings extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'key' => Yii::t('app', 'Key'),
+            'name' => 'Наименование',
+            'key' => 'Ключ',
         ];
     }
 

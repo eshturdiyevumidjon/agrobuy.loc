@@ -50,11 +50,11 @@ class Banners extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => Yii::t('app','Title'),
-            'text' => Yii::t('app','Text'),
-            'link' => Yii::t('app','Link'),
-            'image' => Yii::t('app','Image'),
-            'trash' => Yii::t('app','Image'),
+            'title' =>  'Заголовок',
+            'text' =>   'Текст',
+            'link' =>   'Ссылка',
+            'image' =>  'Фотография',
+            'trash' =>  'Картинка',
         ];
     }
     public static function NeedTranslation()

@@ -152,13 +152,35 @@ class UsersController extends Controller
         $request = Yii::$app->request;
         $model = new Users();  
 
-        if ($model->load($request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } 
-        else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($model->load($request->post()) && $model->save()){
+                
+                return [
+                    'forceClose' => true,
+                    'forceReload'=>'#crud-datatable-pjax',
+                ];    
+            }else{
+                 return [
+                    'title'=> "Создать",
+                    'size' => "large",
+                    'content'=>$this->renderAjax('create', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-primary pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-info','type'=>"submit"])
+                ];        
+            }
+        }
+        else{
+            if ($model->load($request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } 
+            else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         }
        
     }

@@ -66,8 +66,8 @@ class Lang extends \yii\db\ActiveRecord
             'image' => 'Флаг',
             'default' => 'Заметка',
             'status' => 'Статус',
-            'date_update' => 'Ўзгартирилган вақти',
-            'date_create' => 'Яратилган вақти',
+            'date_update' => 'Дата изменения',
+            'date_create' => 'Дата создания',
             'flag' => 'Флаг',
         ];
     }

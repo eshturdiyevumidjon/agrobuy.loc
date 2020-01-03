@@ -46,11 +46,11 @@ class Settings extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => Yii::t('app','Name'),
-            'key' => Yii::t('app','Key'),
-            'value' => Yii::t('app','Text'),
-            'priority' =>Yii::t('app','Priority'),
-            'view_in_footerser_id' =>Yii::t('app','View in footerser id'),
+            'name' =>'Наименование',
+            'key' =>'Ключ',
+            'value' =>'Значание',
+            'priority' =>'Приоритет',
+            'view_in_footerser_id' =>'Показать в футере',
             'translation_name' =>Yii::t('app','Translation name'),
             'translation_value' =>Yii::t('app','Translation value'),
         ];

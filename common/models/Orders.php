@@ -45,10 +45,10 @@ class Orders extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'created_date' => Yii::t('app', 'Created Date'),
-            'amount' => Yii::t('app', 'Amount'),
-            'state' => Yii::t('app', 'State'),
+            'user_id' => 'Пользователь',
+            'created_date' => 'Дата создание',
+            'amount' => 'Сумма',
+            'state' => 'Статус заказа',
         ];
     }
 

@@ -50,12 +50,12 @@ class ChatMessage extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'chat_id' => Yii::t('app', 'Chat ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'message' => Yii::t('app', 'Message'),
-            'file' => Yii::t('app', 'File'),
-            'date_cr' => Yii::t('app', 'Date Cr'),
-            'is_read' => Yii::t('app', 'Is Read'),
+            'chat_id' => 'Чат',
+            'user_id' => 'Пользователь',
+            'message' => 'Сообщение',
+            'file' => 'Файл',
+            'date_cr' =>'Дата создание',
+            'is_read' =>'Прочитано',
         ];
     }
 

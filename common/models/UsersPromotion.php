@@ -46,10 +46,10 @@ class UsersPromotion extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'promotion_id' => Yii::t('app', 'Promotion ID'),
-            'access_date' => Yii::t('app', 'Access Date'),
-            'date_cr' => Yii::t('app', 'Date Cr'),
+            'user_id' =>'Пользователь',
+            'promotion_id' => 'Продвижение',
+            'access_date' => 'Срок окончание',
+            'date_cr' =>'Дата создание',
         ];
     }
 

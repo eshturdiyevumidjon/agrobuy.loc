@@ -84,11 +84,11 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => Yii::t('app','Title'),
-            'imageFiles' => Yii::t('app',"Image"),
-            'text' => Yii::t('app','Text'),
-            'image' => Yii::t('app','Image'),
-            'date' => Yii::t('app','Date Create'),
+            'title' => 'Заголовок ',
+            'imageFiles' => 'Картинка',
+            'text' => 'Текст',
+            'image' => 'Фотография',
+            'date' => 'Дата',
         ];
     }
 

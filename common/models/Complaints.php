@@ -50,11 +50,11 @@ class Complaints extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'ads_id' => Yii::t('app', 'Ads ID'),
-            'text' => Yii::t('app', 'Text'),
-            'date_cr' => Yii::t('app', 'Date Cr'),
-            'user_from' => Yii::t('app', 'User From'),
+            'user_id' =>'Пользователь',
+            'ads_id' => 'Объявление',
+            'text' => 'Текст',
+            'date_cr' => 'Дата создание',
+            'user_from' => 'Кто отправил',
         ];
     }
 

@@ -44,12 +44,12 @@ class Translates extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'table_name' => 'Table Name',
-            'field_id' => 'Field ID',
-            'field_name' => 'Field Name',
-            'field_description' => 'Field Description',
-            'field_value' => 'Field Value',
-            'language_code' => 'Language Code',
+            'table_name' => 'Наименование таблицы',
+            'field_id' => 'ID строка',
+            'field_name' => 'Наименование строка',
+            'field_description' => 'Описание',
+            'field_value' => 'Значение',
+            'language_code' => 'Код языка',
         ];
     }
 }

@@ -63,19 +63,19 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'type' => Yii::t('app', 'Type'),
-            'title' => Yii::t('app', 'Title'),
-            'images' => Yii::t('app', 'Images'),
-            'category_id' => Yii::t('app', 'Category ID'),
-            'subcategory_id' => Yii::t('app', 'Subcategory ID'),
-            'city_name' => Yii::t('app', 'City Name'),
-            'text' => Yii::t('app', 'Text'),
-            'price' => Yii::t('app', 'Price'),
-            'old_price' => Yii::t('app', 'Old Price'),
-            'unit_price' => Yii::t('app', 'Unit Price'),
-            'treaty' => Yii::t('app', 'Treaty'),
-            'date_cr' => Yii::t('app', 'Date Cr'),
+            'user_id' =>'Пользователь',
+            'type' => 'Тип',
+            'title' =>'Заголовок',
+            'images' =>'Фотографии',
+            'category_id' => 'Категория',
+            'subcategory_id' => 'Субкатегория',
+            'city_name' =>'Город,Регион',
+            'text' =>'Текст объявлении',
+            'price' =>'Цена',
+            'old_price' => 'Старая цена',
+            'unit_price' => 'Цена за единицу',
+            'treaty' => 'Договорная',
+            'date_cr' => 'Дата создание',
         ];
     }
 

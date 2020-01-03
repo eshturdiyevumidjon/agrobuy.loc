@@ -44,9 +44,9 @@ class Chats extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'date_cr' => Yii::t('app', 'Date Cr'),
-            'type' => Yii::t('app', 'Type'),
+            'name' =>'Наименование',
+            'date_cr' =>'Дата создание',
+            'type' => 'Тип чата',
         ];
     }
 

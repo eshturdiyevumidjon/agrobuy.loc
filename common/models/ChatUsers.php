@@ -45,9 +45,9 @@ class ChatUsers extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'chat_id' => Yii::t('app', 'Chat ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'date_cr' => Yii::t('app', 'Date Cr'),
+            'chat_id' => 'Чат',
+            'user_id' => 'Пользователи',
+            'date_cr' => 'Дата создание',
         ];
     }
 

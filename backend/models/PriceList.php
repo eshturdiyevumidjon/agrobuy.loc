@@ -39,8 +39,8 @@ class PriceList extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'price' => Yii::t('app', 'Price'),
-            'number' => Yii::t('app', 'Number'),
+            'price' => 'Сумма',
+            'number' => 'Порядковый номер',
         ];
     }
 }

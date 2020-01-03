@@ -44,10 +44,10 @@ class AboutCompany extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'logo' => Yii::t('app', 'Logo'),
-            'mail' => Yii::t('app', 'Mail'),
-            'phone' => Yii::t('app', 'Phone'),
+            'name' =>'Наименование',
+            'logo' => 'Лого',
+            'mail' => 'E-mail',
+            'phone' => 'Телефон',
         ];
     }
 

@@ -47,12 +47,12 @@ class AdvertisingItems extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'advertising_id' => Yii::t('app', 'Advertising ID'),
-            'title' => Yii::t('app', 'Title'),
-            'text' => Yii::t('app', 'Text'),
-            'link' => Yii::t('app', 'Link'),
-            'type' => Yii::t('app', 'Type'),
-            'file' => Yii::t('app', 'File'),
+            'advertising_id' => 'Рекламные баннеры',
+            'title' =>'Заголовок',
+            'text' => 'Текст',
+            'link' => 'Ссылка',
+            'type' => 'Тип рекламы  ',
+            'file' => 'Файл',
         ];
     }
 

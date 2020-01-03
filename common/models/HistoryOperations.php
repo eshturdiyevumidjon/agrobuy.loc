@@ -47,11 +47,11 @@ class HistoryOperations extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'type' => Yii::t('app', 'Type'),
-            'date_cr' => Yii::t('app', 'Date Cr'),
-            'field_id' => Yii::t('app', 'Field ID'),
-            'summa' => Yii::t('app', 'Summa'),
+            'user_id' => 'Пользователь',
+            'type' =>'Тип',
+            'date_cr' => 'Дата создание',
+            'field_id' =>'№ объявление',
+            'summa' =>'Сумма',
         ];
     }
 

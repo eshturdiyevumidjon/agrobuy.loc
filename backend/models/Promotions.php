@@ -49,13 +49,13 @@ class Promotions extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'text' => Yii::t('app', 'Text'),
-            'price' => Yii::t('app', 'Price'),
-            'days' => Yii::t('app', 'Days'),
-            'premium' => Yii::t('app', 'Premium'),
-            'top' => Yii::t('app', 'Top'),
-            'discount' => Yii::t('app', 'Discount'),
+            'name' => 'Наименование',
+            'text' => 'Текст',
+            'price' => 'Сумма',
+            'days' =>'Количество дней',
+            'premium' => 'Премиум',
+            'top' =>'Топ',
+            'discount' => 'Скидка %',
         ];
     }
 
