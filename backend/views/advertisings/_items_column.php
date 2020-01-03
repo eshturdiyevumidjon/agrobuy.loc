@@ -3,20 +3,18 @@ use yii\helpers\Url;
 
 return [
     [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
-    ],
-    [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-        // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'id',
-    // ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'advertising_id',
+        'attribute'=>'file',
+        'format'=>'raw',
+        'content'=>function($data){
+            return $data->getImage('_columns');
+        },
+        'contentOptions'=>['class'=>'text-center'],
+        'headerOptions'=>['class'=>'text-center'],
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -34,10 +32,6 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'type',
     ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'file',
-    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

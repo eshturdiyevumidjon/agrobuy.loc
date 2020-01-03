@@ -39,9 +39,9 @@ class AdvertisingItemsSearch extends AdvertisingItems
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $id)
     {
-        $query = AdvertisingItems::find();
+        $query = AdvertisingItems::find()->where(['advertising_id' => $id]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

@@ -20,9 +20,9 @@ use common\models\PreferenceBooks;
                 <tr>
                     <th>№</th>
                     <th>Тип</th>
+                    <th>Описания</th>
                     <th>Дата и время</th>
                     <th>Сумма</th>
-                    <th>История</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,9 +30,9 @@ use common\models\PreferenceBooks;
                 <tr>
                     <td><?= $i ?></td>
                     <td><?= $history->getTypeDescription()?></td>
+                    <td><?= $history->getDescription()?></td>
                     <td><?= PreferenceBooks::getDateTime($history->date_cr)?></td>
                     <td><?= $history->summa?></td>
-                    <td><?= $history->field_id?></td>
                 </tr>
                 <?php } ?>
             </tbody>         

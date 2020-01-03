@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use backend\models\Promotions;
 
 /**
  * This is the model class for table "history_operations".
@@ -77,6 +78,23 @@ class HistoryOperations extends \yii\db\ActiveRecord
             case 1: return "Пополнение счета";
             case 2: return "Платная услуга";
             default: return "Неизвестно";
+        }
+    }    
+
+    public function getDescription()
+    {
+        if($this->type == 1){
+            return 'Пополнено баланс';
+        }
+        else{
+            if($this->type == 2){
+                $promotion = Promotions::findOne($this->field_id);
+                if($promotion != null) return "Куплено платная услуга <b>({$promotion->name})</b>";
+                else return "Неизвестно";
+            }
+            else{
+                return "Неизвестно";
+            }
         }
     }
 }

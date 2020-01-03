@@ -63,4 +63,15 @@ class AdvertisingItems extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Advertisings::className(), ['id' => 'advertising_id']);
     }
+
+    public function getImage($for = '_form')
+    {
+        $adminka = Yii::$app->params['adminka'];
+        if($for =='_form') {
+            return $this->file ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'/uploads/reclama-advert/' . $this->file .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
+        }
+        if($for == '_columns') {
+           return $this->file  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/reclama-advert/' . $this->file .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
+        }
+    }
 }

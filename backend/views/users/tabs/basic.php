@@ -18,7 +18,7 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
     <div class="panel-heading">
         <div class="panel-heading-btn">
             <?=Html::a('<i class="fa fa-pencil"></i>', ['/users/change-personal?id='.$model->id.'&type=1'],['role'=>'modal-remote','title'=> 'Изменить', 'class' => 'btn-sm btn-icon btn-circle btn-info'])?>
-             <?=Html::a('Назад', ['/users'],['data-pjax'=>'0','title'=> 'Назад', 'class' => ' btn-warning btn btn-xs'])?>
+            <?=Html::a('Назад', ['/users'],['data-pjax'=>'0','title'=> 'Назад', 'class' => ' btn-warning btn btn-xs'])?>
         </div>
         <h4 class="panel-title"><b>Личные данные</b></h4>
     </div>

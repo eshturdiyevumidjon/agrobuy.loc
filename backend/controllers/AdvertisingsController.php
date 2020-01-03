@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Advertisings;
 use backend\models\AdvertisingsSearch;
+use backend\models\AdvertisingItemsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -56,21 +57,14 @@ class AdvertisingsController extends Controller
     public function actionView($id)
     {   
         $request = Yii::$app->request;
-        if($request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                    'title'=> "Advertisings #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-            ]);
-        }
+
+        $searchModel = new AdvertisingItemsSearch();
+        $items = $searchModel->search(Yii::$app->request->queryParams, $id);
+            
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+            'items' => $items,
+        ]);
     }
 
     /**
