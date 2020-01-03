@@ -49,7 +49,7 @@ use common\models\Users;
                     
                     ['label' => 'Домашняя страница', 'icon' => 'dashboard', 'url' => ['/site']],
                     ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/users']],
-                    // ['label' => 'Компания', 'icon' => 'university', 'url' => ['/companies/index']],
+                    ['label' => 'Объявление', 'icon' => 'university', 'url' => ['/ads']],
                     // ['label' => 'Группы', 'icon' => 'users', 'url' => ['/groups/index']],
                     // ['label' => 'Тарифы', 'icon' => 'bar-chart-o', 'url' => ['/tariffs/index']],
                     ['label' => 'Языки', 'icon' => 'language', 'url' => ['/language'],],
