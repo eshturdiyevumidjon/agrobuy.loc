@@ -43,6 +43,8 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'sub_category',
         'header' => 'Суб-категория',
+        'contentOptions'=>['class'=>'text-center'],
+        'headerOptions'=>['class'=>'text-center'],
         'width' => '100px',
         'content' => function($data){
             return '<center>' . Html::a('Добавить <i class="glyphicon glyphicon-plus"></i>', ['/categories/add-sub-category', 'id' => $data->id], ['role'=>'modal-remote','title'=> 'Добавить', 'class'=>'btn btn-warning']) . '</center>';

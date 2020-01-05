@@ -45,6 +45,16 @@ class Advertisings extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeDelete()
+    {
+        $items = AdvertisingItems::find()->where(['advertising_id' => $this->id])->all();
+        foreach ($items as $item){
+            $item->unlinkFile($item->file);
+            $item->delete();
+        }
+        return parent::beforeDelete();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

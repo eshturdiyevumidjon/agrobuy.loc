@@ -70,16 +70,21 @@ class UsersController extends Controller
         $model = $this->findModel($id);
         $promotions = $model->getPromotions();
         $histories = $model->getHistories();
+        $assessment = $model->getAssessmentsList();
 
         $searchModel = new AdsSearch();
-        $catalogProvider = $searchModel->searchByUser(Yii::$app->request->queryParams, $id);
-        
+        $catalogProvider = $searchModel->searchByCatalog(Yii::$app->request->queryParams, $id);
+        $adsProvider = $searchModel->searchByUser(Yii::$app->request->queryParams, $id);
+        $favoritesProvider = $searchModel->searchByFavorites(Yii::$app->request->queryParams, $id);
 
         return $this->render('view', [
             'model' => $model,
             'promotions' => $promotions,
             'catalogProvider' => $catalogProvider,
+            'adsProvider' => $adsProvider,
             'histories' => $histories,
+            'assessment' => $assessment,
+            'favoritesProvider' => $favoritesProvider,
         ]);
     }
 

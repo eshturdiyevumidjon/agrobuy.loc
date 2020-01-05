@@ -47,8 +47,9 @@ class Ads extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg',],
             [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty'], 'integer'],
-            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 10],
+            [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr'], 'safe'],
             [['title', 'unit_price'], 'string', 'max' => 255],
@@ -80,6 +81,15 @@ class Ads extends \yii\db\ActiveRecord
             'date_cr' => 'Дата создание',
             'imageFiles' => 'Фотографии',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->date_cr = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -136,13 +146,10 @@ class Ads extends \yii\db\ActiveRecord
         return ArrayHelper::map($categories, 'id', 'title');
     }
 
-    public function beforeSave($insert)
+    public function getUsersList()
     {
-        if ($this->isNewRecord) 
-        {
-            $this->date_cr = date('Y-m-d');
-        }
-        return parent::beforeSave($insert);
+        $users = Users::find()->all();
+        return ArrayHelper::map($users, 'id', 'fio');
     }
 
     public function getSubcategoryList()
@@ -155,7 +162,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             1 => "Да",
-            2 => "Нет",
+            0 => "Нет",
         ];
     }
 
@@ -169,7 +176,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         $adminka = Yii::$app->params['adminka'];
         if($for =='_form') {
-            return $this->images ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
+            return $this->images ? '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .'">' : '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
         }
         if($for == '_columns') {
            return $this->images  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';

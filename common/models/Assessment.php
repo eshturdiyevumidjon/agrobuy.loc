@@ -11,9 +11,12 @@ use Yii;
  * @property int|null $user_id Пользователь
  * @property int|null $ball Балл
  * @property string|null $date_cr Дата создание
+ * @property int|null $user_from От
  *
+ * @property Users $userFrom
  * @property Users $user
  */
+
 class Assessment extends \yii\db\ActiveRecord
 {
     /**
@@ -30,8 +33,9 @@ class Assessment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'ball'], 'integer'],
+            [['user_id', 'ball', 'user_from'], 'integer'],
             [['date_cr'], 'safe'],
+            [['user_from'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_from' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -46,7 +50,16 @@ class Assessment extends \yii\db\ActiveRecord
             'user_id' => 'Пользователь',
             'ball' =>'Балл',
             'date_cr' => 'Дата создание',
+            'user_from' => 'От',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserFrom()
+    {
+        return $this->hasOne(Users::className(), ['id' => 'user_from']);
     }
 
     /**

@@ -11,47 +11,40 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col-md-4">
-            <?= $form->field($model, 'user_id')->textInput() ?>
+        <div class="col-md-5">
+            <?= $form->field($model, 'user_id')->dropDownList($model->getUsersList(),[]) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'type')->textInput() ?>
-        </div>
-        <div class="col-md-4">
-            <?= $form->field($model, 'treaty')->textInput() ?>
+            <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        </div>        
+        <div class="col-md-3">
+            <?= $form->field($model, 'type')->dropDownList($model->getType(),[]) ?>
         </div>
     </div>
     
-<div class="row">
-        <div class="col-md-4">
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-md-4">
-    <?= $form->field($model, 'category_id')->textInput() ?>
-        </div>
-        <div class="col-md-4">
-    <?= $form->field($model, 'subcategory_id')->textInput() ?>
-        </div>
-</div>
-<div class="row">
-        <div class="col-md-4">
-    <?= $form->field($model, 'price')->textInput() ?>
-        </div>
-         <div class="col-md-4">
-    <?= $form->field($model, 'old_price')->textInput() ?>
-        </div>
-        <div class="col-md-4">
-    <?= $form->field($model, 'unit_price')->textInput(['maxlength' => true]) ?>
-        </div>
-</div>
     <div class="row">
-        <div class="col-md-12">
-            <?= $form->field($model, 'city_name')->textarea(['rows' => 3]) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'category_id')->dropDownList($model->getCategoryList(),[]) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'subcategory_id')->dropDownList($model->getSubcategoryList(),[]) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'price')->textInput(['type' => 'number']) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <?= $form->field($model, 'city_name')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'unit_price')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-12">
-            <?= $form->field($model, 'text')->textarea(['rows' => 3]) ?>
+            <?= $form->field($model, 'text')->textarea(['rows' => 2]) ?>
         </div>
-
+    </div>
+    <div class="row">
         <div class="col-md-5">
             <div class="col-md-12">
                 <div id="image">
@@ -61,6 +54,9 @@ use yii\widgets\ActiveForm;
             <div class="col-md-12">
                 <?= $form->field($model, 'imageFiles')->fileInput(['class'=>"image_input"]); ?>
             </div>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'treaty')->checkBox() ?>
         </div>
     </div>
 

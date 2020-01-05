@@ -76,4 +76,125 @@ class AdsSearch extends Ads
 
         return $dataProvider;
     }
+
+    public function searchByCatalog($params, $id)
+    {
+        $catalog = UsersCatalog::find()->where(['user_id' => $id])->all();
+        $idList = [];
+        foreach ($catalog as $value) {
+            $idList [] = $value->ads_id;
+        }
+        $query = Ads::find()->where(['id' => $idList]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'type' => $this->type,
+            'category_id' => $this->category_id,
+            'subcategory_id' => $this->subcategory_id,
+            'price' => $this->price,
+            'old_price' => $this->old_price,
+            'date_cr' => $this->date_cr,
+        ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'images', $this->images])
+            ->andFilterWhere(['like', 'city_name', $this->city_name])
+            ->andFilterWhere(['like', 'text', $this->text])
+            ->andFilterWhere(['like', 'unit_price', $this->unit_price])
+            ->andFilterWhere(['like', 'treaty', $this->treaty]);
+
+        return $dataProvider;
+    }
+
+    public function searchByUser($params, $id)
+    {
+        $query = Ads::find()->where(['user_id' => $id]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'type' => $this->type,
+            'category_id' => $this->category_id,
+            'subcategory_id' => $this->subcategory_id,
+            'price' => $this->price,
+            'old_price' => $this->old_price,
+            'date_cr' => $this->date_cr,
+        ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'images', $this->images])
+            ->andFilterWhere(['like', 'city_name', $this->city_name])
+            ->andFilterWhere(['like', 'text', $this->text])
+            ->andFilterWhere(['like', 'unit_price', $this->unit_price])
+            ->andFilterWhere(['like', 'treaty', $this->treaty]);
+
+        return $dataProvider;
+    }
+
+    public function searchByFavorites($params, $id)
+    {
+        $favorites = Favorites::find()->where(['type' => 1, 'user_id' => $id])->all();
+        $idList = [];
+        foreach ($favorites as $value) {
+            $idList [] = $value->field_id;
+        }
+        $query = Ads::find()->where(['id' => $idList]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'type' => $this->type,
+            'category_id' => $this->category_id,
+            'subcategory_id' => $this->subcategory_id,
+            'price' => $this->price,
+            'old_price' => $this->old_price,
+            'date_cr' => $this->date_cr,
+        ]);
+
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'images', $this->images])
+            ->andFilterWhere(['like', 'city_name', $this->city_name])
+            ->andFilterWhere(['like', 'text', $this->text])
+            ->andFilterWhere(['like', 'unit_price', $this->unit_price])
+            ->andFilterWhere(['like', 'treaty', $this->treaty]);
+
+        return $dataProvider;
+    }
 }

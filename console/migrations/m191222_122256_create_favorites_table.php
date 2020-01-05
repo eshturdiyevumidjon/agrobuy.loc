@@ -19,7 +19,8 @@ class m191222_122256_create_favorites_table extends Migration
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->comment("Пользователь"),  
             'type' => $this->integer()->comment("Тип"),  
-            'date_cr' => $this->integer()->comment("Дата создание"),  
+            'date_cr' => $this->datetime()->comment("Дата создание"),
+            'field_id' => $this->string(255)->comment('Значение'),
         ]);
 
         // creates index for column `user_id`

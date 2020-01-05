@@ -122,6 +122,14 @@ class Users extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getAssessments0()
+    {
+        return $this->hasMany(Assessment::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getChatMessages()
     {
         return $this->hasMany(ChatMessage::className(), ['user_id' => 'id']);
@@ -319,5 +327,10 @@ class Users extends \yii\db\ActiveRecord
     public function getHistories()
     {
         return HistoryOperations::find()->where(['user_id' => $this->id])->all();
+    }
+
+    public function getAssessmentsList()
+    {
+        return Assessment::find()->where(['user_id' => $this->id])->all();
     }
 }

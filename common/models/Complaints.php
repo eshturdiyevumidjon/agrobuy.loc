@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "complaints".
@@ -80,5 +82,38 @@ class Complaints extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
+    }
+
+    public function getUsersList()
+    {
+        $users = Users::find()->all();
+        return ArrayHelper::map($users, 'id', 'fio');
+    }
+
+    public function getComplaintsList($param, $id)
+    {
+        $query = Complaints::find()->where(['ads_id' => $id]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'ads_id' => $this->ads_id,
+            'user_id' => $this->user_id,
+        ]);
+
+        $query->andFilterWhere(['like', 'text', $this->text])
+            ->andFilterWhere(['like', 'date_cr', $this->date_cr])
+            ->andFilterWhere(['like', 'user_from', $this->user_from]);
+
+        return $dataProvider;
     }
 }

@@ -18,7 +18,10 @@ CrudAsset::register($this);
             <li class="active"><a href="#default-tab-1" data-toggle="tab" aria-expanded="true">Информация</a></li>
             <li class=""><a href="#default-tab-2" data-toggle="tab" aria-expanded="false">Продвижение</a></li>
             <li class=""><a href="#default-tab-3" data-toggle="tab" aria-expanded="false">Каталог пользователя</a></li>
-            <li class=""><a href="#default-tab-4" data-toggle="tab" aria-expanded="false">История оплат</a></li>
+            <li class=""><a href="#default-tab-4" data-toggle="tab" aria-expanded="false">Список объявлении</a></li>
+            <li class=""><a href="#default-tab-5" data-toggle="tab" aria-expanded="false">История оплат</a></li>
+            <li class=""><a href="#default-tab-6" data-toggle="tab" aria-expanded="false">Оценки пользователей</a></li>
+            <li class=""><a href="#default-tab-7" data-toggle="tab" aria-expanded="false">Избранные</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade active in" id="default-tab-1">
@@ -37,8 +40,23 @@ CrudAsset::register($this);
                 ]) ?>
             </div>
             <div class="tab-pane fade" id="default-tab-4">
+                <?= $this->render('tabs/ads', [
+                    'adsProvider' => $adsProvider,
+                ]) ?>
+            </div>
+            <div class="tab-pane fade" id="default-tab-5">
                 <?= $this->render('tabs/history_payment', [
                     'histories' => $histories,
+                ]) ?>
+            </div>
+            <div class="tab-pane fade" id="default-tab-6">
+                <?= $this->render('tabs/assessment', [
+                    'assessment' => $assessment,
+                ]) ?>
+            </div>
+            <div class="tab-pane fade" id="default-tab-7">
+                <?= $this->render('tabs/favorites', [
+                    'favoritesProvider' => $favoritesProvider,
                 ]) ?>
             </div>
         </div>

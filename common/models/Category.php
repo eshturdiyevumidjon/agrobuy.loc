@@ -46,6 +46,15 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeDelete()
+    {
+        $subs = SubCategories::find()->where(['category_id' => $this->id])->all();
+        foreach ($subs as $sub){
+            $sub->delete();
+        }
+        return parent::beforeDelete();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

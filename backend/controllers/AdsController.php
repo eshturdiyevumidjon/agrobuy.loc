@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use \yii\web\Response;
+use common\models\Complaints;
 use yii\helpers\Html;
 
 /**
@@ -23,6 +24,15 @@ class AdsController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -57,21 +67,14 @@ class AdsController extends Controller
     public function actionView($id)
     {   
         $request = Yii::$app->request;
-        if($request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                    'title'=> "Ads #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-            ]);
-        }
+
+        $searchModel = new Complaints();
+        $complaintsProvider = $searchModel->getComplaintsList(Yii::$app->request->queryParams, $id);
+
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+            'complaintsProvider' => $complaintsProvider,
+        ]);
     }
 
     /**
@@ -94,17 +97,18 @@ class AdsController extends Controller
                 $model->upload();
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new Ads",
+                    'title'=> "Объявление",
                     'forceClose'=>true,
                 ];         
             }else{           
                 return [
-                    'title'=> "Create new Ads",
+                    'title'=> "Создать",
+                    'size' => 'large',
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
             }
@@ -113,7 +117,7 @@ class AdsController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -137,9 +141,6 @@ class AdsController extends Controller
         $file = $model->images;
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
 
@@ -148,17 +149,18 @@ class AdsController extends Controller
 
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Ads #".$id,
+                    'title'=> "Объявление",
                     'forceClose'=>true,
                 ];    
             }else{
                  return [
-                    'title'=> "Update Ads #".$id,
+                    'title'=> "Изменить",
+                    'size' => 'large',
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
                 ];        
             }
         }else{
@@ -185,22 +187,17 @@ class AdsController extends Controller
     public function actionDelete($id)
     {
         $request = Yii::$app->request;
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $file = $model->images;
+        $model->unlinkFile($file);
+        $model->delete();
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
-            /*
-            *   Process for non-ajax request
-            */
             return $this->redirect(['index']);
         }
-
-
     }
 
      /**
@@ -210,7 +207,7 @@ class AdsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionBulkDelete()
+    /*public function actionBulkDelete()
     {        
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
@@ -220,19 +217,15 @@ class AdsController extends Controller
         }
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
+
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
-            /*
-            *   Process for non-ajax request
-            */
+
             return $this->redirect(['index']);
         }
        
-    }
+    }*/
 
     /**
      * Finds the Ads model based on its primary key value.
