@@ -55,7 +55,7 @@ $model = Users::findOne(Yii::$app->user->identity->id);
                     ['label' => 'Курсы', 'icon' => 'table', 'url' => ['/courses/index'],],
                     ['label' => 'Рекламы', 'icon' => 'bookmark', 'url' => ['/advertising/index'],],
                     ['label' => 'Уведомления', 'icon' => 'bell', 'url' => ['/alerts/index'],],
-                    ['label' => 'О компаниях', 'icon' => 'university', 'url' => ['/companies/about-company','id'=>Yii::$app->user->identity->company->id],],
+                    ['label' => 'О компании', 'icon' => 'university', 'url' => ['/companies/about-company','id'=>Yii::$app->user->identity->company->id],],
                 ],
             ]
         ) ?>

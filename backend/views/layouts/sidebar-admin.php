@@ -47,27 +47,27 @@ use common\models\Users;
                 'items' => [
                     ['label' => 'Меню', 'options' => ['class' => 'nav-header']],
                     
-                    ['label' => 'Домашняя страница', 'icon' => 'dashboard', 'url' => ['/site']],
+                    ['label' => 'Главная страница', 'icon' => 'dashboard', 'url' => ['/site']],
                     ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/users']],
-                    ['label' => 'Объявление', 'icon' => 'university', 'url' => ['/ads']],
+                    ['label' => 'Объявления', 'icon' => 'university', 'url' => ['/ads']],
                     // ['label' => 'Группы', 'icon' => 'users', 'url' => ['/groups/index']],
                     // ['label' => 'Тарифы', 'icon' => 'bar-chart-o', 'url' => ['/tariffs/index']],
                     // ['label' => 'Курсы', 'icon' => 'table', 'url' => ['/courses/index'],],
-                    ['label' => 'Новосты', 'icon' => 'bookmark', 'url' => ['/news'],],
-                    ['label' => 'Баннеры', 'icon' => 'bars', 'url' => ['/banners'],],
+                    ['label' => 'Новости', 'icon' => 'bookmark', 'url' => ['/news'],],
+                    ['label' => 'Слайдеры', 'icon' => 'bars', 'url' => ['/banners'],],
                     // ['label' => 'Уведомления', 'icon' => 'bell', 'url' => ['/alerts/index'],],
                     ['label' => 'Рекламные баннеры', 'icon' => 'send', 'url' => ['/advertisings'],],
                     ['label' => 'Справочники', 'icon' => 'book', 'url' => ['/nothealth'],
 
                         'items' => [
-                            ['label' => 'Продвижения', 'icon' => 'tags', 'url' => ['/promotions'],],
-                            ['label' => 'Категория', 'icon' => 'book', 'url' => ['/categories'],],
-                            ['label' => 'Настройки', 'icon' => 'book', 'url' => ['/settings'],],
-                            ['label' => 'Суммы пополнение счета', 'icon' => 'fas fa-th-list', 'url' => ['/price-list'],],
+                            ['label' => 'Платные услуги', 'icon' => 'tags', 'url' => ['/promotions'],],
+                            ['label' => 'Категории', 'icon' => 'book', 'url' => ['/categories'],],
+                            ['label' => 'Ссылки подвала сайта', 'icon' => 'book', 'url' => ['/settings'],],
+                            ['label' => 'Настройки пополнения счета', 'icon' => 'fas fa-th-list', 'url' => ['/price-list'],],
                             ['label' => 'Языки', 'icon' => 'language', 'url' => ['/language'],],
                         ],
                     ] ,
-                     ['label' => 'О компаниях', 'icon' => 'university', 'url' => ['/about-company/view','id'=>1],],
+                     ['label' => 'О компании', 'icon' => 'university', 'url' => ['/about-company/view','id'=>1],],
                 ],
             ]
         ) ?>
