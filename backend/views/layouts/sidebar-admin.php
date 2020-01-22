@@ -44,12 +44,13 @@ use common\models\Users;
                 <?= Menu::widget(
             [
                 'options' => ['class' => 'nav'],
+                'encodeLabels' => false,
                 'items' => [
-                    ['label' => 'Меню', 'options' => ['class' => 'nav-header']],
+                    //['label' => 'Меню', 'options' => ['class' => 'nav-header']],
                     
                     ['label' => 'Главная страница', 'icon' => 'dashboard', 'url' => ['/site']],
                     ['label' => 'Пользователи', 'icon' => 'user', 'url' => ['/users']],
-                    ['label' => 'Объявления', 'icon' => 'university', 'url' => ['/ads']],
+                    ['label' => 'Объявления' . Html::tag('span', '1', ['class' => 'pull-right badge badge-danger', 'style' => 'background: #ff5b57 !important;']), 'icon' => 'university', 'url' => ['/ads']],
                     // ['label' => 'Группы', 'icon' => 'users', 'url' => ['/groups/index']],
                     // ['label' => 'Тарифы', 'icon' => 'bar-chart-o', 'url' => ['/tariffs/index']],
                     // ['label' => 'Курсы', 'icon' => 'table', 'url' => ['/courses/index'],],
