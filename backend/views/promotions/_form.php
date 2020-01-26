@@ -11,32 +11,30 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
         <div class="row">
+            <div class="col-md-12">
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            </div>
+            
+        </div>
+        <div class="row">
             <div class="col-md-6">
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'days')->textInput(['type'=>'number']) ?>
             </div>
             <div class="col-md-6">
-    <?= $form->field($model, 'price')->textInput(['type'=>'number']) ?>
+                <?= $form->field($model, 'price')->textInput(['type'=>'number']) ?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-    <?= $form->field($model, 'days')->textInput(['type'=>'number']) ?>
+                <?= $form->field($model, 'premium')->checkBox() ?>
             </div>
             <div class="col-md-6">
-    <?= $form->field($model, 'discount')->textInput(['type'=>'number']) ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-    <?= $form->field($model, 'premium')->checkBox() ?>
-            </div>
-            <div class="col-md-6">
-    <?= $form->field($model, 'top')->checkBox() ?>
+                <?= $form->field($model, 'top')->checkBox() ?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
- <?= $form->field($model, 'text')->textarea(['rows' => 3]) ?>
+                <?= $form->field($model, 'text')->textarea(['rows' => 3]) ?>
             </div>
         </div>
 

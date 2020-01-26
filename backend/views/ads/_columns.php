@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 use common\models\Ads;
 
 
@@ -93,14 +94,26 @@ return [
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },
+        
+        'deleteOptions'=>['role'=>'modal-remote','title'=>'Удалить', 
+            // 'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
+            // 'data-request-method'=>'post',
+            'data-toggle'=>'tooltip',
+            // 'data-confirm-title'=>'Подтвердите действие',
+            // 'data-confirm-message'=>'Вы уверены что хотите удалить этого элемента?'
+        ],
+        'template' => '{view} {update} {leadDelete}',
         'viewOptions'=>['data-pjax'=>'0','title'=>'Просмотр','data-toggle'=>'tooltip'],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Изменить', 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>'Удалить', 
-            'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-            'data-request-method'=>'post',
-            'data-toggle'=>'tooltip',
-            'data-confirm-title'=>'Подтвердите действие',
-            'data-confirm-message'=>'Вы уверены что хотите удалить этого элемента?'], 
+        'buttons'  => [
+            'leadDelete' => function ($url, $model) {
+                    $url = Url::to(['/ads/delete', 'id' => $model->id]);
+                    return Html::a('<span class="fa fa-trash"></span>', $url, [
+                        'role'=>'modal-remote','title'=>Yii::t('app','Delete'), 
+                        'data-toggle'=>'tooltip',
+                    ]);
+            }, 
+        ],
     ],
 
 ];   

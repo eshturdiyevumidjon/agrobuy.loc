@@ -94,6 +94,43 @@ class Users extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($insert){
+            if($this->type == 3){
+                $chat = new \common\models\Chats();
+                $chat->name = 'chat_'.$this->id;
+                $chat->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
+                $chat->type = 1;
+                $chat->save();
+
+                $chat1 = new \common\models\ChatUsers();
+                $chat2 = new \common\models\ChatUsers();
+                
+                $chat1->chat_id = $chat->id;
+                $chat2->chat_id = $chat->id;
+                $chat1->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
+                $chat2->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
+                $chat1->user_id = 1;
+                $chat2->user_id = $this->id;
+
+                $chat1->save();
+                $chat2->save();
+            }
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+    
+    public function getAvatar()
+    {
+        if (!file_exists('uploads/avatars/'.$this->avatar) || $this->avatar == '') {
+            $path = 'http://' . $_SERVER['SERVER_NAME'].'/admin/img/nouser.png';
+        } else {
+            $path = 'http://' . $_SERVER['SERVER_NAME'].'/admin/uploads/avatars/'.$this->avatar;
+        }
+        return $path;
+    }
+
     /**
      * @return bool
      */

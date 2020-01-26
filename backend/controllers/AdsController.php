@@ -36,8 +36,8 @@ class AdsController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
-                    'bulk-delete' => ['post'],
+                    // 'delete' => ['post'],
+                    // 'bulk-delete' => ['post'],
                 ],
             ],
         ];
@@ -189,15 +189,47 @@ class AdsController extends Controller
         $request = Yii::$app->request;
         $model = $this->findModel($id);
         $file = $model->images;
-        $model->unlinkFile($file);
-        $model->delete();
-
+        $model->scenario = Ads::SCENARIO_DELETING;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            return $this->redirect(['index']);
+            if($model->load($request->post()) && $model->validate()){
+
+                if($file)
+                    $model->unlinkFile($file);
+
+                $chat = \common\models\Chats::find()->where(['name'=>'support']);
+
+                $model->delete();
+
+                return [
+                    'forceReload'=>'#crud-datatable-pjax',
+                    'forceClose'=>true,
+                ];    
+            }else{
+                 return [
+                    'title'=> Yii::t('app','Delete'),
+                    'size' => 'normal',
+                    'content'=>$this->renderAjax('delete_form', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button(Yii::t('app','Delete'),['class'=>'btn btn-primary','type'=>"submit"])
+                ];        
+            }
         }
+
+        // $request = Yii::$app->request;
+        // $model = $this->findModel($id);
+        // $file = $model->images;
+        // $model->unlinkFile($file);
+        // $model->delete();
+
+        // if($request->isAjax){
+        //     Yii::$app->response->format = Response::FORMAT_JSON;
+        //     return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+        // }else{
+        //     return $this->redirect(['index']);
+        // }
     }
 
      /**

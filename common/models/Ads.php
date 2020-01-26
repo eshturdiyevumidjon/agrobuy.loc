@@ -33,6 +33,9 @@ use yii\web\UploadedFile;
 class Ads extends \yii\db\ActiveRecord
 {
     public $imageFiles;
+    public $comment;
+    const SCENARIO_DELETING = 'removing';
+
     /**
      * {@inheritdoc}
      */
@@ -51,13 +54,23 @@ class Ads extends \yii\db\ActiveRecord
             [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty'], 'integer'],
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
-            [['date_cr'], 'safe'],
+            [['date_cr','comment'], 'safe'],
             [['title', 'unit_price'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['comment'],'required', 'on' => self::SCENARIO_DELETING],
+            
         ];
     }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_DELETING] = ['comment'];
+        return $scenarios;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -80,6 +93,7 @@ class Ads extends \yii\db\ActiveRecord
             'treaty' => 'Договорная',
             'date_cr' => 'Дата создание',
             'imageFiles' => 'Фотографии',
+            'comment' => 'Причина',
         ];
     }
 

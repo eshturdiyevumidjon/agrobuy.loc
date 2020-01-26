@@ -8,9 +8,12 @@ $this->title = 'About';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+   	Username:<br />
+	<input id="username" type="text"><button id="btnSetUsername">Set username</button>
 
-    <p>This is the About page. You may modify the following file to customize its content:</p>
+	<div id="chat" style="width:400px; height: 250px; overflow: scroll;"></div>
 
-    <code><?= __FILE__ ?></code>
+	Message:<br />
+	<input id="message" type="text"><button id="btnSend">Send</button>
+	<div id="response" style="color:#D00"></div>
 </div>

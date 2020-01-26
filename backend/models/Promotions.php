@@ -36,7 +36,7 @@ class Promotions extends \yii\db\ActiveRecord
         return [
             [['text'], 'string'],
             [['price'], 'number'],
-            [['price', 'name', 'days', 'discount', 'text'], 'required'],
+            [['price', 'name', 'days', 'text'], 'required'],
             [['days', 'premium', 'top', 'discount'], 'integer'],
             [['name'], 'string', 'max' => 255],
         ];
