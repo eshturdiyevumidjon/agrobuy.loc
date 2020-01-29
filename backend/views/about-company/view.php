@@ -28,16 +28,16 @@ if (!file_exists('uploads/about-company/' . $model->logo) || $model->logo == nul
         <div class="panel-body">
             <?php Pjax::begin(['enablePushState' => false, 'id' => 'crud-datatable-pjax']) ?>
                 <div class="col-md-2">
-                    <img src="<?= $path?>" style = "width:150px; height:150px;object-fit: cover;">
+                    <img src="<?= $path?>" style="margin-top: 50px;">
                 </div> 
                 <div class="col-md-10 table-view" > 
                     <?= DetailView::widget([
                         'model' => $model,
                         'attributes' => [
                             'name',
-                            'logo',
                             'mail',
-                            'phone' ,
+                            'phone',
+                            'address',
                         ],
                     ]) ?>
                 </div>

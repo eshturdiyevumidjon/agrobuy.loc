@@ -15,6 +15,7 @@ class m191221_101234_create_about_company_table extends Migration
         $this->createTable('{{%about_company}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(255)->comment("Наименование"),
+            'address' => $this->text()->comment("Адрес"),
             'logo' => $this->string(255)->comment("Лого"),
             'mail' => $this->string(255)->comment("E-mail"),
             'phone' => $this->string(255)->comment("Телефон"),
@@ -23,6 +24,7 @@ class m191221_101234_create_about_company_table extends Migration
         $this->insert('{{%about_company}}',array(
           'id' => 1,
           'logo' => 'logo.png',
+          'address' => 'Москва, ул Сталинградская 23 а',
           'name' => 'AgroBuy',
           'mail' => 'agro@gmail.com',
           'phone' => '+998-90-999-99-99',

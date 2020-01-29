@@ -16,13 +16,13 @@ if (!file_exists('uploads/about-company/' . $model->logo) || $model->logo == nul
             <div class="col-md-3">
                <div id="image" class="col-md-12">
                     <?=Html::img($path, [
-                        'style' => 'width:150px; height:150px;object-fit: cover;',
-                        'class'=>'img-circle',
+                        'style' => 'margin-top: 50px;',
+                        /*'class'=>'img-circle',*/
                     ])?>
                 </div>
                 <br>
                 <div class="col-md-12">
-                   <?= $form->field($model, 'image')->fileInput(['class'=>"image_input",'id'=>'inputFile']); ?>
+                    <?= $form->field($model, 'image')->fileInput(['class'=>"image_input",'id'=>'inputFile']); ?>
                     <?= $form->field($model, 'logo')->hiddenInput(['id'=>'logo'])->label(false); ?>
                 </div>
             </div>
@@ -41,6 +41,9 @@ if (!file_exists('uploads/about-company/' . $model->logo) || $model->logo == nul
                 </div>
                 <div class="col-md-6">
                      <?= $form->field($model, 'mail')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-6">
+                     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
                 </div>
             </div>
         </div>

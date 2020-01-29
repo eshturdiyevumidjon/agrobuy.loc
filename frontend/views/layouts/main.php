@@ -10,12 +10,27 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AgroAsset;
 use common\widgets\Alert;
 use backend\models\Lang;
-
+use backend\models\Settings;
+use backend\models\AboutCompany;
+use frontend\models\Sessions;
 
 AgroAsset::register($this);
-$langs=\backend\models\Lang::getLanguages();
+$langs = Lang::getLanguages();
 $language = Yii::$app->language;
 $pathInfo = Yii::$app->request->pathInfo;
+$session = new Sessions();
+
+
+$about_company = AboutCompany::findOne(1);
+$siteName = Yii::$app->params['siteName'];
+
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo) || $about_company->logo == null) {
+    $path = $siteName . '/backend/web/img/no-logo.png';
+} else {
+    $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+}
+//$path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -32,15 +47,21 @@ $pathInfo = Yii::$app->request->pathInfo;
 <body>
 <?php $this->beginBody() ?>
 
-<?=$this->render('header.php');?>
-<?= $this->render(
-    'content.php',
-    ['content' => $content]
-) ?>    
-<?=$this->render('footer.php');?>
-<?=$this->render('popups.php');?>
+	<?php //$terms = Settings::find()->where(['view_in_footerser_id' => 1])->orderBy('priority', SORT_ASC)->all();?>
 
+	<?= $this->render('header.php',['path' => $path,]);?>
 
+	<?= $this->render('content.php',
+	    ['content' => $content]
+	)?> 
+
+	<?= $this->render('footer.php', [
+		'about_company' => $about_company,
+		'path' => $path,
+		'session' => $session,
+	]) ?>
+	
+	<?= $this->render('popups.php');?>
 
 <?php $this->endBody() ?>
 </body>

@@ -12,7 +12,7 @@ return [
     'bootstrap' => ['log'],
     'language' => 'ru',
     'timeZone' => 'Asia/Tashkent',
-    'name' => 'MyTeacher',
+    'name' => 'AgroBuy',
     'controllerNamespace' => 'frontend\controllers',
     'modules' => [
             'translations' => [

@@ -33,6 +33,7 @@ class AboutCompany extends \yii\db\ActiveRecord
         return [
             [['name', 'logo', 'mail', 'phone'], 'string', 'max' => 255],
             [['image'],'safe'],
+            [['address'],'string'],
             
         ];
     }
@@ -45,6 +46,7 @@ class AboutCompany extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' =>'Наименование',
+            'address' => 'Адрес',
             'logo' => 'Лого',
             'mail' => 'E-mail',
             'phone' => 'Телефон',

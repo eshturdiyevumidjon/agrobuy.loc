@@ -32,7 +32,7 @@ class ColorAdminAsset extends AssetBundle
        'plugins/jquery-jvectormap/jquery-jvectormap.css',
        'plugins/isotope/isotope.css',
        'plugins/lightbox/css/lightbox.css',
-       'css/chats.css',
+       //'css/chats.css',
 
        // Page style end
     ];
@@ -61,7 +61,7 @@ class ColorAdminAsset extends AssetBundle
         'js/apps.min.js',
         'js/myjs.js',
         'js/new.js',
-        'js/chat.js',
+        //'js/chat.js',
 
     ];
     public $depends = [

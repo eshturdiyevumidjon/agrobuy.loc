@@ -2,7 +2,7 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-3 col-md-4 col-9">
-            <a href="index.html" class="logo"><img src="images/logo.png" alt=""></a>          
+            <a href="/" class="logo"><img src="<?=$path?>" alt="Logo"></a>          
           </div>        
           <div class="col-lg-9 col-md-8 col-3 justify-content-end d-flex align-items-center">
             <div class="mob-language">

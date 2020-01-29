@@ -12,7 +12,6 @@ use \yii\web\Response;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
 
-
 class AboutCompanyController extends Controller
 {
    
@@ -26,13 +25,6 @@ class AboutCompanyController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                    'bulk-delete' => ['post'],
                 ],
             ],
         ];
@@ -97,45 +89,6 @@ class AboutCompanyController extends Controller
                 ]);
             }
         }
-    }
-
-  
-    public function actionDelete($id)
-    {
-        $request = Yii::$app->request;
-        $this->findModel($id)->delete();
-
-        if($request->isAjax){
-           
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            
-            return $this->redirect(['index']);
-        }
-
-
-    }
-
-   
-    public function actionBulkDelete()
-    {        
-        $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); 
-        foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            $model->delete();
-        }
-
-        if($request->isAjax){
-            
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-           
-            return $this->redirect(['index']);
-        }
-       
     }
 
     protected function findModel($id)
