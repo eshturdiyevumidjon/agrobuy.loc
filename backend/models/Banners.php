@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use frontend\models\Sessions;
 
 /**
  * This is the model class for table "banners".
@@ -73,36 +74,11 @@ class Banners extends \yii\db\ActiveRecord
            return $this->image  ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'/uploads/banners/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
     }
 
-    
-    public static function TranslatesText($value, $lang)
-    {
-        $text = Translates::find()
-            ->where(['table_name' => $value->tableName(),'field_id' => $value->id,'field_name'=>'text', 'language_code' => $lang])
-            ->one()->field_value;
-
-            if($text == null){
-                $text = $value->text;
-            }
-
-        return $text;
-    }
-
-    public static function TranslatesTitle($value, $lang)
-    {
-        $title = Translates::find()
-            ->where(['table_name' => $value->tableName(),'field_id' => $value->id,'field_name'=>'title', 'language_code' => $lang])
-            ->one()->field_value;
-
-            if($title == null){
-                $title = $value->title;
-            }
-
-        return $title;
-    }
 
     public static function getTranslates($news_all)
     {
         $news  = [];
+        $session = new Sessions();
         foreach ($news_all as  $value) {
                 if(Yii::$app->language == 'ru'){
                         $news[] = [
@@ -114,8 +90,8 @@ class Banners extends \yii\db\ActiveRecord
                     ];
                 }
                 else {
-                        $title = Banners::TranslatesTitle($value, Yii::$app->language);
-                        $text = Banners::TranslatesText($value, Yii::$app->language);
+                        $title = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'title');
+                        $text = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'text');
                         $news[] = [
                         'id' => $value->id,
                         'title' => $title,
@@ -127,5 +103,44 @@ class Banners extends \yii\db\ActiveRecord
                 }
         }
         return $news;
+    }
+
+    public function getAllBannersList()
+    {
+        $session = new Sessions();
+        $banners = Banners::find()->all();
+        $result = [];
+        $siteName = Yii::$app->params['siteName'];
+
+        foreach ($banners as $value) {
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/banners/' . $value->image) || $value->image == null) {
+                $path = $siteName . '/backend/web/img/no-logo.png';
+            } 
+            else {
+                $path = $siteName . '/backend/web/uploads/banners/' . $value->image;
+            }
+            if(Yii::$app->language == 'kr') {
+                $result [] = [
+                    'id' => $value->id,
+                    'title' => $value->title,
+                    'text' => $value->text,
+                    'image' => $path,
+                    'link' => $value->link,
+                ];
+            }
+            else {
+                $title = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'title');
+                $text = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'text');
+                $result [] = [
+                    'id' => $value->id,
+                    'title' => $title,
+                    'text' => $text,
+                    'image' => $path,
+                    'link' => $value->link,
+                ];
+            }
+        }
+
+        return $result;
     }
 }

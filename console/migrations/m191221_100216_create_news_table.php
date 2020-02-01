@@ -33,6 +33,20 @@ class m191221_100216_create_news_table extends Migration
             'date'=>date('Y-m-d'),
         ));
 
+        $this->insert('{{%news}}',array(
+            'title' => 'News3 title',
+            'text' => 'News3 tekst News2 tekstNews2 tekstNews2News2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 News2 tekst',
+            'image' => 'news3.jpg',
+            'date'=>date('Y-m-d'),
+        ));
+
+        $this->insert('{{%news}}',array(
+            'title' => 'News4 title',
+            'text' => 'News4 tekst News2 tekstNews2 tekstNews2News2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 tekstNews2 News2 tekst',
+            'image' => 'news4.jpg',
+            'date'=>date('Y-m-d'),
+        ));
+
     }
 
     /**

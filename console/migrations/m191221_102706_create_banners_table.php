@@ -19,18 +19,33 @@ class m191221_102706_create_banners_table extends Migration
             'image' => $this->string(255)->comment("Фотография"),
             'link' => $this->string(255)->comment("Ссылка"),
         ]);
+
         $this->insert('{{%banners}}',array(
-            'title' => 'Banner1 title',
-            'text' => 'Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text Banner1 text',
+            'title' => 'IFrut - свежие фрукты',
+            'text' => 'Компания занимающаяся выращиванием высококачественных фруктов с 2009 г. Они занимаются поставки не только на местные рынки, но и на международные площадки.',
             'image' => 'banner1.jpg',
-            'link' => 'http://kun.uz/',
+            'link' => 'http://agrobuy.uz/',
         ));
         
         $this->insert('{{%banners}}',array(
-            'title' => 'Banner2 title',
-            'text' => 'Banner2 tekst Banner2 tekstBanner2 tekstBanner2Banner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 tekstBanner2 Banner2 tekst',
+            'title' => 'IFrut - свежие фрукты',
+            'text' => 'Компания занимающаяся выращиванием высококачественных фруктов с 2009 г. Они занимаются поставки не только на местные рынки, но и на международные площадки.',
             'image' => 'banner2.jpg',
-            'link' => 'http://kun.uz/',
+            'link' => 'http://agrobuy.uz/',
+        ));
+
+        $this->insert('{{%banners}}',array(
+            'title' => 'IFrut - свежие фрукты',
+            'text' => 'Компания занимающаяся выращиванием высококачественных фруктов с 2009 г. Они занимаются поставки не только на местные рынки, но и на международные площадки.',
+            'image' => 'banner3.jpg',
+            'link' => 'http://agrobuy.uz/',
+        ));
+
+        $this->insert('{{%banners}}',array(
+            'title' => 'IFrut - свежие фрукты',
+            'text' => 'Компания занимающаяся выращиванием высококачественных фруктов с 2009 г. Они занимаются поставки не только на местные рынки, но и на международные площадки.',
+            'image' => 'banner4.jpg',
+            'link' => 'http://agrobuy.uz/',
         ));
     }
 

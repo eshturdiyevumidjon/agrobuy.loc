@@ -11,17 +11,20 @@ use frontend\assets\AgroAsset;
 use common\widgets\Alert;
 use backend\models\Lang;
 use backend\models\Settings;
-use backend\models\AboutCompany;
 use frontend\models\Sessions;
 
 AgroAsset::register($this);
-$langs = Lang::getLanguages();
-$language = Yii::$app->language;
+$langs = Lang::getLanguagesForHeader();
+$nowLanguage = Yii::$app->language;
 $pathInfo = Yii::$app->request->pathInfo;
+if($pathInfo == 'site/index') $pathInfo = '';
 $session = new Sessions();
-
-
-$about_company = AboutCompany::findOne(1);
+$about_company = $session->getCompany();
+$session->setTranslates();
+/*echo "<pre>";
+print_r($ff);
+echo "</pre>";
+die;*/
 $siteName = Yii::$app->params['siteName'];
 
 if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo) || $about_company->logo == null) {
@@ -29,17 +32,16 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
 } else {
     $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
 }
-//$path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
 
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= $nowLanguage ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      	<meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -47,9 +49,12 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
 <body>
 <?php $this->beginBody() ?>
 
-	<?php //$terms = Settings::find()->where(['view_in_footerser_id' => 1])->orderBy('priority', SORT_ASC)->all();?>
-
-	<?= $this->render('header.php',['path' => $path,]);?>
+	<?= $this->render('header.php', [
+		'path' => $path,
+		'langs' => $langs,
+		'nowLanguage' => $nowLanguage,
+		'pathInfo' => $pathInfo,
+	]);?>
 
 	<?= $this->render('content.php',
 	    ['content' => $content]

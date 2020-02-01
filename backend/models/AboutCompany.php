@@ -33,6 +33,7 @@ class AboutCompany extends \yii\db\ActiveRecord
         return [
             [['name', 'logo', 'mail', 'phone'], 'string', 'max' => 255],
             [['image'],'safe'],
+            [['view_banners'],'integer'],
             [['address'],'string'],
             
         ];
@@ -50,6 +51,7 @@ class AboutCompany extends \yii\db\ActiveRecord
             'logo' => 'Лого',
             'mail' => 'E-mail',
             'phone' => 'Телефон',
+            'view_banners' => "Банныеры вкл/отк",
         ];
     }
 

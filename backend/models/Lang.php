@@ -93,4 +93,18 @@ class Lang extends \yii\db\ActiveRecord
         return ($this->status=='1')?'Активный':'Отключен';
     }
 
+    public static function getLanguagesForHeader()
+    {
+        $langs = Lang::find()->where(['status'=>1])->all();
+        $result = [];
+        foreach ($langs as $value) {
+            $result [] = [
+                'local' => $value->local,
+                'url' => $value->url,
+                'class' => $value->url == Yii::$app->language ? 'active' : '',
+            ];
+        }
+        return $result;
+    }
+
 }

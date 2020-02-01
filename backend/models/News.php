@@ -2,9 +2,9 @@
 
 namespace backend\models;
 
-
 use Yii;
 use backend\models\Translates;
+use frontend\models\Sessions;
 
 /**
  * This is the model class for table "news".
@@ -118,9 +118,11 @@ class News extends \yii\db\ActiveRecord
         return $title;
     }
 
-    public static function getTranslates($news_all){
-    $news  = [];
-     foreach ($news_all as  $value) {
+    public static function getTranslates($news_all)
+    {
+        $news  = [];
+        $session = new Sessions();
+        foreach ($news_all as  $value) {
             if(Yii::$app->language == 'ru')
                 {
                     $news[] = [
@@ -132,8 +134,8 @@ class News extends \yii\db\ActiveRecord
                 ];
             }
             else {
-                    $title = News::TranslatesTitle($value, Yii::$app->language);
-                    $text = News::TranslatesText($value, Yii::$app->language);
+                    $title = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'title');
+                    $text = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'text');
                     $news[] = [
                     'id' => $value->id,
                     'title' => $title,
@@ -146,4 +148,43 @@ class News extends \yii\db\ActiveRecord
         }
         return $news;
    }
+
+    public function getAllNewsList()
+    {
+        $session = new Sessions();
+        $news = News::find()->all();
+        $result = [];
+        $siteName = Yii::$app->params['siteName'];
+
+        foreach ($news as $value) {
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/news/' . $value->image) || $value->image == null) {
+                $path = $siteName . '/backend/web/img/no-logo.png';
+            } 
+            else {
+                $path = $siteName . '/backend/web/uploads/news/' . $value->image;
+            }
+            if(Yii::$app->language == 'kr') {
+                $result [] = [
+                    'id' => $value->id,
+                    'title' => $value->title,
+                    'text' => $value->text,
+                    'image' => $path,
+                    '' => date('d.m.Y', strtotime($value->date))
+                ];
+            }
+            else {
+                $title = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'title');
+                $text = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'text');
+                $result [] = [
+                    'id' => $value->id,
+                    'title' => $title,
+                    'text' => $text,
+                    'image' => $path,
+                    'date' => date('d.m.Y', strtotime($value->date))
+                ];                    
+            }
+        }
+
+        return $result;
+    }
 }

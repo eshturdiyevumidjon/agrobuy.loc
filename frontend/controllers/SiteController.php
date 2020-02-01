@@ -14,6 +14,10 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use backend\models\Banners;
+use common\models\Category;
+use frontend\models\Sessions;
+use backend\models\News;
 
 /**
  * Site controller
@@ -74,7 +78,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $banners = Banners::getAllBannersList();
+        $categories = Category::getAllCategoryList();
+        $session = new Sessions();
+        $about_company = $session->getCompany();
+        $news = News::getAllNewsList();
+
+        return $this->render('index', [
+            'banners' => $banners,
+            'about_company' => $about_company,
+            'categories' => $categories,
+            'news' => $news,
+        ]);
     }
 
     /**
