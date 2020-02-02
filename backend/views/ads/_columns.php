@@ -71,6 +71,14 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'price',
     ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'currency_id',
+        'filter' => Ads::getCurrencyList(),
+        'content'=>function($data){
+            return $data->getCurrencyList()[$data->currency_id];
+        },
+    ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'old_price',
@@ -108,7 +116,7 @@ return [
         'buttons'  => [
             'leadDelete' => function ($url, $model) {
                     $url = Url::to(['/ads/delete', 'id' => $model->id]);
-                    return Html::a('<span class="fa fa-trash"></span>', $url, [
+                    return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
                         'role'=>'modal-remote','title'=>Yii::t('app','Delete'), 
                         'data-toggle'=>'tooltip',
                     ]);

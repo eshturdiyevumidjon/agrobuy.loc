@@ -78,6 +78,14 @@ class AdvertisingItems extends \yii\db\ActiveRecord
         if($for == '_columns') {
            return $this->file  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/reclama-advert/' . $this->file .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
         }
+        if($for == 'main_page') {
+            $siteName = Yii::$app->params['siteName'];
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/reclama-advert/' . $this->file)) {
+                return $siteName . '/backend/web/img/no-logo.png';
+            } else {
+                return $siteName . '/backend/web/uploads/reclama-advert/' . $this->file;
+            }
+        }
     }
 
     public function getType()

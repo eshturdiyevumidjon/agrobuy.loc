@@ -10,7 +10,6 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AgroAsset;
 use common\widgets\Alert;
 use backend\models\Lang;
-use backend\models\Settings;
 use frontend\models\Sessions;
 
 AgroAsset::register($this);
@@ -21,13 +20,9 @@ if($pathInfo == 'site/index') $pathInfo = '';
 $session = new Sessions();
 $about_company = $session->getCompany();
 $session->setTranslates();
-/*echo "<pre>";
-print_r($ff);
-echo "</pre>";
-die;*/
 $siteName = Yii::$app->params['siteName'];
 
-if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo) || $about_company->logo == null) {
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
     $path = $siteName . '/backend/web/img/no-logo.png';
 } else {
     $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;

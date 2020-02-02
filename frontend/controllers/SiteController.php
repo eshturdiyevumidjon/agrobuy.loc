@@ -18,6 +18,13 @@ use backend\models\Banners;
 use common\models\Category;
 use frontend\models\Sessions;
 use backend\models\News;
+use backend\models\Advertisings;
+use backend\models\AdvertisingItems;
+use common\models\Ads;
+use common\models\UsersPromotion;
+use backend\models\UsersBall;
+use yii\widgets\ActiveForm;
+use common\models\Favorites;
 
 /**
  * Site controller
@@ -78,19 +85,68 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $session = new Sessions();
+        $adv = $session->getMainAdv();
+        $news = News::getAllNewsList();
+        $usersID = UsersBall::getUsersList();
+        $userID = UsersPromotion::getUsersID();
+        $about_company = $session->getCompany();
         $banners = Banners::getAllBannersList();
         $categories = Category::getAllCategoryList();
-        $session = new Sessions();
-        $about_company = $session->getCompany();
-        $news = News::getAllNewsList();
+        $favorites = Favorites::find()->where(['type' => 1])->all();
+
+        $premiumAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'users.id', $userID])
+            ->limit(8)
+            ->orderBy(['rand()' => SORT_DESC])
+            ->all();
+
+        $reklama = AdvertisingItems::find()
+            ->where(['advertising_id' => $adv->id])
+            ->orderBy(['rand()' => SORT_DESC])
+            ->one();
+
+        $newAds = Ads::find()
+            ->joinWith(['category', 'currency'])
+            ->limit(4)
+            ->orderBy(['date_cr' => SORT_DESC, 'id' => SORT_DESC])
+            ->all();
+
+        $trustedAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'users.id', $usersID])
+            ->limit(4)
+            ->orderBy(['rand()' => SORT_DESC])
+            ->all();
 
         return $this->render('index', [
             'banners' => $banners,
             'about_company' => $about_company,
             'categories' => $categories,
             'news' => $news,
+            'reklama' => $reklama,
+            'newAds' => $newAds,
+            'premiumAds' => $premiumAds,
+            'favorites' => $favorites,
+            'trustedAds' => $trustedAds,
+            'nowLanguage' => Yii::$app->language,
         ]);
     }
+
+    public function actionFavoriteAdd($id, $type)
+    {
+        $fav = Favorites::find()->where([ 'field_id' => $id, 'type' => $type])->one();
+        if($fav != null) $fav->delete();
+        else {
+            $fav = new Favorites();
+            $fav->user_id = Yii::$app->user->identity->id;
+            $fav->type = $type;
+            $fav->field_id = $id;
+            $fav->save();
+        }
+    }
+
 
     /**
      * Logs in a user.
@@ -99,18 +155,34 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        Yii::$app->user->logout();
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
+        $session = new Sessions();
+        $request = Yii::$app->request;
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        $about_company = $session->getCompany();
+        $siteName = Yii::$app->params['siteName'];
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
         } else {
-            $model->password = '';
+            $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+        }
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
 
-            return $this->render('login', [
+        if($model->load($request->post()) && $model->validate() && $model->login()){
+            return $this->goBack();
+        }
+        else {
+            return $this->renderAjax('login', [
                 'model' => $model,
+                'path' => $path,
+                'nowLanguage' => Yii::$app->language,
             ]);
         }
     }
@@ -127,38 +199,6 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return mixed
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-            }
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
 
     /**
      * Signs user up.
@@ -167,15 +207,31 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        $session = new Sessions();
+        $about_company = $session->getCompany();
+        $siteName = Yii::$app->params['siteName'];
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+        }
+        $request = Yii::$app->request;
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-            return $this->goHome();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
         }
 
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
+        if($model->load($request->post()) && $model->validate() && $model->signup()){
+            return $this->goHome();
+        }
+        else {
+            return $this->renderAjax('signup', [
+                'model' => $model,
+                'path' => $path,
+                'nowLanguage' => Yii::$app->language,
+            ]);
+        }
     }
 
     /**

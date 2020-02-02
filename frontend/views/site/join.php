@@ -5,7 +5,6 @@
 <section class="start-with-us">
     <div class="container">
         <h2 class="title">
-          	<!-- <span>Начните</span> вместе с нами -->
            	<?php 
            		$text = explode(' ', Yii::t('app',"Biz bilan boshlang"));
            		$res = '';

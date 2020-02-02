@@ -33,15 +33,21 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'premium',
+        'content' => function($data){
+            return $data->getPremiumDescription();
+        }
     ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'top',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'discount',
-    // ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'top',
+        'content' => function($data){
+            return $data->getTopDescription();
+        }
+    ],
+    /*[
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'discount',
+    ],*/
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

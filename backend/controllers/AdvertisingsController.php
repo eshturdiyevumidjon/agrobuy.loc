@@ -238,26 +238,22 @@ class AdvertisingsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    /*public function actionDelete($id)
     {
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
+
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
-            /*
-            *   Process for non-ajax request
-            */
+
             return $this->redirect(['index']);
         }
 
 
-    }
+    }*/
 
      /**
      * Delete multiple existing Advertisings model.
@@ -266,7 +262,7 @@ class AdvertisingsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionBulkDelete()
+    /*public function actionBulkDelete()
     {        
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
@@ -276,19 +272,15 @@ class AdvertisingsController extends Controller
         }
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
+
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
-            /*
-            *   Process for non-ajax request
-            */
+
             return $this->redirect(['index']);
         }
        
-    }
+    }*/
 
     /**
      * Finds the Advertisings model based on its primary key value.

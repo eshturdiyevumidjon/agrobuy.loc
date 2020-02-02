@@ -56,11 +56,11 @@ use common\models\Users;
                     // ['label' => 'Курсы', 'icon' => 'table', 'url' => ['/courses/index'],],
                     ['label' => 'Новости', 'icon' => 'bookmark', 'url' => ['/news'],],
                     ['label' => 'Слайдеры', 'icon' => 'bars', 'url' => ['/banners'],],
-                    // ['label' => 'Уведомления', 'icon' => 'bell', 'url' => ['/alerts/index'],],
                     ['label' => 'Рекламные баннеры', 'icon' => 'send', 'url' => ['/advertisings'],],
                     ['label' => 'Справочники', 'icon' => 'book', 'url' => ['/nothealth'],
 
                         'items' => [
+                            ['label' => 'Валюты', 'icon' => 'dollar', 'url' => ['/currency'],],
                             ['label' => 'Платные услуги', 'icon' => 'tags', 'url' => ['/promotions'],],
                             ['label' => 'Категории', 'icon' => 'book', 'url' => ['/categories'],],
                             ['label' => 'Ссылки подвала сайта', 'icon' => 'book', 'url' => ['/settings'],],

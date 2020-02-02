@@ -1,3 +1,8 @@
+<?php
+
+use yii\helpers\Html;
+
+?>
 <div class="pp">
 
       <span data-fancybox data-src="#recovery-password" >Popup1</span>
@@ -23,7 +28,7 @@
       <div class="dropdown">
         <div class="ad-promo-button">
             <div class="ad-1">
-              <img src="images/desert.jpg" alt="">
+              <img src="/images/desert.jpg" alt="">
             </div>
             <div class="ad-2">
               Продается поле 45 Га...
@@ -32,7 +37,7 @@
               837 39 20
             </div>
             <span id="dropdownMenuButton">
-              <img src="images/right-arrow-green.png" alt="">
+              <img src="/images/right-arrow-green.png" alt="">
             </span>
         </div>
         <div class="drops">
@@ -58,7 +63,7 @@
                 1
               </div>
               <div class="ad-1">
-                <img src="images/desert.jpg" alt="">
+                <img src="/images/desert.jpg" alt="">
               </div>
               <div class="ad-2">
                 Продается поле 45 Га...
@@ -74,7 +79,7 @@
                 2
               </div>
               <div class="ad-1">
-                <img src="images/desert.jpg" alt="">
+                <img src="/images/desert.jpg" alt="">
               </div>
               <div class="ad-2">
                 Продается поле 45 Га...
@@ -91,7 +96,7 @@
         <div class="prem-vip-item">
           <div class="prem-vip-discount">- 50%</div>
           <div class="prem-vip-img">
-              <img src="images/vip.png" alt="">
+              <img src="/images/vip.png" alt="">
           </div>
           <a class="prem-vip-date">7 дней</a>
           <p>Приобретите сейчас VIP пакет и получите скидку в 50% с возможностью оставлять неограниченное количество объявленийй в течении 7 дней</p>
@@ -99,7 +104,7 @@
         </div>
         <div class="prem-vip-item">
           <div class="prem-vip-img">
-              <img src="images/premium.png" alt="">
+              <img src="/images/premium.png" alt="">
           </div>
           <a class="prem-vip-date">Премиум</a>
           <p>Приобретите сейчас VIP пакет и получите скидку в 50% с возможностью оставлять неограниченное количество объявленийй в течении 7 дней</p>
@@ -131,7 +136,7 @@
     </div>    
 
     <div id="registration-2" style="display: none;" class="popup-style">
-      <img src="images/logo.png" alt="" class="logo-popup-top">
+      <img src="/images/logo.png" alt="" class="logo-popup-top">
       <h2><span>Регистрация</span></h2>
       <p class="text-center">На указанный Вами номер телефона было <br>выслано сообщение с кодом</p>
       <form>
@@ -151,7 +156,10 @@
     </div>
 
     <div id="registration" style="display: none;" class="popup-style">
-      <img src="images/logo.png" alt="" class="logo-popup-top">
+      <div id="registrationContent"></div>
+    </div>
+    <!-- <div id="registration" style="display: none;" class="popup-style">
+      <img src="/images/logo.png" alt="" class="logo-popup-top">
       <h2><span>Регистрация</span></h2>
       <form>
         <div class="form-group">
@@ -167,10 +175,10 @@
         <p class="text-center">или</p>
         <p>Уже есть аккаунт? <a href="#" class="link-popup">Войти</a></p>
       </form>
-    </div>
+    </div> -->
     
     <div id="recovery-password-2" style="display: none;" class="popup-style">
-      <img src="images/logo.png" alt="" class="logo-popup-top">
+      <img src="/images/logo.png" alt="" class="logo-popup-top">
       <h2>Востановление <br><span>пароля</span></h2>
       <p>На указанный Вами номер телефона было <br>выслано сообщение с кодом</p>
       <form>
@@ -188,26 +196,11 @@
     </div>
 
     <div id="avtorization" style="display: none;" class="popup-style">
-      <img src="images/logo.png" alt="" class="logo-popup-top">
-      <h2><span>Авторизация</span></h2>
-      <form>
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Логин">
-        </div>
-        <div class="form-group">
-          <input type="password" class="form-control" placeholder="Пароль">
-        </div>
-        <div class="text-left">
-          <a href="#" class="link-popup">Забыли пароль?</a>
-        </div>
-        <button type="submit" class="btn-template">Авторизоваться</button>
-        <p class="text-center">или</p>
-        <a href="#" class="link-popup">Зарегистрироваться</a>
-      </form>
+      <div id="avtorizationContent"></div>
     </div>
 
     <div id="recovery-password" style="display: none;" class="popup-style">
-      <img src="images/logo.png" alt="" class="logo-popup-top">
+      <img src="/images/logo.png" alt="" class="logo-popup-top">
       <h2>Востановление <br><span>пароля</span></h2>
       <form>
         <div class="form-group">
@@ -216,3 +209,34 @@
         <button type="submit" class="btn-template">Востановить пароль</button>
       </form>
     </div>
+
+    <div id="logout-popup" style="display: none;" class="popup-style">
+      <h2><?=Yii::t('app', 'Saytdan chiqish')?></h2>
+      <p><?=Yii::t('app', 'Siz haqiqatdan ham saytdan chiqmoqchimisiz?')?></p>
+      <?php 
+          echo Html::beginForm(['/site/logout'], 'post'); ?>
+          <div class="btn-service">
+            <button type="submit" class="btn-template">Да</button>
+          </div>
+          <?php echo Html::endForm();
+      ?>
+    </div>
+
+
+<?php 
+$this->registerJs(<<<JS
+  $(function () {
+    // add
+    $('.avtorization_class').on('click', function () {
+        $('#avtorization').modal('show').find('#avtorizationContent').load($(this).attr('value'));
+    });
+
+    $('.registration_class').on('click', function () {
+        $('#registration').modal('show').find('#registrationContent').load($(this).attr('value'));
+    });
+  });
+
+
+JS
+)
+?>

@@ -66,4 +66,16 @@ class Promotions extends \yii\db\ActiveRecord
     {
         return $this->hasMany(UsersPromotion::className(), ['promotion_id' => 'id']);
     }
+
+    public function getTopDescription()
+    {
+        if($this->top == 1) return "Да";
+        else return "Нет";
+    }
+
+    public function getPremiumDescription()
+    {
+        if($this->premium == 1) return "Да";
+        else return "Нет";
+    }
 }

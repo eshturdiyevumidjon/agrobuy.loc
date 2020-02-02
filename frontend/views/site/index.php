@@ -4,45 +4,60 @@ $this->title = 'AgroBuy';
 ?>
     <?= $about_company->view_banners == 1 ? 
         $this->render('banners', [
+            'nowLanguage' => $nowLanguage,
             'banners' => $banners,
         ]) : '' 
     ?>
 
     <?= $this->render('search', [
+        'nowLanguage' => $nowLanguage,
         'categories' => $categories,
     ]) ?>
   
     <?= $this->render('join', [
-        //'banners' => $banners,
+        'nowLanguage' => $nowLanguage,
     ]) ?>
 
     <?= $this->render('categories', [
+        'nowLanguage' => $nowLanguage,
         'categories' => $categories,
     ]) ?>
 
-    <?= $this->render('premium', [
-        //'banners' => $banners,
-    ]) ?>
+    <?= count($premiumAds) > 0 ? 
+        $this->render('premium', [
+            'nowLanguage' => $nowLanguage,
+            'premiumAds' => $premiumAds,
+            'favorites' => $favorites,
+        ])  : '' ?>
 
     <section class="trust-him">
         <div class="container">
         
-            <?= $this->render('trusted', [
-                //'banners' => $banners,
-            ]) ?>
+            <?= count($trustedAds) > 0 ? 
+                $this->render('trusted', [
+                    'nowLanguage' => $nowLanguage,
+                    'trustedAds' => $trustedAds,
+                    'favorites' => $favorites,
+                ]) : '' 
+            ?>
 
             <div class="reclama">
-                <img src="images/logo.png" alt="">
-                <p>Реклама</p>
+                <img src="<?=$reklama->getImage('main_page')?>" alt="<?=$reklama->title?>">
+                <p><?=$reklama->title?></p>
             </div>
 
-            <?= $this->render('new_Ads', [
-                //'banners' => $banners,
-            ]) ?>
+            <?= count($newAds) > 0 ? 
+                $this->render('new_ads', [
+                    'nowLanguage' => $nowLanguage,
+                    'newAds' => $newAds,
+                    'favorites' => $favorites,
+                ]): '' 
+            ?>
 
         </div>
     </section>
 
     <?= $this->render('news', [
+        'nowLanguage' => $nowLanguage,
         'news' => $news,
     ]) ?>

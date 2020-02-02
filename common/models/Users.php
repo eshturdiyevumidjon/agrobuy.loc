@@ -9,6 +9,7 @@ use yii\web\ForbiddenHttpException;
 use backend\models\Companies;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use backend\models\UsersBall;
 
 class Users extends \yii\db\ActiveRecord
 {
@@ -82,6 +83,7 @@ class Users extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
+            $this->balance = 0;
             $this->password = Yii::$app->security->generatePasswordHash($this->password);
             $this->access_token = Yii::$app->getSecurity()->generateRandomString();
             $this->expiret_at = time() + $this::EXPIRE_TIME;
@@ -236,6 +238,26 @@ class Users extends \yii\db\ActiveRecord
         return $this->hasMany(UsersPromotion::className(), ['user_id' => 'id']);
     }
 
+    /**
+     * Gets query for [[UsersBalls]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersBalls()
+    {
+        return $this->hasMany(UsersBall::className(), ['user_from' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UsersBalls0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersBalls0()
+    {
+        return $this->hasMany(UsersBall::className(), ['user_to' => 'id']);
+    }
+
     /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
     public function upload()
     {
@@ -369,5 +391,29 @@ class Users extends \yii\db\ActiveRecord
     public function getAssessmentsList()
     {
         return Assessment::find()->where(['user_id' => $this->id])->all();
+    }
+
+    public function getStarCount()
+    {
+        $userBall = UsersBall::find()->where(['user_to' => $this->id])->all();
+        $count = 0; $ball = 0;
+        foreach ($userBall as $value) {
+            $count++;
+            $ball += $value->ball;
+        }
+        if($count > 0) return round($ball/$count, 2);
+        else return 0;
+    }
+
+    public function getAvatarForSite()
+    {
+        $siteName = Yii::$app->params['siteName'];
+
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/avatars/' . $this->avatar)) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/avatars/' . $this->avatar;
+        }
+        return $path;
     }
 }

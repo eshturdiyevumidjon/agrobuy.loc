@@ -7,35 +7,41 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <img src="<?=$path?>" alt="Logo" class="logo-popup-top">
+    <h2><span><?= Yii::t('app',"Avtorizatsiyadan o'tish") ?></span></h2>
 
-    <p>Please fill out the following fields to login:</p>
+    <?php $form = ActiveForm::begin(); ?>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+        <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => Yii::t('app',"Login") ])->label(false) ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+        <?= $form->field($model, 'password')->passwordInput(['placeholder' => Yii::t('app', "Parol")])->label(false) ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div style="color:#999;margin:1em 0">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                    <br>
-                    Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?>
-                </div>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
+        <div class="text-left">
+            <a href="#" class="link-popup"><?= Yii::t('app',"Parolni unutdingizmi?") ?></a>
         </div>
-    </div>
-</div>
+
+        <button type="submit" class="btn-template"><?= Yii::t('app',"Avtorizatsiya o'tish") ?></button>
+        <p class="text-center"><?= Yii::t('app',"yoki") ?></p>
+        <a data-fancybox data-src="#registration" value="/<?=$nowLanguage?>/site/signup" class="link-popup registration_class">
+          <?= Yii::t('app',"Registratsiyadan o'tish") ?> </a>
+
+    <?php ActiveForm::end(); ?>
+
+<!-- <img src="/images/logo.png" alt="" class="logo-popup-top">
+      <h2><span>Авторизация</span></h2>
+      <form>
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Логин">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" placeholder="Пароль">
+        </div>
+        <div class="text-left">
+          <a href="#" class="link-popup">Забыли пароль?</a>
+        </div>
+        <button type="submit" class="btn-template">Авторизоваться</button>
+        <p class="text-center">или</p>
+        <a href="#" class="link-popup">Зарегистрироваться</a>
+      </form>
+ -->

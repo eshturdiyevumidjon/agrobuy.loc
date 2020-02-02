@@ -8,7 +8,7 @@ use backend\models\Settings;
 use backend\models\AboutCompany;
 use yii\data\ActiveDataProvider;
 use backend\models\Translates;
-/*use yii\web\Cookie;*/
+use backend\models\Advertisings;
 
 /**
  * Signup form
@@ -27,14 +27,29 @@ class Sessions extends Model
         }
         else {
             if($item == 0){
-                if(isset($session['terms'][$item])) return '<a href="/privacy?key=' . $session['terms'][$item]['key'] . '" class="privacy-policy">' . $session['terms'][$item]['name'] . '</a>';
+                if(isset($session['terms'][$item])) return '<a href="/privacy?key=' . $session['terms'][$item]['key'] . '" class="privacy-policy">' . $this->getFooterLangName($session['terms'][$item]['key']) . '</a>';
                 else return null;
             }
             else {
-                if(isset($session['terms'][$item])) return '<a href="/privacy?key=' . $session['terms'][$item]['key'] . '" >' . $session['terms'][$item]['name'] . '</a>';
+                if(isset($session['terms'][$item])) return '<a href="/privacy?key=' . $session['terms'][$item]['key'] . '" >' . $this->getFooterLangName($session['terms'][$item]['key']) . '</a>';
                 else return null;
             }
         }
+    }
+
+    public function getFooterLangName($key)
+    {
+        if($key == 'terms_of_use') return Yii::t('app',"Foydalanuvchi shartnomasi");
+        if($key == 'privacy_policy') return Yii::t('app',"Maxfiylik siyosati");
+        if($key == 'quick_sale') return Yii::t('app',"Tez sotish");
+        if($key == 'turbo') return Yii::t('app',"Turbo");
+        if($key == 'premium') return Yii::t('app',"Pullik");
+        if($key == 'vip') return Yii::t('app',"Vip");
+        if($key == 'highlight_ads') return Yii::t('app',"Reklamalarni ajratib ko'rsatish");
+        if($key == 'raising_ads') return Yii::t('app',"E'lonni yuqoriga chiqarish");
+        if($key == 'extension_of_publication') return Yii::t('app',"Nashrni kengaytirish");
+        if($key == 'ad_limit') return Yii::t('app',"E'lon cheklovi");
+        if($key == 'transaction_rules') return Yii::t('app',"Bitim qoidalari");
     }
 
     public function getCompany()
@@ -44,34 +59,24 @@ class Sessions extends Model
             $about_company = AboutCompany::findOne(1);
             $session['about_company'] = $about_company;
         }
-        if($item === null) {
-            return $session['about_company'];
-        }
+        return $session['about_company'];
     }
 
     public function setTranslates()
     {
-        $query = Translates::find()->all();
-
-        /*$dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);*/
-
+        $translates = Translates::find()->all();
         $session = Yii::$app->session;
-        $session['translates'] = $query;
-        //return $session['translates'];
+        $session['translates'] = $translates;
+    }
 
-        // echo "<pre>";
-        // print_r($session['translates']);
-        // echo "</pre>";
-        // die;
-
-        /*$query->andFilterWhere([
-            'id' => $this->id,
-        ]);
-
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'key', $this->key]);*/
+    public function getTranslates()
+    {
+        $session = Yii::$app->session;
+        if($session['translates'] == null) {
+            $translates = Translates::find()->all();
+            $session['translates'] = $translates;
+        }
+        return $session['translates'];
     }
 
     public static function getAllTranslates($table_name, $value, $lang, $field)
@@ -102,6 +107,17 @@ class Sessions extends Model
             return $value->{$field};
         }
 
+    }
+
+    public function getMainAdv()
+    {
+        $session = Yii::$app->session;
+        if($session['main_adv'] == null) {
+            $adv = Advertisings::find()->where(['key' => 'main'])->one();
+            $session['main_adv'] = $adv;
+            return $session['main_adv'];
+        }
+        return $session['main_adv'];
     }
 
 

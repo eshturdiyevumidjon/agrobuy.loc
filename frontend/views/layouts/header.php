@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 $nowLanguageName = '';
 
@@ -24,16 +25,29 @@ $nowLanguageName = '';
               <span class="d-sm-none"><?=$nowLanguageName?></span>
             </div>
             <a href="#" class="btn-template"><?= Yii::t('app',"E'lon berish") ?></a>
-            <a data-fancybox data-src="#avtorization" class="entor-to-site">
-              <span style="background-image: url(images/icon-user.png);"></span>
-              <?= Yii::t('app',"Kirish") ?>
-            </a>
+            <?php if(Yii::$app->user->isGuest) { ?>
+              <a data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="entor-to-site avtorization_class">
+                <span style="background-image: url(/images/icon-user.png);"></span>
+                <?= Yii::t('app',"Kirish") ?>
+              </a>
+            <?php } else { ?>
+                <span class="btn btn-template" data-fancybox data-src="#logout-popup" ><?=Yii::t('app', 'Chiqish')?></span>
+              <?php 
+                 /*echo Html::beginForm(['/site/logout'], 'post');
+                 echo Html::submitButton(Yii::t('app', 'Ha'), ['class' => 'btn btn-template'] );
+                 echo Html::endForm();*/
+              ?>
+              <a href="/profile" class="entor-to-site">
+                <span style="background-image: url(/images/icon-user.png);"></span>
+                <?= Yii::t('app',"Profil") ?>
+              </a>
+            <?php } ?>
           </div>
         </div>
         <div class="d-md-none form-search-mobile">
           <form class="form-sit">
             <input type="text" placeholder="<?= Yii::t('app',"Sayt bo'yicha qidirish") ?>" class="form-control">
-            <button type="submit" style="background-image: url(images/magnifier.png);"></button>
+            <button type="submit" style="background-image: url(/images/magnifier.png);"></button>
           </form>
           <a href="#" class="open-filter"><?= Yii::t('app',"Filtrlar") ?></a>
         </div>

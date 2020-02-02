@@ -68,4 +68,15 @@ class UsersPromotion extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
+
+    public function getUsersID()
+    {
+        $usersPromotion = UsersPromotion::find()->joinWith('promotion')->where(['>=', 'access_date', date('Y-m-d') ])->andWhere(['promotions.premium' => 1])->all();
+
+        $userID = [];
+        foreach ($usersPromotion as $value) {
+            $userID [] = $value->user_id;
+        }
+        return $userID;
+    }
 }

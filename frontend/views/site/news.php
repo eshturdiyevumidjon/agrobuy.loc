@@ -1,8 +1,7 @@
 <?php
 
 ?>
-
-<section class="news">
+    <section class="news">
       <div class="container">
         <h2 class="title">
           <span><?= Yii::t('app',"Xabarlar") ?></span>

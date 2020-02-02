@@ -7,29 +7,19 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-signup">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <img src="<?=$path?>" alt="Logo" class="logo-popup-top">
+    <h2><span>Регистрация</span></h2>
+    <?php $form = ActiveForm::begin(); ?>
 
-    <p>Please fill out the following fields to signup:</p>
+        <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => Yii::t('app',"Login") ])->label(false) ?>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+        <?= $form->field($model, 'email')->textInput(['type' => 'tel', 'placeholder' => '+ 998 __ ___ __ __' ])->label(false) ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+        <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Придумайте пароль' ])->label(false) ?>
 
-                <?= $form->field($model, 'email') ?>
+        <button type="submit" class="btn-template">Отправить код</button>
+        <p class="text-center">или</p>
+        <p>Уже есть аккаунт? <a href="#" class="link-popup">Войти</a></p>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-</div>
+    <?php ActiveForm::end(); ?>

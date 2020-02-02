@@ -6,7 +6,6 @@ $i = 0;
 <section class="select-category">
     <div class="container">
         <h2 class="title">
-            <!-- Выберите <span>категорию</span>  -->
             <?php 
                 $text = explode(' ', Yii::t('app',"Kategoriyani tanlang"));
                 $res = '';

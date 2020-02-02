@@ -18,7 +18,7 @@ class AdsSearch extends Ads
     public function rules()
     {
         return [
-            [['id', 'user_id', 'type', 'category_id', 'subcategory_id'], 'integer'],
+            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id'], 'integer'],
             [['title', 'images', 'city_name', 'text', 'unit_price', 'treaty', 'date_cr'], 'safe'],
             [['price', 'old_price'], 'number'],
         ];
@@ -65,6 +65,7 @@ class AdsSearch extends Ads
             'price' => $this->price,
             'old_price' => $this->old_price,
             'date_cr' => $this->date_cr,
+            'currency_id' => $this->currency_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

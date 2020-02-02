@@ -60,6 +60,7 @@ class Favorites extends \yii\db\ActiveRecord
         
         return parent::beforeSave($insert);
     }
+    //type = 1 bu adslarga yulduzcha qoyish
 
     /**
      * @return \yii\db\ActiveQuery

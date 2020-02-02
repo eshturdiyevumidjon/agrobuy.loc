@@ -11,14 +11,17 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-3">
             <?= $form->field($model, 'user_id')->dropDownList($model->getUsersList(),[]) ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
         </div>        
         <div class="col-md-3">
             <?= $form->field($model, 'type')->dropDownList($model->getType(),[]) ?>
+        </div>
+         <div class="col-md-3">
+            <?= $form->field($model, 'currency_id')->dropDownList($model->getCurrencyList(),[]) ?>
         </div>
     </div>
     

@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
+use backend\models\Currency;
 
 /**
  * This is the model class for table "ads".
@@ -51,7 +52,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg',],
-            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty'], 'integer'],
+            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id'], 'integer'],
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr','comment'], 'safe'],
@@ -59,6 +60,7 @@ class Ads extends \yii\db\ActiveRecord
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::className(), 'targetAttribute' => ['currency_id' => 'id']],
             [['comment'],'required', 'on' => self::SCENARIO_DELETING],
             
         ];
@@ -94,6 +96,7 @@ class Ads extends \yii\db\ActiveRecord
             'date_cr' => 'Дата создание',
             'imageFiles' => 'Фотографии',
             'comment' => 'Причина',
+            'currency_id' => 'Валюта',
         ];
     }
 
@@ -104,6 +107,16 @@ class Ads extends \yii\db\ActiveRecord
         }
         
         return parent::beforeSave($insert);
+    }
+
+    /**
+     * Gets query for [[Currency]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCurrency()
+    {
+        return $this->hasOne(Currency::className(), ['id' => 'currency_id']);
     }
 
     /**
@@ -166,6 +179,12 @@ class Ads extends \yii\db\ActiveRecord
         return ArrayHelper::map($users, 'id', 'fio');
     }
 
+    public function getCurrencyList()
+    {
+        $cur = Currency::find()->all();
+        return ArrayHelper::map($cur, 'id', 'name');
+    }
+
     public function getSubcategoryList()
     {
         $subcategories = Subcategory::find()->all();
@@ -195,6 +214,14 @@ class Ads extends \yii\db\ActiveRecord
         if($for == '_columns') {
            return $this->images  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
         }
+        if($for == 'main_page') {
+            $siteName = Yii::$app->params['siteName'];
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $this->images)) {
+                return $siteName . '/backend/web/img/no-logo.png';
+            } else {
+                return $siteName . '/backend/web/uploads/ads/' . $this->images;
+            }
+        }
     }
 
     public function upload()
@@ -211,5 +238,13 @@ class Ads extends \yii\db\ActiveRecord
     public function unlinkFile($file)
     {
         if( file_exists('uploads/ads/' . $file) ) unlink('uploads/ads/' . $file);
+    }
+
+    public function getStar($favorites)
+    {
+        foreach ($favorites as $value) {
+            if($value->field_id == $this->id) return true;
+        }
+        return false;
     }
 }
