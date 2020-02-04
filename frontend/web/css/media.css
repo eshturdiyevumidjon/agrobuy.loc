@@ -23,16 +23,16 @@
 		color: #383838;
 		cursor: default;
 	}
+	.languages-group a{
+		/*border-left: 0;*/
+		border-right: 0;
+		border-radius: 0;
+	}
 	.languages-group a:nth-child(1){
 		border-top-left-radius: 10px;
 		border-bottom-left-radius: 10px;
 	}
-	.languages-group a:nth-child(2){
-		border-left: 0;
-		border-right: 0;
-		border-radius: 0;
-	}
-	.languages-group a:nth-child(3){
+	.languages-group a:last-child{
 		border-top-right-radius: 10px;
 		border-bottom-right-radius: 10px;
 	}
@@ -413,7 +413,7 @@
 		background-size: 16px auto;
 	}
 	.popup-style{
-		padding: 30px;
+		padding: 30px !important;
 	}
 	.prem-vip-discount{
 		min-width: 75px;
@@ -1276,7 +1276,7 @@
 		padding-bottom: 10px;
 	}
 	.popup-style{
-		padding: 25px 15px;
+		padding: 25px 15px !important;
 	}
 	img.logo-popup-top{
 		max-width: 165px;

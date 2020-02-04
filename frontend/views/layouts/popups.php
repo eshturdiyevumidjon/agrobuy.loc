@@ -228,11 +228,11 @@ $this->registerJs(<<<JS
   $(function () {
     // add
     $('.avtorization_class').on('click', function () {
-        $('#avtorization').modal('show').find('#avtorizationContent').load($(this).attr('value'));
+        $('#avtorization').find('#avtorizationContent').load($(this).attr('value'));
     });
 
     $('.registration_class').on('click', function () {
-        $('#registration').modal('show').find('#registrationContent').load($(this).attr('value'));
+        $('#registration').find('#registrationContent').load($(this).attr('value'));
     });
   });
 

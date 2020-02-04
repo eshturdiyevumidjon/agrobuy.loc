@@ -711,7 +711,7 @@ span.star-item.active img:nth-child(1){
 .item-product a{
 	text-decoration: none;
 	color: #383838;
-	display: inline-block;
+	display: block;
 }
 .item-product h3{
 	text-transform: uppercase;
@@ -736,6 +736,14 @@ span.star-item.active img:nth-child(1){
 	font-weight: 300;
 	padding-left: 20px;
 	padding-right: 20px;
+	display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 20px;
+    word-break: break-all;
 }
 .item-product a>p span{
 	font-weight: 500;
@@ -792,13 +800,14 @@ span.star-item.active img:nth-child(1){
 .item-product .address-item-product{
 	display: block;
     display: -webkit-box;
-	height: 45px;
+	height: 30px;
 	text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     min-height: inherit;
+    line-height: 30px;
 }
 
 .block-id-product{
@@ -846,9 +855,21 @@ section.trust-him h2{
 	align-items: flex-start;
 	justify-content: center;
 	padding: 20px 30px;
+	/*background-color: #fff;*/
+	position: relative;
+	overflow: hidden;
 }
 .reclama img{
-	margin-bottom: 20px;
+	object-fit: cover;
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	max-height: inherit !important;
+	z-index: 2;
 }
 .reclama p{
 	font-size: 50px;
@@ -857,6 +878,9 @@ section.trust-him h2{
 	text-transform: uppercase;
 	margin-bottom: 0;
 	margin-top: 20px;
+	position: relative;
+	z-index: 3;
+	/*margin: 0;*/
 }
 /********************************************SECTION*************************************************/
 section.news{
@@ -1069,7 +1093,7 @@ footer{
 	max-width: 550px;
   	border-radius: 10px;
   	text-align: center;
-  	padding: 60px;
+  	padding: 60px !important;
   	width: 100%;
 }
 .popup-style p{
@@ -3415,6 +3439,8 @@ section.personal-area .about-main-user-right{
 }
 .my-catalog-block a.btn-template.link-btn{
 	width: 48%;
+	white-space: nowrap;
+	padding: 0;
 }
 .my-catalog-block a.btn-template.link-btn:nth-child(2){
 	background: none;
@@ -3929,25 +3955,27 @@ section.swiper-news.my-new-sect .row a{
 section.news-section .reclama{
 	margin-bottom: 30px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /********************************************SECTION*************************************************/
+/*Pravkalar*/
+/*.modal-backdrop.show{
+	display: none;
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
