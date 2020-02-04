@@ -96,7 +96,7 @@ class m150207_210500_i18n_init extends Migration
             "Sizda akkaunt bormi?" => "Сизда аккаунт борми?",
             "Ro'yxatdan o'tish" => "Рўйхатдан ўтиш",
             "Bu sahifa mavjud emas" => "Бу сахифа мавжуд эмас",
-            "Siz notog'ri yoki o'chib ketgan havoladan foydalangan bo'lishingiz mumkin" => "Сиз нотоғри ёки ўчиб кетган хаволадан фойдаланган бўлишингиз мумкин",
+            "Siz notog'ri yoki o'chib ketgan havoladan foydalangan bo'lishingiz mumkin" => "Сиз нотўғри ёки ўчиб кетган хаволадан фойдаланган бўлишингиз мумкин",
             "E'lon qo'shish" => "Эълон қўшиш",
             "Uchun" => "Учун",
             "So'm" => "Сум",
@@ -117,7 +117,7 @@ class m150207_210500_i18n_init extends Migration
             "Subkategoriyani tanlang" => "Субкатэгорияни танланг",
             "Shahar,viloyat qo'shing" => "Шахар,вилоят қўшинг",
             "E'lon sarlavhasi" => "Эьлон сарлавхаси",
-            "E'lon haqida batafsil ma'lumot bering" => "Эьлон хақида батафсил маьлумот беринг",
+            "E'lon haqida batafsil ma'lumot bering" => "Эьлон хақида батафсил маълумот беринг",
             "Narxni ko'rsating" => "Нархни кўрсатинг",
             "Narxi" => "Нархи",
             "Birlikni kiriting" => "Бирликни киритинг",
@@ -170,7 +170,14 @@ class m150207_210500_i18n_init extends Migration
             "Saralash" => "Саралаш",
             "Narxi bo'yicha" => "Нархига",
             "Sanasi bo'yicha" => "Санасига",
-            "Afsuski sizning so'rovingiz bo'yicha hech narsa topilmadi" => "Афсуски сизнинг соровингиз бўйича хеч нарса топилмади",
+            "Afsuski sizning so'rovingiz bo'yicha hech narsa topilmadi" => "Афсуски сизнинг сўровингиз бўйича хеч нарса топилмади",
+            "Profilni tahrirlash" => "Профильни таҳрирлаш",
+            "Mening e'lonlarim" => "Менинг эълонларим",
+            "E'lonni tahrirlash" => "Эълонни таҳрирлаш",
+            "Rag'batlantirish" => "Рағбатлантириш",
+            "Faollashtirish/O'chirish" => "Фаоллаштириш/Ўчириш",
+            "E'lonni o'chirish" => "Эълонни ўчириш",
+            "Mening katalogimga qo'shish/o'chiring" => "Менинг каталогимга кўшиш/ўчириш",
         ];
 
         $translations_uz_ru = [
@@ -302,6 +309,13 @@ class m150207_210500_i18n_init extends Migration
             "Narxi bo'yicha" => "Цене",
             "Sanasi bo'yicha" => "Дате",
             "Afsuski sizning so'rovingiz bo'yicha hech narsa topilmadi" => "К сожалению, по Вашему запросу ничего не найденно",
+            "Profilni tahrirlash" => "Редактировать профиль",
+            "Mening e'lonlarim" => "Мои объявления",
+            "E'lonni tahrirlash" => "Редактировать объявление",
+            "Rag'batlantirish" => "Продвинуть",
+            "Faollashtirish/O'chirish" => "Деактивировать/активировать",
+            "E'lonni o'chirish" => "Удалить объявление",
+            "Mening katalogimga qo'shish/o'chiring" => "Добавить/удалить объявление в/из мой каталог",
         ];
 
         $keys = array_keys($translations);

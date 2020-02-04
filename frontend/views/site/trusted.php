@@ -50,9 +50,9 @@ else $avt = false;
                         <?php if($ads->old_price != null) { ?>
                             <s><?=$ads->old_price?> <?=$ads->currency->name?></s>
                             <b><?=$ads->price?> <?=$ads->currency->name?></b>
-                          <?php } else {?>
+                        <?php } else {?>
                             <b><?=$ads->price?> <?=$ads->currency->name?></b>
-                          <?php } ?>
+                        <?php } ?>
                     </div>
                     <div class="address-item-product">
                         <?=$ads->city_name?>

@@ -14,6 +14,7 @@ class m191221_095126_create_promotions_table extends Migration
     {
         $this->createTable('{{%promotions}}', [
             'id' => $this->primaryKey(),
+            'image' => $this->string(255)->comment("Картинка"),
             'name' => $this->string(255)->comment("Наименование"),
             'text' => $this->text()->comment("Текст"),
             'price' => $this->float()->comment("Сумма"),
@@ -29,6 +30,7 @@ class m191221_095126_create_promotions_table extends Migration
             'text' => 'Приобрестите сейчас Поднять на первое место пакет и получите скидку в 30% с 
             возможностью оставлять неограниченное количество объявлений в течении 7 дней',
             'price' => 5000,
+            'image' => 'vip.png',
             'days' => 7,
             'premium' => false,
             'top' => true,
@@ -41,6 +43,7 @@ class m191221_095126_create_promotions_table extends Migration
             оставлять неограниченное количество объявлений в течении 10 дней',
             'price' => 10000,
             'days' => 10,
+            'image' => 'premium.png',
             'premium' => true,
             'top' => false,
             'discount' => 0,

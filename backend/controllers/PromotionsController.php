@@ -73,12 +73,13 @@ class PromotionsController extends Controller
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
+                $model->upload();
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> Yii::t('app','Create'),
-                    'content'=>'<span class="text-success">Create Promotions success</span>',
+                    'content'=>'<span class="text-success">Успешно выполнено</span>',
                     'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                            Html::a('Создать ещё',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
@@ -125,6 +126,10 @@ class PromotionsController extends Controller
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
+
+                $model->unlinkFile($file);
+                $model->upload();
+
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Promotions",

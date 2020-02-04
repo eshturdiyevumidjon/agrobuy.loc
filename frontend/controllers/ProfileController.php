@@ -6,6 +6,9 @@ use Yii;
 use yii\web\HttpException;
 use frontend\models\Sessions;
 use common\models\Users;
+use common\models\Ads;
+use common\models\Favorites;
+use backend\models\Promotions;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -29,9 +32,29 @@ class ProfileController extends \yii\web\Controller
     {
     	$session = new Sessions();
     	$identity = Yii::$app->user->identity;
+        $favorites = Favorites::find()->where(['type' => 1])->all();
+        $promotions = Promotions::find()->all();
+        $favId = [];
+        foreach ($favorites as $value) {
+            $favId [] = $value->field_id;
+        }
+
+        $favoriteAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'ads.id', $favId])
+            ->all();
+
+        $myAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['ads.user_id' => $identity->id])
+            ->all();
 
         return $this->render('index',[
         	'identity' => $identity,
+            'myAds' => $myAds,
+            'favorites' => $favorites,
+            'favoriteAds' => $favoriteAds,
+            'promotions' => $promotions,
         	'nowLanguage' => Yii::$app->language,
         ]);
     }

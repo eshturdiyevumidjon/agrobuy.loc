@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 return [
    // [
@@ -10,10 +11,15 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-        // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'id',
-    // ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'image',
+        'contentOptions' => ['style'=>'width: 48px; height:48px;'],
+        'content' => function ($data) {
+           if($data->image != null) return '<center>' . Html::img('/backend/web/uploads/promotions/'.$data->image, [ 'style' => 'height:48px;width:48px; object-fit: cover;']) . '</center>';
+           else return '<center>' . Html::img('/backend/web/img/nouser.png', [ 'style' => 'height:48px;width:48px; object-fit: cover;']) . '</center>';
+        },
+    ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'name',
@@ -44,10 +50,10 @@ return [
             return $data->getTopDescription();
         }
     ],
-    /*[
+    [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'discount',
-    ],*/
+    ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

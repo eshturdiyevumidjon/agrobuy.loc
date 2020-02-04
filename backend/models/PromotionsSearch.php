@@ -19,7 +19,7 @@ class PromotionsSearch extends Promotions
     {
         return [
             [['id', 'days', 'discount'], 'integer'],
-            [['name', 'text', 'premium', 'top'], 'safe'],
+            [['name', 'text', 'premium', 'top', 'image'], 'safe'],
             [['price'], 'number'],
         ];
     }
@@ -60,6 +60,7 @@ class PromotionsSearch extends Promotions
             'id' => $this->id,
             'price' => $this->price,
             'days' => $this->days,
+            'image' => $this->image,
             'discount' => $this->discount,
         ]);
 
