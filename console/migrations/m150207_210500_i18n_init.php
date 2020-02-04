@@ -83,7 +83,7 @@ class m150207_210500_i18n_init extends Migration
             "Avtorizatsiya" => "Авторизация",
             "Parolni unutdingizmi?" => "Парольни унутдингизми?",
             "yoki" => "ёки",
-            "Avtorizatsiya o'tish" => "Авторизациядан ўтиш",
+            "Avtorizatsiyadan o'tish" => "Авторизациядан ўтиш",
             "Kompaniya nomi" => "Компания номи",
             "ID" => "ID",
             "Katalogni baham ko'ring" => "Каталогни бахам кўриш",
@@ -177,7 +177,12 @@ class m150207_210500_i18n_init extends Migration
             "Rag'batlantirish" => "Рағбатлантириш",
             "Faollashtirish/O'chirish" => "Фаоллаштириш/Ўчириш",
             "E'lonni o'chirish" => "Эълонни ўчириш",
-            "Mening katalogimga qo'shish/o'chiring" => "Менинг каталогимга кўшиш/ўчириш",
+            "Mening katalogimga qo'shish/o'chiring" => "Менинг каталогимга қўшиш/ўчириш",
+            "Operatsiya" => "Операция",
+            "Yaratilgan vaqti" => "Яратилган вақти",
+            "E'lon nomeri" => "Эълон номери",
+            "Summa" => "Сумма",
+            "Hisobni to'ldirish" => "Хисобни тўлдириш",
         ];
 
         $translations_uz_ru = [
@@ -221,7 +226,7 @@ class m150207_210500_i18n_init extends Migration
             "Avtorizatsiya" => "Авторизация",
             "Parolni unutdingizmi?" => "Забыли пароль?",
             "yoki" => "или",
-            "Avtorizatsiya o'tish" => "Авторизоваться",
+            "Avtorizatsiyadan o'tish" => "Авторизоваться",
             "Kompaniya nomi" => "Название компании",
             "ID" => "ID",
             "Katalogni baham ko'ring" => "Поделиться каталогом",
@@ -316,6 +321,11 @@ class m150207_210500_i18n_init extends Migration
             "Faollashtirish/O'chirish" => "Деактивировать/активировать",
             "E'lonni o'chirish" => "Удалить объявление",
             "Mening katalogimga qo'shish/o'chiring" => "Добавить/удалить объявление в/из мой каталог",
+            "Operatsiya" => "Операция",
+            "Yaratilgan vaqti" => "Дата и время",
+            "E'lon nomeri" => "№ объявления",
+            "Summa" => "Сумма",
+            "Hisobni to'ldirish" => "Пополнение счета",
         ];
 
         $keys = array_keys($translations);

@@ -97,4 +97,10 @@ class HistoryOperations extends \yii\db\ActiveRecord
             }
         }
     }
+
+    public function getPromotion()
+    {
+        $promotion = Promotions::findOne($this->field_id);
+        if($promotion != null) return $promotion;
+    }
 }

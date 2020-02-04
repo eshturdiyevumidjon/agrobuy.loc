@@ -24,12 +24,12 @@ $nowLanguageName = '';
               </div>
               <span class="d-sm-none"><?=$nowLanguageName?></span>
             </div>
-            <a href="#" class="btn-template"><?= Yii::t('app',"E'lon berish") ?></a>
+            <a href="#" class="btn-template"><?= Yii::t('app',"E'lon qo'shish") ?></a>
             <?php if(Yii::$app->user->isGuest) { ?>
-              <a data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="entor-to-site avtorization_class">
+              <div data-touch="false" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="entor-to-site avtorization_class">
                 <span style="background-image: url(/images/icon-user.png);"></span>
                 <?= Yii::t('app',"Kirish") ?>
-              </a>
+              </div>
             <?php } else { ?>
                 <span class="btn btn-template" data-fancybox data-src="#logout-popup" ><?=Yii::t('app', 'Chiqish')?></span>
               <?php 

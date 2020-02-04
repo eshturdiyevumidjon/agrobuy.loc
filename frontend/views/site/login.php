@@ -9,7 +9,7 @@ use yii\bootstrap\ActiveForm;
 
 ?>
     <img src="<?=$path?>" alt="Logo" class="logo-popup-top">
-    <h2><span><?= Yii::t('app',"Avtorizatsiyadan o'tish") ?></span></h2>
+    <h2><span><?= Yii::t('app',"Avtorizatsiya") ?></span></h2>
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -21,7 +21,7 @@ use yii\bootstrap\ActiveForm;
             <a href="#" class="link-popup"><?= Yii::t('app',"Parolni unutdingizmi?") ?></a>
         </div>
 
-        <button type="submit" class="btn-template"><?= Yii::t('app',"Avtorizatsiya o'tish") ?></button>
+        <button type="submit" class="btn-template"><?= Yii::t('app',"Avtorizatsiyadan o'tish") ?></button>
         <p class="text-center"><?= Yii::t('app',"yoki") ?></p>
         <a data-fancybox data-src="#registration" value="/<?=$nowLanguage?>/site/signup" class="link-popup registration_class">
           <?= Yii::t('app',"Registratsiyadan o'tish") ?> </a>

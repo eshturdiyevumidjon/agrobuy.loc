@@ -1,26 +1,19 @@
 <?php
 
-	use yii\halpers\Html;
-?>  
 
+?>
 <div class="puy-tab-person">
-                <div class="prem-vip">
-                  <div class="prem-vip-item">
-                    <div class="prem-vip-discount">- 50%</div>
-                    <div class="prem-vip-img">
-                        <img src="/images/vip.png" alt="">
-                    </div>
-                    <a class="prem-vip-date">7 дней</a>
-                    <p>Приобретите сейчас VIP пакет и получите скидку в 50% с возможностью оставлять неограниченное количество объявленийй в течении 7 дней</p>
-                    <span class="prem-vip-price">5 000 сумма</span>
-                  </div>
-                  <div class="prem-vip-item">
-                    <div class="prem-vip-img">
-                        <img src="/images/premium.png" alt="">
-                    </div>
-                    <a class="prem-vip-date">Премиум</a>
-                    <p>Приобретите сейчас VIP пакет и получите скидку в 50% с возможностью оставлять неограниченное количество объявленийй в течении 7 дней</p>
-                    <span class="prem-vip-price">5 000 сумма</span>
-                  </div>
-                </div>
-              </div>
+    <div class="prem-vip">
+    	<?php foreach ($promotions as $prom) { ?>
+	        <div class="prem-vip-item">
+	            <?php if($prom->discount > 0) echo '<div class="prem-vip-discount">- ' . $prom->discount . '%</div>'?>
+	            <div class="prem-vip-img">
+	                <img src="<?=$prom->getImage('main_page')?>" alt="">
+	            </div>
+	            <a class="prem-vip-date"><?=$prom->name?></a>
+	            <p><?=$prom->text?></p>
+	            <span class="prem-vip-price"><?=$prom->price?> <?= Yii::t('app',"So'm") ?></span>
+	        </div>
+    	<?php } ?>
+    </div>
+</div>

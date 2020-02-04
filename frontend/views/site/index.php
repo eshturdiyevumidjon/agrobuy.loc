@@ -43,7 +43,7 @@ $this->title = 'AgroBuy';
 
             <div class="reclama">
                 <img src="<?=$reklama->getImage('main_page')?>" alt="<?=$reklama->title?>">
-                <p><?=$reklama->title?></p>
+                <!-- <p><?php //$reklama->title?></p> -->
             </div>
 
             <?= count($newAds) > 0 ? 

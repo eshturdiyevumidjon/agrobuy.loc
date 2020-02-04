@@ -9,6 +9,7 @@ use common\models\Users;
 use common\models\Ads;
 use common\models\Favorites;
 use backend\models\Promotions;
+use common\models\HistoryOperations;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -34,6 +35,7 @@ class ProfileController extends \yii\web\Controller
     	$identity = Yii::$app->user->identity;
         $favorites = Favorites::find()->where(['type' => 1])->all();
         $promotions = Promotions::find()->all();
+        $history = HistoryOperations::find()->where(['user_id' => $identity->id])->all();
         $favId = [];
         foreach ($favorites as $value) {
             $favId [] = $value->field_id;
@@ -55,6 +57,7 @@ class ProfileController extends \yii\web\Controller
             'favorites' => $favorites,
             'favoriteAds' => $favoriteAds,
             'promotions' => $promotions,
+            'history' => $history,
         	'nowLanguage' => Yii::$app->language,
         ]);
     }

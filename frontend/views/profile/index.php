@@ -40,14 +40,14 @@
             </div>
             <div class="tab-pane fade" id="thirdtab">
               <?= $this->render('buy-tab-person', [
-                  /*'nowLanguage' => $nowLanguage,
-                  'categories' => $categories,*/
+                  'nowLanguage' => $nowLanguage,
+                  'promotions' => $promotions,
               ]) ?>
             </div>
             <div class="tab-pane fade" id="fourthtab">
                 <?= $this->render('operation-history', [
-                  /*'nowLanguage' => $nowLanguage,
-                  'categories' => $categories,*/
+                  'nowLanguage' => $nowLanguage,
+                  'history' => $history,
               ]) ?>
             </div>
           </div>
