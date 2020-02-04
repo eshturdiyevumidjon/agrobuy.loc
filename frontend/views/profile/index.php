@@ -14,9 +14,9 @@
 <section class="personal-area">
     <div class="container">
         <?= $this->render('main-block-user', [
-	        'nowLanguage' => $nowLanguage,
-	        'identity' => $identity,
-	    ]) ?>
+  	        'nowLanguage' => $nowLanguage,
+  	        'identity' => $identity,
+  	    ]) ?>
         <div class="personal-tab">
           <ul class="nav nav-tabs">
             <li><a href="#firsttab" data-toggle="tab" class="active"><?= Yii::t('app',"Mening e'lonlarim") ?></a></li>
@@ -28,8 +28,8 @@
             <div class="tab-pane in active" id="firsttab">
               <?= $this->render('tab-my-ads', [
 		            'myAds' => $myAds,
-		        	'nowLanguage' => $nowLanguage,
-		        	'favorites' => $favorites,
+  		        	'nowLanguage' => $nowLanguage,
+  		        	'favorites' => $favorites,
               ]) ?>
             </div>
             <div class="tab-pane fade" id="secondtab">

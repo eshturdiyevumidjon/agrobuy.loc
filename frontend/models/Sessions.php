@@ -9,6 +9,7 @@ use backend\models\AboutCompany;
 use yii\data\ActiveDataProvider;
 use backend\models\Translates;
 use backend\models\Advertisings;
+use common\models\Regions;
 
 /**
  * Signup form
@@ -118,6 +119,28 @@ class Sessions extends Model
             return $session['main_adv'];
         }
         return $session['main_adv'];
+    }
+
+    public function getCatalogAdv()
+    {
+        $session = Yii::$app->session;
+        if($session['catalog_adv'] == null) {
+            $adv = Advertisings::find()->where(['key' => 'user_catalog'])->one();
+            $session['catalog_adv'] = $adv;
+            return $session['catalog_adv'];
+        }
+        return $session['catalog_adv'];
+    }
+
+    public function getRegionsList()
+    {
+        $session = Yii::$app->session;
+        if($session['regions'] == null) {
+            $regions = Regions::find()->all();
+            $session['regions'] = $regions;
+            return $session['regions'];
+        }
+        return $session['regions'];
     }
 
 

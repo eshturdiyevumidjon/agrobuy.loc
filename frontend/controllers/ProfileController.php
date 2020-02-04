@@ -10,6 +10,10 @@ use common\models\Ads;
 use common\models\Favorites;
 use backend\models\Promotions;
 use common\models\HistoryOperations;
+use common\models\UsersCatalog;
+use common\models\Category;
+use backend\models\AdvertisingItems;
+use common\models\Regions;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -59,6 +63,31 @@ class ProfileController extends \yii\web\Controller
             'promotions' => $promotions,
             'history' => $history,
         	'nowLanguage' => Yii::$app->language,
+        ]);
+    }
+
+    public function actionCatalog()
+    {
+        $session = new Sessions();
+        $adv = $session->getCatalogAdv();
+        $regions = $session->getRegionsList();
+        $identity = Yii::$app->user->identity;
+        $categories = Category::getAllCategoryList();
+        $usersCatalog = UsersCatalog::find()->joinWith(['ads'])->where(['users_catalog.user_id' => $identity->id])->all();
+
+        $reklama = AdvertisingItems::find()
+            ->where(['advertising_id' => $adv->id])
+            ->orderBy(['rand()' => SORT_DESC])
+            ->one();
+
+        return $this->render('catalog',[
+            'identity' => $identity,
+            'session' => $session,
+            'regions' => $regions,
+            'categories' => $categories,
+            'reklama' => $reklama,
+            'usersCatalog' => $usersCatalog,
+            'nowLanguage' => Yii::$app->language,
         ]);
     }
 

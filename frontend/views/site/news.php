@@ -1,5 +1,7 @@
 <?php
-
+/*echo "<pre>";
+print_r($news);
+echo "</pre>";*/
 ?>
     <section class="news">
       <div class="container">

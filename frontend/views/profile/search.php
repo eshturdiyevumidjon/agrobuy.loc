@@ -2,8 +2,6 @@
 
 ?>
 
-<section class="form-section">
-      <div class="container">
         <form class="form-search">
           <div class="form-group select2-style">
             <select class="js-select2">
@@ -29,5 +27,3 @@
             <button type="submit" class="btn-template"><?= Yii::t('app',"Qidirish") ?></button>
           </div>
         </form>
-      </div>
-</section>

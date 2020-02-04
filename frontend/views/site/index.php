@@ -10,6 +10,7 @@ $this->title = 'AgroBuy';
     ?>
 
     <?= $this->render('search', [
+        'regions' => $regions,
         'nowLanguage' => $nowLanguage,
         'categories' => $categories,
     ]) ?>

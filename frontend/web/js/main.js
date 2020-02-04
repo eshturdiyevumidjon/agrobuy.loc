@@ -1,12 +1,12 @@
 $(document).ready(function () {
 
-  $('.item-product .address-item-product').each(function(i){
-    $(i).css('display', 'inline')
-    if($(i).height()<36){
-      $(i).addClass('min-pro')
-    }
-    $(i).css('display', '-webkit-box')
-  })
+  // $('.item-product .address-item-product').each(function(i){
+  //   $(i).css('display', 'inline')
+  //   if($(i).height()<36){
+  //     $(i).addClass('min-pro')
+  //   }
+  //   $(i).css('display', '-webkit-box')
+  // })
 
 
   $('[data-fancybox]').fancybox();

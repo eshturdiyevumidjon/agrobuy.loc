@@ -154,7 +154,7 @@ class m150207_210500_i18n_init extends Migration
             "Jami" => "Жами",
             "Saytdan chiqish" => "Сайтдан чиқиш",
             "Siz haqiqatdan ham saytdan chiqmoqchimisiz?" => "Сиз хақиқатдан хам сайтдан чиқмоқчимисиз",
-            "Profil rasmini o'zgartiring" => "Профиль расмини ўзгартиринг",
+            "Profil rasmini o'zgartirish" => "Профиль расмини ўзгартириш",
             "Ishonch" => "Ишонч",
             "Mening katalogim" => "Менинг каталогим",
             "Mening chatim" => "Менинг чатим",
@@ -240,7 +240,7 @@ class m150207_210500_i18n_init extends Migration
             "Ro'yxatdan o'tish" => "Регистрация",
             "Bu sahifa mavjud emas" => "Эта страница недоступна",
             "Siz notog'ri yoki o'chib ketgan havoladan foydalangan bo'lishingiz mumkin" => "Возможно вы воспользовались недействительной ссылкой или страница была удалена",
-            "E'lon qo'shish" => "Подать обьявления",
+            "E'lon qo'shish" => "Подать объявления",
             "Uchun" => "За",
             "So'm" => "Сум",
             "Chiqish" => "Выход",
@@ -298,7 +298,7 @@ class m150207_210500_i18n_init extends Migration
             "Jami" => "Итого",
             "Saytdan chiqish" => "Выйти",
             "Siz haqiqatdan ham saytdan chiqmoqchimisiz?" => "Вы уверены, что хотите выйти?",
-            "Profil rasmini o'zgartiring" => "Сменить фото профиля",
+            "Profil rasmini o'zgartirish" => "Сменить фото профиля",
             "Ishonch" => "Доверие",
             "Mening katalogim" => "Мой каталог",
             "Mening chatim" => "Мои чаты",
@@ -355,18 +355,18 @@ class m150207_210500_i18n_init extends Migration
             ));
         };
 
-        foreach ($values as $key => $value) {
-            $this->insert('{{%message}}',array(
-                'id' => ($key+1),
-                'language' => 'en',
-                'translation' => $value
-            ));
-        }
-
         foreach ($val as $key => $value) {
             $this->insert('{{%message}}',array(
                 'id' => ($key+1),
                 'language' => 'ru',
+                'translation' => $value
+            ));
+        }
+
+        foreach ($values as $key => $value) {
+            $this->insert('{{%message}}',array(
+                'id' => ($key+1),
+                'language' => 'en',
                 'translation' => $value
             ));
         }

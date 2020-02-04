@@ -18,7 +18,6 @@ use backend\models\Banners;
 use common\models\Category;
 use frontend\models\Sessions;
 use backend\models\News;
-use backend\models\Advertisings;
 use backend\models\AdvertisingItems;
 use common\models\Ads;
 use common\models\UsersPromotion;
@@ -94,6 +93,7 @@ class SiteController extends Controller
         $banners = Banners::getAllBannersList();
         $categories = Category::getAllCategoryList();
         $favorites = Favorites::find()->where(['type' => 1])->all();
+        $regions = $session->getRegionsList();
 
         $premiumAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
@@ -122,6 +122,7 @@ class SiteController extends Controller
 
         return $this->render('index', [
             'banners' => $banners,
+            'regions' => $regions,
             'about_company' => $about_company,
             'categories' => $categories,
             'news' => $news,
@@ -207,6 +208,7 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        /*return $this->goHome();*/
         $session = new Sessions();
         $about_company = $session->getCompany();
         $siteName = Yii::$app->params['siteName'];
