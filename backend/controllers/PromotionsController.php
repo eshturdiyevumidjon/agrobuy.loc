@@ -127,8 +127,11 @@ class PromotionsController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
 
-                $model->unlinkFile($file);
-                $model->upload();
+                if(!empty($model->imageFiles))
+                {
+                    $model->unlinkFile($file);
+                    $model->upload();
+                }
 
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
