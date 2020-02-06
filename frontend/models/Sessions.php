@@ -103,7 +103,10 @@ class Sessions extends Model
         }
         else {
             foreach ($session['translates'] as $tr) {
-                if($tr->table_name == $table_name && $tr->field_id == $value->id && $tr->field_name == $field && $tr->language_code == $lang) return $tr->field_value;
+                if($tr->table_name == $table_name && $tr->field_id == $value->id && $tr->field_name == $field && $tr->language_code == $lang){
+                    if($tr->field_value == '') return $value->{$field};
+                    else return $tr->field_value;
+                } 
             }
             return $value->{$field};
         }
@@ -130,6 +133,28 @@ class Sessions extends Model
             return $session['catalog_adv'];
         }
         return $session['catalog_adv'];
+    }
+
+    public function getSearchBigAdv()
+    {
+        $session = Yii::$app->session;
+        if($session['search_big'] == null) {
+            $adv = Advertisings::find()->where(['key' => 'search_big'])->one();
+            $session['search_big'] = $adv;
+            return $session['search_big'];
+        }
+        return $session['search_big'];
+    }
+
+    public function getSearchSmallAdv()
+    {
+        $session = Yii::$app->session;
+        if($session['search_small'] == null) {
+            $adv = Advertisings::find()->where(['key' => 'search_small'])->one();
+            $session['search_small'] = $adv;
+            return $session['search_small'];
+        }
+        return $session['search_small'];
     }
 
     public function getRegionsList()

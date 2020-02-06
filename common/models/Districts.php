@@ -48,6 +48,16 @@ class Districts extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Ads]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAds()
+    {
+        return $this->hasMany(Ads::className(), ['region_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Region]].
      *
      * @return \yii\db\ActiveQuery

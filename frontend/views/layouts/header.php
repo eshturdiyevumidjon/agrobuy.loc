@@ -31,7 +31,7 @@ $nowLanguageName = '';
                 <?= Yii::t('app',"Kirish") ?>
               </a>
             <?php } else { ?>
-                <span class="btn btn-template" data-fancybox data-src="#logout-popup" ><?=Yii::t('app', 'Chiqish')?></span>
+                <a class="btn btn-template btn_exit" data-fancybox data-src="#logout-popup" ><?=Yii::t('app', 'Chiqish')?></a>
               <?php 
                  /*echo Html::beginForm(['/site/logout'], 'post');
                  echo Html::submitButton(Yii::t('app', 'Ha'), ['class' => 'btn btn-template'] );

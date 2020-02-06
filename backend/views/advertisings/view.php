@@ -18,7 +18,7 @@ CrudAsset::register($this);
         <div class="panel-heading-btn">
             <?=Html::a('Назад', ['/advertisings'],['data-pjax'=>'0','title'=> 'Назад', 'class' => ' btn-warning btn btn-xs'])?>
         </div>
-        <h4 class="panel-title"><?=$model->name?></h4>
+        <h4 class="panel-title">Рекламный баннер - <?=$model->name?></h4>
     </div>
     <div class="panel-body"> 
         <?=GridView::widget([

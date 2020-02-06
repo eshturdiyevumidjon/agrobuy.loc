@@ -24,6 +24,7 @@ use common\models\UsersPromotion;
 use backend\models\UsersBall;
 use yii\widgets\ActiveForm;
 use common\models\Favorites;
+use common\models\AdsSearch;
 
 /**
  * Site controller
@@ -106,6 +107,10 @@ class SiteController extends Controller
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->one();
+        if($reklama != null) {
+            $reklama->view_count = $reklama->view_count + 1;
+            $reklama->save();
+        }
 
         $newAds = Ads::find()
             ->joinWith(['category', 'currency'])
@@ -234,6 +239,63 @@ class SiteController extends Controller
                 'nowLanguage' => Yii::$app->language,
             ]);
         }
+    }
+
+    public function actionSearch()
+    {
+        $request = Yii::$app->request;
+        $session = new Sessions();
+        $get = null;
+        $dataProvider = null;
+        $search_big = $session->getSearchBigAdv();
+        $search_small = $session->getSearchSmallAdv();
+        $regions = $session->getRegionsList();
+        $categories = Category::getAllCategoryList();
+        $about_company = $session->getCompany();
+        $favorites = Favorites::find()->where(['type' => 1])->all();
+        $siteName = Yii::$app->params['siteName'];
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+        }
+
+        $reklamaBig = AdvertisingItems::find()
+            ->where(['advertising_id' => $search_big->id])
+            ->orderBy(['rand()' => SORT_DESC])
+            ->one();
+        if($reklamaBig != null) {
+            $reklamaBig->view_count = $reklamaBig->view_count + 1;
+            $reklamaBig->save();
+        }
+
+        $reklamaSmall = AdvertisingItems::find()
+            ->where(['advertising_id' => $search_small->id])
+            ->orderBy(['rand()' => SORT_DESC])
+            ->one();
+        if($reklamaSmall != null) {
+            $reklamaSmall->view_count = $reklamaSmall->view_count + 1;
+            $reklamaSmall->save();
+        }
+
+        if($request->get()){
+            $get = $request->get();
+            $searchModel = new AdsSearch();
+            $dataProvider = $searchModel->filtr($get);
+        }
+
+        return $this->render('search', [
+            'model' => $model,
+            'get' => $get,
+            'path' => $path,
+            'regions' => $regions,
+            'favorites' => $favorites,
+            'categories' => $categories,
+            'reklamaBig' => $reklamaBig,
+            'dataProvider' => $dataProvider,
+            'reklamaSmall' => $reklamaSmall,
+            'nowLanguage' => Yii::$app->language,
+        ]);
     }
 
     /**

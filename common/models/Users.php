@@ -405,6 +405,11 @@ class Users extends \yii\db\ActiveRecord
         else return 0;
     }
 
+    public function getReyting()
+    {
+        return '000';
+    }
+
     public function getAvatarForSite()
     {
         $siteName = Yii::$app->params['siteName'];

@@ -86,7 +86,7 @@ class UsersBall extends \yii\db\ActiveRecord
     //eng yuqori ballga ega bolgan dastlabki 5 ta userning idsini yigib olish funksiyasi
     public function getUsersList()
     {
-        $usersBall = UsersBall::find()->all();
+        $usersBall = UsersBall::find()->joinWith([ 'user',])->all();
 
         $userID = [];
         foreach ($usersBall as $value) {

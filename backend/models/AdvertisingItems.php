@@ -35,7 +35,7 @@ class AdvertisingItems extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['advertising_id', 'type'], 'integer'],
+            [['advertising_id', 'type', 'count', 'status', 'click_count', 'limit', 'view_count'], 'integer'],
             [['text'], 'string'],
             [['title'], 'required'],
             [['imageFiles'], 'file', 'skipOnEmpty' => true,],
@@ -58,6 +58,11 @@ class AdvertisingItems extends \yii\db\ActiveRecord
             'type' => 'Тип рекламы',
             'file' => 'Файл',
             'imageFiles' => 'Файл',
+            'count' => 'Счетчик',
+            'status' => 'Статус',
+            'click_count' => 'Кол-во кликов',
+            'limit' => 'Лимит',
+            'view_count' => 'Кол-во просмотров',
         ];
     }
 

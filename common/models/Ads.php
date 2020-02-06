@@ -52,7 +52,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg',],
-            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id'], 'integer'],
+            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id'], 'integer'],
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr','comment'], 'safe'],
@@ -61,6 +61,8 @@ class Ads extends \yii\db\ActiveRecord
             [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::className(), 'targetAttribute' => ['currency_id' => 'id']],
+            [['district_id'], 'exist', 'skipOnError' => true, 'targetClass' => Districts::className(), 'targetAttribute' => ['district_id' => 'id']],
+            [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Regions::className(), 'targetAttribute' => ['region_id' => 'id']],
             [['comment'],'required', 'on' => self::SCENARIO_DELETING],
             
         ];
@@ -97,6 +99,8 @@ class Ads extends \yii\db\ActiveRecord
             'imageFiles' => 'Фотографии',
             'comment' => 'Причина',
             'currency_id' => 'Валюта',
+            'region_id' => 'Город',
+            'district_id' => 'Район',
         ];
     }
 
@@ -125,6 +129,26 @@ class Ads extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    /**
+     * Gets query for [[District]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDistrict()
+    {
+        return $this->hasOne(Districts::className(), ['id' => 'district_id']);
+    }
+
+    /**
+     * Gets query for [[Region]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRegion()
+    {
+        return $this->hasOne(Regions::className(), ['id' => 'region_id']);
     }
 
     /**

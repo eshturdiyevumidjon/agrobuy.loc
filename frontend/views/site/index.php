@@ -9,7 +9,7 @@ $this->title = 'AgroBuy';
         ]) : '' 
     ?>
 
-    <?= $this->render('search', [
+    <?= $this->render('filtr', [
         'regions' => $regions,
         'nowLanguage' => $nowLanguage,
         'categories' => $categories,

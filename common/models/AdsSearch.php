@@ -18,7 +18,7 @@ class AdsSearch extends Ads
     public function rules()
     {
         return [
-            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id'], 'integer'],
+            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id', 'region_id', 'district_id'], 'integer'],
             [['title', 'images', 'city_name', 'text', 'unit_price', 'treaty', 'date_cr'], 'safe'],
             [['price', 'old_price'], 'number'],
         ];
@@ -198,4 +198,45 @@ class AdsSearch extends Ads
 
         return $dataProvider;
     }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function filtr($get)
+    {
+        $query = Ads::find()->joinWith(['category', 'user', 'currency']);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if(isset($get['category'])) {
+            $query->andFilterWhere([
+                'category_id' => $get['category'],
+            ]);
+        }
+
+        if(isset($get['region'])) {
+            $query->andFilterWhere([
+                'region_id' => $get['region'],
+            ]);
+        }
+
+        if(isset($get['sub'])) {
+            $query->andFilterWhere([
+                'subcategory_id' => $get['sub'],
+            ]);
+        }
+
+        if(isset($get['text'])) {
+            $query->andFilterWhere(['like', 'title', $get['text']]);
+        }
+
+        return $dataProvider;
+    }
+
 }

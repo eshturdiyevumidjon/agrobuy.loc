@@ -52,13 +52,17 @@ return [
         'attribute'=>'category_id',
         'filter' => Ads::getCategoryList(),
         'content'=>function($data){
-            return $data->getCategoryList()[$data->type];
+            return $data->getCategoryList()[$data->category_id];
         },
     ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'subcategory_id',
-    // ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'subcategory_id',
+        'filter' => Ads::getSubcategoryList(),
+        'content'=>function($data){
+            return $data->getSubcategoryList()[$data->subcategory_id];
+        },
+    ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'city_name',

@@ -49,12 +49,12 @@ else $avt = false;
                         <h3><?=$ads->title?></h3>
                         <p><?= Yii::t('app',"Kategoriya") ?>: <span><?=$ads->category->title?></span></p>
                         <div class="discount">
-                          <?php if($ads->old_price != null) { ?>
-                            <s><?=$ads->old_price?> <?=$ads->currency->name?></s>
-                            <b><?=$ads->price?> <?=$ads->currency->name?></b>
-                          <?php } else {?>
-                            <b><?=$ads->price?> <?=$ads->currency->name?></b>
-                          <?php } ?>
+                            <?php if($ads->old_price != null) { ?>
+                                <s><?=$ads->old_price?> <?=$ads->currency->name?></s>
+                                <b><?=$ads->price?> <?=$ads->currency->name?></b>
+                            <?php } else {?>
+                                <b><?=$ads->price?> <?=$ads->currency->name?></b>
+                            <?php } ?>
                         </div>
                         <div class="address-item-product">
                             <?=$ads->city_name?>

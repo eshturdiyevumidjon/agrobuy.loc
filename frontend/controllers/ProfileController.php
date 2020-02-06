@@ -79,6 +79,10 @@ class ProfileController extends \yii\web\Controller
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->one();
+        if($reklama != null) {
+            $reklama->view_count = $reklama->view_count + 1;
+            $reklama->save();
+        }
 
         return $this->render('catalog',[
             'identity' => $identity,
@@ -87,6 +91,72 @@ class ProfileController extends \yii\web\Controller
             'categories' => $categories,
             'reklama' => $reklama,
             'usersCatalog' => $usersCatalog,
+            'nowLanguage' => Yii::$app->language,
+        ]);
+    }
+
+    public function actionEdit()
+    {
+        $session = new Sessions();
+        $identity = Yii::$app->user->identity;
+        $favorites = Favorites::find()->where(['type' => 1])->all();
+        $promotions = Promotions::find()->all();
+        $history = HistoryOperations::find()->where(['user_id' => $identity->id])->all();
+        $favId = [];
+        foreach ($favorites as $value) {
+            $favId [] = $value->field_id;
+        }
+
+        $favoriteAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'ads.id', $favId])
+            ->all();
+
+        $myAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['ads.user_id' => $identity->id])
+            ->all();
+
+        return $this->render('_form',[
+            'identity' => $identity,
+            'myAds' => $myAds,
+            'favorites' => $favorites,
+            'favoriteAds' => $favoriteAds,
+            'promotions' => $promotions,
+            'history' => $history,
+            'nowLanguage' => Yii::$app->language,
+        ]);
+    }
+
+    public function actionChat()
+    {
+        $session = new Sessions();
+        $identity = Yii::$app->user->identity;
+        $favorites = Favorites::find()->where(['type' => 1])->all();
+        $promotions = Promotions::find()->all();
+        $history = HistoryOperations::find()->where(['user_id' => $identity->id])->all();
+        $favId = [];
+        foreach ($favorites as $value) {
+            $favId [] = $value->field_id;
+        }
+
+        $favoriteAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'ads.id', $favId])
+            ->all();
+
+        $myAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['ads.user_id' => $identity->id])
+            ->all();
+
+        return $this->render('chat',[
+            'identity' => $identity,
+            'myAds' => $myAds,
+            'favorites' => $favorites,
+            'favoriteAds' => $favoriteAds,
+            'promotions' => $promotions,
+            'history' => $history,
             'nowLanguage' => Yii::$app->language,
         ]);
     }

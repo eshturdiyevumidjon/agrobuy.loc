@@ -37,6 +37,10 @@ return [
         },
     ],
     [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'view_count',
+    ],
+    [
         'class'    => 'kartik\grid\ActionColumn',
         'template' => '{leadUpdate} {leadDelete}',
         'buttons'  => [

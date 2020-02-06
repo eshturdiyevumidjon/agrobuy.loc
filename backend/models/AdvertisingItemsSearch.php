@@ -18,7 +18,7 @@ class AdvertisingItemsSearch extends AdvertisingItems
     public function rules()
     {
         return [
-            [['id', 'advertising_id', 'type'], 'integer'],
+            [['id', 'advertising_id', 'type', 'count', 'status', 'click_count', 'limit', 'view_count'], 'integer'],
             [['title', 'text', 'link', 'file'], 'safe'],
         ];
     }
@@ -59,6 +59,11 @@ class AdvertisingItemsSearch extends AdvertisingItems
             'id' => $this->id,
             'advertising_id' => $this->advertising_id,
             'type' => $this->type,
+            'count' => $this->count,
+            'status' => $this->status,
+            'click_count' => $this->click_count,
+            'limit' => $this->limit,
+            'view_count' => $this->view_count,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
