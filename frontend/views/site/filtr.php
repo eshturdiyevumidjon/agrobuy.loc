@@ -7,7 +7,7 @@
         <form class="form-search" action="/site/search" method="get">
           <div class="form-group select2-style">
             <select class="js-select2" name="category">
-              <option><?= Yii::t('app',"Kategoriya") ?></option>
+              <option value="" disabled selected><?= Yii::t('app',"Kategoriya") ?></option>
               <?php foreach ($categories as $category) {
                 echo '<option value="' . $category['id'] . '">' . $category['title'] . '</option>';
               }

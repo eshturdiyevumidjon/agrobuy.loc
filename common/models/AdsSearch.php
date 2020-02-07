@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Ads;
+use frontend\models\Sessions;
 
 /**
  * AdsSearch represents the model behind the search form about `common\models\Ads`.
@@ -18,7 +19,7 @@ class AdsSearch extends Ads
     public function rules()
     {
         return [
-            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id', 'region_id', 'district_id'], 'integer'],
+            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id', 'region_id', 'district_id', 'status'], 'integer'],
             [['title', 'images', 'city_name', 'text', 'unit_price', 'treaty', 'date_cr'], 'safe'],
             [['price', 'old_price'], 'number'],
         ];
@@ -58,6 +59,7 @@ class AdsSearch extends Ads
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'status' => $this->status,
             'user_id' => $this->user_id,
             'type' => $this->type,
             'category_id' => $this->category_id,
@@ -208,7 +210,90 @@ class AdsSearch extends Ads
      */
     public function filtr($get)
     {
-        $query = Ads::find()->joinWith(['category', 'user', 'currency']);
+        $query = Ads::find()->joinWith(['category', 'user', 'currency'])->where(['ads.status' => 1]);
+        $session = new Sessions();
+        if(isset($get['sortingAds'])) {
+            $sortingAds = $session->setSortingAds($get['sortingAds']);
+        }
+        else $sortingAds = $session->setSortingAds();
+        if($sortingAds == 'date') $sort = [ 'date_cr' => SORT_ASC ];
+        else $sort = [ 'price' => SORT_ASC ];
+
+        if(isset($get['type'])) {
+            $type = $session->getAdsType($get['type']);
+        }
+        else $type = $session->getAdsType();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => $sort,
+            ],
+        ]);
+
+        if(isset($get['category'])) {
+            $query->andFilterWhere([
+                'ads.category_id' => $get['category'],
+            ]);
+        }
+
+        if(isset($get['region'])) {
+            $query->andFilterWhere([
+                'ads.region_id' => $get['region'],
+            ]);
+        }
+
+        if(isset($get['sub'])) {
+            $query->andFilterWhere([
+                'ads.subcategory_id' => $get['sub'],
+            ]);
+        }
+
+        $query->andFilterWhere([ 'ads.type' => $type, ]);
+
+        if(isset($get['text'])) {
+            $query->andFilterWhere(['like', 'ads.title', $get['text']]);
+        }
+
+        return $dataProvider;
+    }
+
+    public function filtrMyAds($identity)
+    {
+        $query = Ads::find()
+            ->joinWith(['category', 'user', 'currency', 'usersCatalogs'])
+            ->where(['ads.user_id' => $identity->id]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function filtrMyFavorites($favId)
+    {
+        $query = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'ads.id', $favId])
+            ->andWhere(['ads.status' => 1]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        return $dataProvider;
+    }
+
+    public function usersCatalogAds($usersCatalog, $get = null)
+    {
+        $adsID = [];
+        foreach ($usersCatalog as $cat) { 
+            $adsID [] = $cat->ads_id;
+        }
+
+        $query = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'ads.id', $adsID]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -216,24 +301,18 @@ class AdsSearch extends Ads
 
         if(isset($get['category'])) {
             $query->andFilterWhere([
-                'category_id' => $get['category'],
+                'ads.category_id' => $get['category'],
             ]);
         }
 
         if(isset($get['region'])) {
             $query->andFilterWhere([
-                'region_id' => $get['region'],
-            ]);
-        }
-
-        if(isset($get['sub'])) {
-            $query->andFilterWhere([
-                'subcategory_id' => $get['sub'],
+                'ads.region_id' => $get['region'],
             ]);
         }
 
         if(isset($get['text'])) {
-            $query->andFilterWhere(['like', 'title', $get['text']]);
+            $query->andFilterWhere(['like', 'ads.title', $get['text']]);
         }
 
         return $dataProvider;

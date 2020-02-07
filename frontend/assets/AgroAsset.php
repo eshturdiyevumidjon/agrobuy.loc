@@ -26,15 +26,15 @@ class AgroAsset extends AssetBundle
     ];
     public $js = [
         'js/chat.js',
-        'js/jquery.min.js',
+        //'js/jquery.min.js',
 	    'js/swiper.min.js',
 	    'js/popper.min.js',
 	    'js/bootstrap.min.js',
-	    // 'js/jquery.maskedinput.js',
+	    'js/jquery.maskedinput.js',
 	    'js/dropzone.min.js',
 	    'js/select2.full.js',
 	    'js/jquery.fancybox.min.js',
-	    // 'js/all.min.js',
+	    'js/jquery-ui.min.js',
 	    'js/main.js',
 	    'js/extension.js',
     ];

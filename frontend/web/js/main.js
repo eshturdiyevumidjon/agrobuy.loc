@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
   // $('.item-product .address-item-product').each(function(i){
   //   $(i).css('display', 'inline')
   //   if($(i).height()<36){

@@ -33,12 +33,15 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'subcategory_id')->dropDownList($model->getSubcategoryList(),[]) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'price')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'status')->dropDownList($model->getStatusList(),[]) ?>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8">
-            <?= $form->field($model, 'city_name')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'region_id')->dropDownList($model->getRegionsList(),[]) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'price')->textInput(['type' => 'number']) ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'unit_price')->textInput(['maxlength' => true]) ?>

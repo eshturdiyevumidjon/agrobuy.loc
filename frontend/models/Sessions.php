@@ -70,6 +70,28 @@ class Sessions extends Model
         $session['translates'] = $translates;
     }
 
+    public function setSortingAds($sortingAds = null)
+    {
+        $session = Yii::$app->session;
+        if($session['sortingAds'] == null) $session['sortingAds'] = 'price';
+        if($sortingAds != null) {
+            if($sortingAds == 'date' || $sortingAds == 'price') $session['sortingAds'] = $sortingAds;
+            else $session['sortingAds'] = 'price';
+        }
+        return $session['sortingAds'];
+    }
+
+    public function getAdsType($ads_type = null)
+    {
+        $session = Yii::$app->session;
+        if($session['ads_type'] == null) $session['ads_type'] = 1;
+        if($ads_type != null) {
+            if($ads_type == '1' || $ads_type == '2') $session['ads_type'] = $ads_type;
+            else $session['ads_type'] = '1';
+        }
+        return $session['ads_type'];
+    }
+
     public function getTranslates()
     {
         $session = Yii::$app->session;
@@ -166,6 +188,20 @@ class Sessions extends Model
             return $session['regions'];
         }
         return $session['regions'];
+    }
+
+    public function getCategoryName($categories, $cat_id, $sub_id)
+    {
+        foreach ($categories as $value) {
+            if($value['id'] == $cat_id) {
+                foreach ($value['subCategory'] as $sub) {
+                    if($sub['id'] == $sub_id) return $value['title'] . ', ' . $sub['name'];
+                }
+                return $value['title'];
+            }
+        }
+
+        return '';
     }
 
 

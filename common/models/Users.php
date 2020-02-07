@@ -258,6 +258,16 @@ class Users extends \yii\db\ActiveRecord
         return $this->hasMany(UsersBall::className(), ['user_to' => 'id']);
     }
 
+    /**
+     * Gets query for [[UsersReytings]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersReytings()
+    {
+        return $this->hasMany(UsersReyting::className(), ['user_id' => 'id']);
+    }
+
     /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
     public function upload()
     {

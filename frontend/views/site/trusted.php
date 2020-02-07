@@ -40,7 +40,7 @@ else $avt = false;
                 <div class="sub-prime trust">
                     <?=Yii::t('app',"Ishonishadi")?>
                 </div>
-                <a href="#">
+                <a href="/ads/view?id=<?=$ads->id?>">
                     <div class="item-product-img">
                         <img src="<?=$ads->getImage('main_page')?>" alt="">
                     </div>

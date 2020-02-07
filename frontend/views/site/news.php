@@ -15,7 +15,7 @@ echo "</pre>";*/
             <?php foreach ($news as $value) {
               ?>
               <div class="swiper-slide">
-                <a href="#">
+                <a href="/news/view?id=<?=$value['id']?>">
                   <div class="new-slider-img">
                     <img src="<?=$value['image']?>" alt="<?=$value['title']?>">
                   </div>

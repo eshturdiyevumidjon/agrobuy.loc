@@ -216,10 +216,14 @@ use yii\helpers\Html;
       <?php 
           echo Html::beginForm(['/site/logout'], 'post'); ?>
           <div class="btn-service">
-            <button type="submit" class="btn-template">Да</button>
+            <button type="submit" class="btn-template"><?=Yii::t('app', "Ha")?></button>
           </div>
           <?php echo Html::endForm();
       ?>
+    </div>
+
+    <div id="delete-ads-popup" style="display: none;" class="popup-style">
+        <div id="deleteAdsContent"></div>
     </div>
 
 
@@ -233,6 +237,10 @@ $this->registerJs(<<<JS
 
     $('.registration_class').on('click', function () {
         $('#registration').find('#registrationContent').load($(this).attr('value'));
+    });
+
+    $('.delete_ads').on('click', function () {
+        $('#delete-ads-popup').find('#deleteAdsContent').load($(this).attr('value'));
     });
   });
 

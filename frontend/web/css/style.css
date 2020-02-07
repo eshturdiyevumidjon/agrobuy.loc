@@ -44,6 +44,7 @@ header a.btn-template{
 	margin-left: 40px;
 	font-weight: 500;
 	position: relative;
+	white-space: nowrap;
 }
 header a.btn-template:hover{
 	text-decoration: none;
@@ -1817,7 +1818,7 @@ section.sample .sample-sun{
 	color: #37a930;
 	fill: #37a930;
 }
-.my-nav-bottom ul a.disabled svg{
+.my-nav-bottom ul a.disabled svg, li.p-first.disabled_last_next_button svg, li.p-last.disabled_last_next_button svg{
 	fill: #aeaeae;
 	color: #aeaeae;
 }
@@ -3962,8 +3963,60 @@ section.news-section .reclama{
 /*.modal-backdrop.show{
 	display: none;
 }*/
+li.p-first.disabled_last_next_button span, li.p-last.disabled_last_next_button span{
+	height: 40px;
+    width: 40px;
+    text-align: center;
+    display: inline-block;
+    padding: 0;
+    line-height: 40px;
+    margin: 0 5px;
+    border: 1px solid #ebebeb;
+    box-shadow: 0 0 2px rgba(235,235,235,.41);
+    border-radius: 10px !important;
+    overflow: hidden;
+    font-weight: bold;
+    color: #37a930;
+}
+ul.pagination li.active a{
+	pointer-events: none;
+}
+.select2-container{
+	width: 100% !important;
+}
+span.select2.select2-container.select2-container--default.select2-container--below+span,
+span.select2.select2-container.select2-container--default+span{
+	display: none !important;
+}
+
+.category-title.sorted>div{
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	-ms-align-items: center;
+	align-items: center;
+}
+.category-title.sorted>div a{
+	white-space: nowrap;
+}
+.not-product svg{
+	padding-top: 15px;
+}
 
 
+/*Umid yozgan kodlar*/
+.my-nav-bottom ul li.active a{
+	    color: #aeaeae;
+	}
+	.disabled_a {
+		display: none;
+	}
+.sub-prime.status {
+    background-color: #ff2020;
+}
+/**/
 
 
 

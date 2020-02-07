@@ -7,6 +7,7 @@ use yii\web\HttpException;
 use frontend\models\Sessions;
 use common\models\Users;
 use common\models\Ads;
+use common\models\AdsSearch;
 use common\models\Favorites;
 use backend\models\Promotions;
 use common\models\HistoryOperations;
@@ -14,6 +15,7 @@ use common\models\UsersCatalog;
 use common\models\Category;
 use backend\models\AdvertisingItems;
 use common\models\Regions;
+use backend\models\PriceList;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -38,6 +40,7 @@ class ProfileController extends \yii\web\Controller
     	$session = new Sessions();
     	$identity = Yii::$app->user->identity;
         $favorites = Favorites::find()->where(['type' => 1])->all();
+        $adsPagination = Yii::$app->params['adsPagination'];
         $promotions = Promotions::find()->all();
         $history = HistoryOperations::find()->where(['user_id' => $identity->id])->all();
         $favId = [];
@@ -45,19 +48,23 @@ class ProfileController extends \yii\web\Controller
             $favId [] = $value->field_id;
         }
 
-        $favoriteAds = Ads::find()
+        $searchModel = new AdsSearch();
+        /*$favoriteAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
             ->where(['in', 'ads.id', $favId])
-            ->all();
+            ->andWhere(['ads.status' => 1])
+            ->all();*/
 
-        $myAds = Ads::find()
-            ->joinWith(['category', 'user', 'currency'])
-            ->where(['ads.user_id' => $identity->id])
-            ->all();
+        $favoriteAdsdataProvider = $searchModel->filtrMyFavorites($favId);
+        $favoriteAdsdataProvider->pagination = ['pageSize' => $adsPagination,];
+
+        $myAdsdataProvider = $searchModel->filtrMyAds($identity);
+        $myAdsdataProvider->pagination = ['pageSize' => $adsPagination,];
 
         return $this->render('index',[
         	'identity' => $identity,
-            'myAds' => $myAds,
+            'myAdsdataProvider' => $myAdsdataProvider,
+            'favoriteAdsdataProvider' => $favoriteAdsdataProvider,
             'favorites' => $favorites,
             'favoriteAds' => $favoriteAds,
             'promotions' => $promotions,
@@ -68,12 +75,27 @@ class ProfileController extends \yii\web\Controller
 
     public function actionCatalog()
     {
+        $request = Yii::$app->request;
         $session = new Sessions();
+        $get = null;
+        $dataProvider = null;
+        $searchModel = new AdsSearch();
         $adv = $session->getCatalogAdv();
         $regions = $session->getRegionsList();
         $identity = Yii::$app->user->identity;
         $categories = Category::getAllCategoryList();
+        $adsPagination = Yii::$app->params['adsPagination'];
         $usersCatalog = UsersCatalog::find()->joinWith(['ads'])->where(['users_catalog.user_id' => $identity->id])->all();
+
+        $cat = null; $reg = null;
+        if($request->get()){
+            $get = $request->get();
+            if(isset($get['category'])) $cat = $get['category'];
+            if(isset($get['region'])) $reg = $get['region'];
+        }
+        
+        $dataProvider = $searchModel->usersCatalogAds($usersCatalog, $get);
+        $dataProvider->pagination = ['pageSize' => $adsPagination,];
 
         $reklama = AdvertisingItems::find()
             ->where(['advertising_id' => $adv->id])
@@ -88,9 +110,12 @@ class ProfileController extends \yii\web\Controller
             'identity' => $identity,
             'session' => $session,
             'regions' => $regions,
+            'cat' => $cat,
+            'reg' => $reg,
+            'get' => $get,
             'categories' => $categories,
             'reklama' => $reklama,
-            'usersCatalog' => $usersCatalog,
+            'dataProvider' => $dataProvider,
             'nowLanguage' => Yii::$app->language,
         ]);
     }
@@ -110,6 +135,7 @@ class ProfileController extends \yii\web\Controller
         $favoriteAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
             ->where(['in', 'ads.id', $favId])
+            ->andWhere(['ads.status' => 1])
             ->all();
 
         $myAds = Ads::find()
@@ -143,6 +169,7 @@ class ProfileController extends \yii\web\Controller
         $favoriteAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
             ->where(['in', 'ads.id', $favId])
+            ->andWhere(['ads.status' => 1])
             ->all();
 
         $myAds = Ads::find()
@@ -157,6 +184,28 @@ class ProfileController extends \yii\web\Controller
             'favoriteAds' => $favoriteAds,
             'promotions' => $promotions,
             'history' => $history,
+            'nowLanguage' => Yii::$app->language,
+        ]);
+    }
+
+    public function actionReplenish()
+    {
+        $request = Yii::$app->request;
+        $identity = Yii::$app->user->identity;
+        if ($request->post()) {
+            /*shartli ravishda balans toldirish imkoniyati bor*/
+            $identity->balance = $identity->balance + $request->post()['summ'];
+            $identity->save();
+            return $this->redirect(['/profile']);
+            /**/
+        }
+
+        $pliceList = PriceList::find()->orderBy(['number' => SORT_ASC])->all();
+
+        return $this->render('replenish',[
+            'identity' => $identity,
+            'myAds' => $myAds,
+            'pliceList' => $pliceList,
             'nowLanguage' => Yii::$app->language,
         ]);
     }

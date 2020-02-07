@@ -88,7 +88,7 @@ class SiteController extends Controller
         $session = new Sessions();
         $adv = $session->getMainAdv();
         $news = News::getAllNewsList();
-        $usersID = UsersBall::getUsersList();
+        $trustedAds = UsersBall::getTrustedAds();
         $userID = UsersPromotion::getUsersID();
         $about_company = $session->getCompany();
         $banners = Banners::getAllBannersList();
@@ -99,6 +99,7 @@ class SiteController extends Controller
         $premiumAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
             ->where(['in', 'users.id', $userID])
+            ->andWhere(['ads.status' => 1])
             ->limit(8)
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
@@ -114,16 +115,18 @@ class SiteController extends Controller
 
         $newAds = Ads::find()
             ->joinWith(['category', 'currency'])
+            ->where(['ads.status' => 1])
             ->limit(4)
             ->orderBy(['date_cr' => SORT_DESC, 'id' => SORT_DESC])
             ->all();
 
-        $trustedAds = Ads::find()
+        /*$trustedAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
             ->where(['in', 'users.id', $usersID])
+            ->andWhere(['ads.status' => 1])
             ->limit(4)
             ->orderBy(['rand()' => SORT_DESC])
-            ->all();
+            ->all();*/
 
         return $this->render('index', [
             'banners' => $banners,
@@ -171,6 +174,7 @@ class SiteController extends Controller
         $model = new LoginForm();
         $about_company = $session->getCompany();
         $siteName = Yii::$app->params['siteName'];
+
         if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
             $path = $siteName . '/backend/web/img/no-logo.png';
         } else {
@@ -181,7 +185,7 @@ class SiteController extends Controller
             return ActiveForm::validate($model);
         }
 
-        if($model->load($request->post()) && $model->validate() && $model->login()){
+        if($model->load($request->post()) && $model->validate() && $model->login()) {
             return $this->goBack();
         }
         else {
@@ -201,10 +205,8 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
-
 
     /**
      * Signs user up.
@@ -247,6 +249,7 @@ class SiteController extends Controller
         $session = new Sessions();
         $get = null;
         $dataProvider = null;
+        $getModels = null;
         $search_big = $session->getSearchBigAdv();
         $search_small = $session->getSearchSmallAdv();
         $regions = $session->getRegionsList();
@@ -254,6 +257,7 @@ class SiteController extends Controller
         $about_company = $session->getCompany();
         $favorites = Favorites::find()->where(['type' => 1])->all();
         $siteName = Yii::$app->params['siteName'];
+        $adsPagination = Yii::$app->params['adsPagination'];
         if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
             $path = $siteName . '/backend/web/img/no-logo.png';
         } else {
@@ -278,15 +282,26 @@ class SiteController extends Controller
             $reklamaSmall->save();
         }
 
+        $cat = null; $reg = null; $sub = null;
         if($request->get()){
             $get = $request->get();
             $searchModel = new AdsSearch();
             $dataProvider = $searchModel->filtr($get);
+            $dataProvider->pagination = ['pageSize' => $adsPagination,];
+            $getModels = $dataProvider->getModels();
+            if(isset($get['category'])) $cat = $get['category'];
+            if(isset($get['sub'])) $sub = $get['sub'];
+            if(isset($get['region'])) $reg = $get['region'];
         }
 
         return $this->render('search', [
             'model' => $model,
             'get' => $get,
+            'reg' => $reg,
+            'cat' => $cat,
+            'sub' => $sub,
+            'session' => $session,
+            'getModels' => $getModels,
             'path' => $path,
             'regions' => $regions,
             'favorites' => $favorites,

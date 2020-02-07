@@ -63,10 +63,14 @@ return [
             return $data->getSubcategoryList()[$data->subcategory_id];
         },
     ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'city_name',
-    // ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'region_id',
+        'filter' => Ads::getRegionsList(),
+        'content'=>function($data){
+            return $data->getRegionsList()[$data->region_id];
+        },
+    ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'text',
@@ -81,6 +85,14 @@ return [
         'filter' => Ads::getCurrencyList(),
         'content'=>function($data){
             return $data->getCurrencyList()[$data->currency_id];
+        },
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'status',
+        'filter' => Ads::getStatusList(),
+        'content'=>function($data){
+            return $data->getStatusList()[$data->status];
         },
     ],
     // [

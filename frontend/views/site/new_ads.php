@@ -39,7 +39,7 @@ else $avt = false;
                 <span class="star-item">
                     <?= $star ?>
                 </span>
-                <a href="#">
+                <a href="/ads/view?id=<?=$ads->id?>">
                     <div class="item-product-img">
                         <img src="<?=$ads->getImage('main_page')?>" alt="">
                     </div>

@@ -1,5 +1,7 @@
+$(document).ready(function () {
 $( ".datetimepicker" ).datepicker();
 var previewNode = document.querySelector("#template");
+if(previewNode){
         previewNode.id = "";
         var previewTemplate = previewNode.parentNode.innerHTML;
         previewNode.parentNode.removeChild(previewNode);
@@ -52,3 +54,5 @@ var previewNode = document.querySelector("#template");
         document.querySelector("#actions .cancel").onclick = function () {
           myDropzone.removeAllFiles(true);
         };
+      }
+    })

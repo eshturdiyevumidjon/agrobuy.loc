@@ -177,12 +177,20 @@ class m150207_210500_i18n_init extends Migration
             "Rag'batlantirish" => "Рағбатлантириш",
             "Faollashtirish/O'chirish" => "Фаоллаштириш/Ўчириш",
             "E'lonni o'chirish" => "Эълонни ўчириш",
-            "Mening katalogimga qo'shish/o'chiring" => "Менинг каталогимга қўшиш/ўчириш",
+            "Mening katalogimga qo'shish/o'chirish" => "Менинг каталогимга қўшиш/ўчириш",
+            "Mening katalogimga qo'shish" => "Менинг каталогимга қўшиш",
+            "Mening katalogimdan o'chirish" => "Менинг каталогимдан ўчириш",
             "Operatsiya" => "Операция",
             "Yaratilgan vaqti" => "Яратилган вақти",
             "E'lon nomeri" => "Эълон номери",
             "Summa" => "Сумма",
             "Hisobni to'ldirish" => "Хисобни тўлдириш",
+            "Sotib olaman" => "Сотиб оламан",
+            "Sotaman" => "Сотаман",
+            "Faollashtirilmagan" => "Фаоллаштирилмаган",
+            "E'lonni o'chirish" => "Эълон ўчириш",
+            "Siz haqiqatdan ham e'lonni o'chirmoqchimisiz?" => "Сиз хақиқатдан хам эълонни ўчирмоқчимисиз?",
+            "Ha" => "Ха",
         ];
 
         $translations_uz_ru = [
@@ -320,12 +328,20 @@ class m150207_210500_i18n_init extends Migration
             "Rag'batlantirish" => "Продвинуть",
             "Faollashtirish/O'chirish" => "Деактивировать/активировать",
             "E'lonni o'chirish" => "Удалить объявление",
-            "Mening katalogimga qo'shish/o'chiring" => "Добавить/удалить объявление в/из мой каталог",
+            "Mening katalogimga qo'shish/o'chirish" => "Добавить/удалить объявление в/из мой каталог",
+            "Mening katalogimga qo'shish" => "Добавить объявление в мой каталог",
+            "Mening katalogimdan o'chirish" => "Удалить объявление из мой каталог",
             "Operatsiya" => "Операция",
             "Yaratilgan vaqti" => "Дата и время",
             "E'lon nomeri" => "№ объявления",
             "Summa" => "Сумма",
             "Hisobni to'ldirish" => "Пополнение счета",
+            "Sotib olaman" => "Куплю",
+            "Sotaman" => "Продам",
+            "Faollashtirilmagan" => "Не активировано",
+            "E'lonni o'chirish" => "Удалить объявления",
+            "Siz haqiqatdan ham e'lonni o'chirmoqchimisiz?" => "Вы уверены, что хотите удалить объявление?",
+            "Ha" => "Да",
         ];
 
         $keys = array_keys($translations);

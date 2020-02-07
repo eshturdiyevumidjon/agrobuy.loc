@@ -1,3 +1,6 @@
+<?php
+	
+?>
 
 <section class="catalog">
     <div class="container">
@@ -23,18 +26,19 @@
           	<div class="about-main-user-right width-btn">
 	            <a href="#" class="btn-template link-btn"><?= Yii::t('app',"Katalogni baham ko'ring") ?></a>
           	</div>
-        </div>
-        
+        </div>        
         <?= $this->render('search', [
-        	'regions' => $regions,
-	        'nowLanguage' => $nowLanguage,
-	        'categories' => $categories,
-	    ]) ?>
-
-     </div>
+          	'regions' => $regions,
+            'cat' => $cat,
+            'reg' => $reg,
+            'get' => $get,
+  	        'nowLanguage' => $nowLanguage,
+  	        'categories' => $categories,
+  	    ]) ?>
+    </div>
 </section>
 
 <?= $this->render('premium', [
     'nowLanguage' => $nowLanguage,
-    'usersCatalog' => $usersCatalog,
+    'dataProvider' => $dataProvider,
 ]) ?>

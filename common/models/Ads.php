@@ -52,7 +52,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg',],
-            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id'], 'integer'],
+            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id', 'status'], 'integer'],
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr','comment'], 'safe'],
@@ -74,7 +74,6 @@ class Ads extends \yii\db\ActiveRecord
         $scenarios[self::SCENARIO_DELETING] = ['comment'];
         return $scenarios;
     }
-
 
     /**
      * {@inheritdoc}
@@ -99,14 +98,16 @@ class Ads extends \yii\db\ActiveRecord
             'imageFiles' => 'Фотографии',
             'comment' => 'Причина',
             'currency_id' => 'Валюта',
-            'region_id' => 'Город',
+            'region_id' => 'Город,Регион',
             'district_id' => 'Район',
+            'status' => 'Статус',
         ];
     }
 
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
+            $this->status = 1;
             $this->date_cr = date('Y-m-d H:i:s');
         }
         
@@ -189,6 +190,20 @@ class Ads extends \yii\db\ActiveRecord
             1 => "Куплю",
             2 => "Продам",
         ];
+    }
+
+    public function getStatusList()
+    {
+        return [
+            1 => "Активно",
+            2 => "Не активно",
+        ];
+    }
+
+    public function getRegionsList()
+    {
+        $region = Regions::find()->all();
+        return ArrayHelper::map($region, 'id', 'name');
     }
 
     public function getCategoryList()

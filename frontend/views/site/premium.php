@@ -41,8 +41,8 @@ else $avt = false;
                     <div class="sub-prime premium">
                         <img src="/images/crown.png" alt="">
                         <?= Yii::t('app',"Pullik") ?>
-                      </div>
-                      <a href="#">
+                    </div>
+                    <a href="/ads/view?id=<?=$ads->id?>">
                         <div class="item-product-img">
                             <img src="<?=$ads->getImage('main_page')?>" alt="">
                         </div>
@@ -60,10 +60,10 @@ else $avt = false;
                             <?=$ads->city_name?>
                         </div>
                         <div class="block-id-product">
-                          <span><?= $ads->getDate($ads->date_cr)?></span>
-                          <span>№: <?=$ads->id?></span>
+                            <span><?= $ads->getDate($ads->date_cr)?></span>
+                            <span>№: <?=$ads->id?></span>
                         </div>
-                      </a>
+                    </a>
                 </div>
             </div>
         <?php } ?>

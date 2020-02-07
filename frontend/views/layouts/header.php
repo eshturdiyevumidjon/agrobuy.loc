@@ -19,7 +19,7 @@ $nowLanguageName = '';
                   foreach ($langs as $lang) { 
                     if($lang['url'] == $nowLanguage) $nowLanguageName = $lang['local'];
                 ?>
-                  <a href="<?= Url::to([ '/' .$pathInfo, 'language' => $lang['url']]) ?>" class="<?=$lang['class']?>"><?=$lang['local']?></a>
+                  <a href="<?= Url::to([ '/' .$pathInfo . '?' . $urlParams, 'language' => $lang['url']]) ?>" class="<?=$lang['class']?>"><?=$lang['local']?></a>
                 <?php  } ?>
               </div>
               <span class="d-sm-none"><?=$nowLanguageName?></span>

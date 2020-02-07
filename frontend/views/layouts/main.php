@@ -16,6 +16,7 @@ AgroAsset::register($this);
 $langs = Lang::getLanguagesForHeader();
 $nowLanguage = Yii::$app->language;
 $pathInfo = Yii::$app->request->pathInfo;
+$urlParams = Yii::$app->getRequest()->getQueryString();
 if($pathInfo == 'site/index') $pathInfo = '';
 $session = new Sessions();
 $about_company = $session->getCompany();
@@ -47,6 +48,7 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
 	<?= $this->render('header.php', [
 		'path' => $path,
 		'langs' => $langs,
+		'urlParams' => $urlParams,
 		'nowLanguage' => $nowLanguage,
 		'pathInfo' => $pathInfo,
 	]);?>

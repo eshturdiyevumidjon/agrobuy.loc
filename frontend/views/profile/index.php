@@ -27,7 +27,7 @@
           <div class="tab-content">
             <div class="tab-pane in active" id="firsttab">
               <?= $this->render('tab-my-ads', [
-		            'myAds' => $myAds,
+                'myAdsdataProvider' => $myAdsdataProvider,
   		        	'nowLanguage' => $nowLanguage,
   		        	'favorites' => $favorites,
               ]) ?>
@@ -35,7 +35,7 @@
             <div class="tab-pane fade" id="secondtab">
               <?= $this->render('tab-favorites-ads', [
                   'nowLanguage' => $nowLanguage,
-                  'favoriteAds' => $favoriteAds,
+                  'favoriteAdsdataProvider' => $favoriteAdsdataProvider,
               ]) ?>
             </div>
             <div class="tab-pane fade" id="thirdtab">

@@ -1,29 +1,29 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 
 /**
- * This is the model class for table "users_catalog".
+ * This is the model class for table "users_reyting".
  *
  * @property int $id
  * @property int|null $user_id Пользователь
- * @property int|null $ads_id Объявление
+ * @property int|null $reyting_id Рейтинг
  * @property string|null $date_cr Дата создание
+ * @property float|null $ball Балл
  *
- * @property Ads $ads
+ * @property Reyting $reyting
  * @property Users $user
  */
-class UsersCatalog extends \yii\db\ActiveRecord
+class UsersReyting extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'users_catalog';
+        return 'users_reyting';
     }
 
     /**
@@ -32,9 +32,10 @@ class UsersCatalog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'ads_id'], 'integer'],
+            [['user_id', 'reyting_id'], 'integer'],
             [['date_cr'], 'safe'],
-            [['ads_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ads::className(), 'targetAttribute' => ['ads_id' => 'id']],
+            [['ball'], 'number'],
+            [['reyting_id'], 'exist', 'skipOnError' => true, 'targetClass' => Reyting::className(), 'targetAttribute' => ['reyting_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -45,31 +46,27 @@ class UsersCatalog extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
+            'id' => 'ID',
             'user_id' => 'Пользователь',
-            'ads_id' => 'Объявление',
+            'reyting_id' => 'Рейтинг',
             'date_cr' => 'Дата создание',
+            'ball' => 'Балл',
         ];
     }
 
-    public function beforeSave($insert)
-    {
-        if ($this->isNewRecord) {
-            $this->date_cr = date('Y-m-d H:i:s');
-        }
-        
-        return parent::beforeSave($insert);
-    }
-
     /**
+     * Gets query for [[Reyting]].
+     *
      * @return \yii\db\ActiveQuery
      */
-    public function getAds()
+    public function getReyting()
     {
-        return $this->hasOne(Ads::className(), ['id' => 'ads_id']);
+        return $this->hasOne(Reyting::className(), ['id' => 'reyting_id']);
     }
 
     /**
+     * Gets query for [[User]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getUser()

@@ -24,7 +24,7 @@ $i = 0;
                 </div>
                 <div class="select-category-popup ik<?=$i?>">
                     <?php foreach ($category['subCategory'] as $sub) {?>
-                        <a href="#" class="dropdown-item"><?=$sub['name']?></a>
+                        <a href="/site/search?category=<?=$category['id']?>&sub=<?=$sub['id']?>" class="dropdown-item"><?=$sub['name']?></a>
                     <?php } ?>
                 </div>
             <?php } ?>          

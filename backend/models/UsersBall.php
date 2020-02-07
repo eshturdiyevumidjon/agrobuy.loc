@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use common\models\Ads;
 
 /**
  * This is the model class for table "users_ball".
@@ -83,10 +84,11 @@ class UsersBall extends \yii\db\ActiveRecord
         return $this->hasOne(Users::className(), ['id' => 'user_to']);
     }
 
-    //eng yuqori ballga ega bolgan dastlabki 5 ta userning idsini yigib olish funksiyasi
-    public function getUsersList()
+    //eng yuqori ballga ega bolgan dastlabki 4 ta userning 4ta eng yangi elonini olish им доверяют ga kerak
+    public function getTrustedAds()
     {
-        $usersBall = UsersBall::find()->joinWith([ 'user',])->all();
+        $adsId = [];
+        $usersBall = UsersBall::find()->all();
 
         $userID = [];
         foreach ($usersBall as $value) {
@@ -97,22 +99,44 @@ class UsersBall extends \yii\db\ActiveRecord
             $userID[$value->user_to] = $userID[$value->user_to] + $value->ball;
         }
 
-        foreach ($userID as $key => $value) {
+        /*foreach ($userID as $key => $value) {
             $count = 0;
             foreach ($usersBall as $ball) {
                 if($key == $ball->user_to) $count++;
             }
-            $userID[$key] = round($userID[$key] / $count, 1);
-        }
+            $userID[$key] = round($userID[$key] / $count * $count, 2);
+        }*/
 
         arsort($userID);
         $result = []; $i = 1;
         foreach ($userID as $key => $value) {
             $result [] = $key;
-            if($i >= 5) break;
+            if($i >= 4) break;
             $i++;
         }
 
-        return $result;
+        $trustedAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'users.id', $result])
+            ->andWhere(['ads.status' => 1])
+            ->orderBy(['date_cr' => SORT_DESC])
+            ->all();
+
+        foreach ($result as $id) {
+            foreach ($trustedAds as $ads) {
+                if($ads->user_id == $id) {
+                    $adsId [] = $ads->id;
+                    break;
+                }
+            }
+        }
+
+        $trustedAds = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['in', 'ads.id', $adsId])
+            ->orderBy(['date_cr' => SORT_DESC])
+            ->all();
+
+        return $trustedAds;
     }
 }
