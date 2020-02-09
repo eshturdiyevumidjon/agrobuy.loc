@@ -31,16 +31,13 @@ $nowLanguageName = '';
                 <?= Yii::t('app',"Kirish") ?>
               </a>
             <?php } else { ?>
+              <?php if(Yii::$app->controller->id == 'profile') { ?>
                 <a class="btn btn-template btn_exit" data-fancybox data-src="#logout-popup" ><?=Yii::t('app', 'Chiqish')?></a>
-              <?php 
-                 /*echo Html::beginForm(['/site/logout'], 'post');
-                 echo Html::submitButton(Yii::t('app', 'Ha'), ['class' => 'btn btn-template'] );
-                 echo Html::endForm();*/
-              ?>
-              <a href="/profile" class="entor-to-site">
-                <span style="background-image: url(/images/icon-user.png);"></span>
-                <?= Yii::t('app',"Profil") ?>
-              </a>
+              <?php } ?>
+                <a href="/profile" class="entor-to-site">
+                  <span style="background-image: url(/images/icon-user.png);"></span>
+                  <?= Yii::t('app',"Profil") ?>
+                </a>
             <?php } ?>
           </div>
         </div>

@@ -26,7 +26,7 @@
             <div class="row">
               <div class="col-lg-8 col-xl-9">
                 <div class="main-list-of-required">
-                  <p><span>Список необходимых файлов</span> <img src="images/right-arrow-green.png" alt=""></p>
+                  <p><span>Список необходимых файлов</span> <img src="/images/right-arrow-green.png" alt=""></p>
                   <ul style="display: none;">
                     <li>Список необходимых файлов 1</li>
                     <li>Список необходимых файлов 2</li>

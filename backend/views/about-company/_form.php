@@ -43,6 +43,9 @@ if (!file_exists('uploads/about-company/' . $model->logo) || $model->logo == nul
                      <?= $form->field($model, 'mail')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-md-6">
+                     <?= $form->field($model, 'premium_ads_count')->textInput(['type' => 'number']) ?>
+                </div>
+                <div class="col-md-12">
                      <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
                 </div>
             </div>

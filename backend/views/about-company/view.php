@@ -37,6 +37,7 @@ if (!file_exists('uploads/about-company/' . $model->logo) || $model->logo == nul
                             'name',
                             'mail',
                             'phone',
+                            'premium_ads_count',
                             'address',
                         ],
                     ]) ?>

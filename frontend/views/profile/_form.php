@@ -1,35 +1,35 @@
 <section class="edit-page">
     <div class="container">
-        <h2 class="title">Редактирование профиля</h2>
+        <h2 class="title"><?=Yii::t('app', "Profilni tahrirlash")?></h2>
 
-        <?= $this->render('_personal', [
+        <?= $this->render('forms/_personal', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $identity,
+  	        'model' => $model,
   	    ]) ?>
 
-  	    <?= $this->render('_legal_status', [
+  	    <?= $this->render('forms/_legal_status', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $identity,
+  	        'model' => $model,
   	    ]) ?>
         
-        <?= $this->render('_passport', [
+        <?= $this->render('forms/_passport', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $identity,
+  	        'identity' => $model,
   	    ]) ?>
 
-        <?= $this->render('_inn', [
+        <?= $this->render('forms/_inn', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $identity,
+  	        'model' => $model,
   	    ]) ?>
         
-        <?= $this->render('_company', [
+        <?= $this->render('forms/_company', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $identity,
+  	        'identity' => $model,
   	    ]) ?>
         
         <?= $this->render('reyting', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $identity,
+  	        'identity' => $model,
   	    ]) ?>
     </div>
 </section>

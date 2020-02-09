@@ -16,6 +16,7 @@ use common\models\Category;
 use backend\models\AdvertisingItems;
 use common\models\Regions;
 use backend\models\PriceList;
+use yii\widgets\ActiveForm;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -85,7 +86,10 @@ class ProfileController extends \yii\web\Controller
         $identity = Yii::$app->user->identity;
         $categories = Category::getAllCategoryList();
         $adsPagination = Yii::$app->params['adsPagination'];
-        $usersCatalog = UsersCatalog::find()->joinWith(['ads'])->where(['users_catalog.user_id' => $identity->id])->all();
+        $usersCatalog = UsersCatalog::find()
+            ->joinWith(['ads'])
+            ->where(['users_catalog.user_id' => $identity->id])
+            ->all();
 
         $cat = null; $reg = null;
         if($request->get()){
@@ -122,11 +126,24 @@ class ProfileController extends \yii\web\Controller
 
     public function actionEdit()
     {
+        $request = Yii::$app->request;
+        $model = Users::findOne(Yii::$app->user->identity->id);
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if($model->load($request->post()) && $model->validate() && $model->save()) {
+            \Yii::$app->getSession()->setFlash('success', 'Muvafaqqiyatli bajarildi');
+            return $this->redirect(['/profile/edit']);
+        }
+
         $session = new Sessions();
-        $identity = Yii::$app->user->identity;
+        //$identity = Yii::$app->user->identity;
         $favorites = Favorites::find()->where(['type' => 1])->all();
         $promotions = Promotions::find()->all();
-        $history = HistoryOperations::find()->where(['user_id' => $identity->id])->all();
+        $history = HistoryOperations::find()->where(['user_id' => $model->id])->all();
         $favId = [];
         foreach ($favorites as $value) {
             $favId [] = $value->field_id;
@@ -144,7 +161,8 @@ class ProfileController extends \yii\web\Controller
             ->all();
 
         return $this->render('_form',[
-            'identity' => $identity,
+            //'identity' => $identity,
+            'model' => $model,
             'myAds' => $myAds,
             'favorites' => $favorites,
             'favoriteAds' => $favoriteAds,
@@ -210,6 +228,33 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
+    public function actionPersonal()
+    {
+        $request = Yii::$app->request;
+        echo "<pre>";
+        print_r(Yii::$app->request->post());
+        echo "</pre>";
+        die;
+
+        $model = new Users();
+        $siteName = Yii::$app->params['siteName'];
+
+        /*if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if($model->load($request->post()) && $model->validate() && $model->login()) {
+            return $this->goBack();
+        }
+        else {
+            return $this->renderAjax('login', [
+                'model' => $model,
+                'path' => $path,
+                'nowLanguage' => Yii::$app->language,
+            ]);
+        }*/
+    }
 
     public function actionSetImg()
     {

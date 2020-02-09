@@ -31,10 +31,11 @@ class Users extends \yii\db\ActiveRecord
             [['balance'], 'number'],
             [['birthday'], 'safe'],
             [['email'], 'email'],
+            [['inn'], 'string', 'min' => 9],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
             [['image','new_password', 'passport_image', 'company_image'], 'safe'],
             [['company_files', 'passport_issue'], 'string'],
-            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'inn', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site'], 'string', 'max' => 255],
+            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site'], 'string', 'max' => 255],
         ];
     }
 
@@ -46,6 +47,7 @@ class Users extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'login' => 'Логин',
+            'fio' => 'Ф.И.О',
             'password' => 'Пароль',
             'avatar' => 'Аватар',
             'phone' => 'Телефон',

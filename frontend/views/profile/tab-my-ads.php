@@ -22,7 +22,7 @@ use yii\widgets\LinkPager;
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="/ads/edit?id=<?=$ads->id?>"><?= Yii::t('app',"E'lonni tahrirlash") ?></a>
-                        <a class="dropdown-item" href="/ads/premium?id=<?=$ads->id?>"><?= Yii::t('app',"Rag'batlantirish") ?></a>
+                        <a class="dropdown-item" href="/ads/premium?id=<?=$ads->id?>"><?= Yii::t('app',"Targ'ib qilish") ?></a>
                         <a class="dropdown-item" href="/ads/status?id=<?=$ads->id?>"><?= Yii::t('app',"Faollashtirish/O'chirish") ?></a>
                         <a class="dropdown-item delete_ads" href="#" value="/<?=$nowLanguage?>/ads/delete-form?id=<?=$ads->id?>" data-fancybox data-src="#delete-ads-popup" ><?=Yii::t('app', "E'lonni o'chirish")?></a>
                         <a class="dropdown-item" href="/ads/catalog?id=<?=$ads->id?>"><?= $catalogTitle ?></a>
