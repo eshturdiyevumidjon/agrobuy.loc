@@ -10,6 +10,8 @@ use backend\models\Companies;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use backend\models\UsersBall;
+use backend\models\Reyting;
+use backend\models\UsersReyting;
 
 class Users extends \yii\db\ActiveRecord
 {
@@ -102,14 +104,14 @@ class Users extends \yii\db\ActiveRecord
     {
         if($insert){
             if($this->type == 3){
-                $chat = new \common\models\Chats();
+                $chat = new Chats();
                 $chat->name = 'chat_'.$this->id;
                 $chat->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
                 $chat->type = 1;
                 $chat->save();
 
-                $chat1 = new \common\models\ChatUsers();
-                $chat2 = new \common\models\ChatUsers();
+                $chat1 = new ChatUsers();
+                $chat2 = new ChatUsers();
                 
                 $chat1->chat_id = $chat->id;
                 $chat2->chat_id = $chat->id;
@@ -121,10 +123,40 @@ class Users extends \yii\db\ActiveRecord
                 $chat1->save();
                 $chat2->save();
             }
+        } // else qismi reytingni hisoblash uchun kerak
+        else {
+            $reyting = Reyting::find()->where(['key' => 'profile_fullness'])->one();
+            $userReyting = UsersReyting::find()
+                ->joinWith(['reyting'])
+                ->where(['user_id' => $this->id, 'reyting_id' => $reyting->id])
+                ->one();
+            $isFull = $this->getIsFull();
+            //echo "f=".$isFull;die;
+            if($userReyting != null) {
+                if($isFull < $reyting->value) $userReyting->delete();
+            }
+            else {
+                if($isFull >= $reyting->value) {
+                    $userReyting = new UsersReyting();
+                    $userReyting->user_id = $this->id;
+                    $userReyting->reyting_id = $reyting->id;
+                    $userReyting->ball = $reyting->ball;
+                    $userReyting->save();
+                }
+            }
         }
         parent::afterSave($insert, $changedAttributes);
     }
     
+    /**
+     * @return bool
+     */
+
+    public function beforeDelete()
+    {
+        return parent::beforeDelete();
+    }
+
     public function getAvatar()
     {
         if (!file_exists('uploads/avatars/'.$this->avatar) || $this->avatar == '') {
@@ -135,14 +167,34 @@ class Users extends \yii\db\ActiveRecord
         return $path;
     }
 
-    /**
-     * @return bool
-     */
-
-    public function beforeDelete()
+    public function getIsFull()
     {
-        return parent::beforeDelete();
+        $allCount = 21; $count = 21;
+        if($this->fio == null || $this->fio == '') $count--;
+        if($this->avatar == null || $this->avatar == '') $count--;
+        if($this->phone == null || $this->phone == '') $count--;
+        if($this->email == null || $this->email == '') $count--;
+        if($this->instagram == null || $this->instagram == '') $count--;
+        if($this->facebook == null || $this->facebook == '') $count--;
+        if($this->telegram == null || $this->telegram == '') $count--;
+        if($this->birthday == null || $this->birthday == '') $count--;
+        if($this->company_name == null || $this->company_name == '') $count--;
+        if($this->legal_status == null || $this->legal_status == '') $count--;
+        if($this->inn == null || $this->inn == '') $count--;
+        if($this->web_site == null || $this->web_site == '') $count--;
+        if($this->passport_serial_number == null || $this->passport_serial_number == '') $count--;
+        if($this->passport_number == null || $this->passport_number == '') $count--;
+        if($this->passport_date == null || $this->passport_date == '') $count--;
+        if($this->passport_issue == null || $this->passport_issue == '') $count--;
+        if($this->passport_file == null || $this->passport_file == '') $count--;
+        if($this->check_phone != 1) $count--;
+        if($this->check_mail != 1) $count--;
+        if($this->check_passport != 1) $count--;
+        if($this->check_car != 1) $count--;
+
+        return round( $count / $allCount * 100, 0);
     }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -419,7 +471,12 @@ class Users extends \yii\db\ActiveRecord
 
     public function getReyting()
     {
-        return '000';
+        $usersReyting = UsersReyting::find()->where(['user_id' => $this->id])->all();
+        $reyting = 0;
+        foreach ($usersReyting as $value) {
+            $reyting += $value->ball;
+        }
+        return $reyting;
     }
 
     public function getAvatarForSite()

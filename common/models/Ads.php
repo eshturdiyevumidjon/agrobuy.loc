@@ -6,6 +6,8 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use backend\models\Currency;
+use backend\models\Reyting;
+use backend\models\UsersReyting;
 
 /**
  * This is the model class for table "ads".
@@ -112,6 +114,21 @@ class Ads extends \yii\db\ActiveRecord
         }
         
         return parent::beforeSave($insert);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($insert) { // bu qism reytingni hisoblash uchun kerak
+            $identity = Yii::$app->user->identity;
+            $reyting = Reyting::find()->where(['key' => 'create_ads'])->one();
+            
+            $userReyting = new UsersReyting();
+            $userReyting->user_id = $identity->id;
+            $userReyting->reyting_id = $reyting->id;
+            $userReyting->ball = $reyting->ball;
+            $userReyting->save();
+        } 
+        parent::afterSave($insert, $changedAttributes);
     }
 
     /**

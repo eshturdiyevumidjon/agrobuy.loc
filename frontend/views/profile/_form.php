@@ -14,7 +14,7 @@
         
         <?= $this->render('forms/_passport', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $model,
+  	        'model' => $model,
   	    ]) ?>
 
         <?= $this->render('forms/_inn', [
@@ -24,12 +24,12 @@
         
         <?= $this->render('forms/_company', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $model,
+  	        'model' => $model,
   	    ]) ?>
         
-        <?= $this->render('reyting', [
+        <?= $this->render('forms/_reyting', [
   	        'nowLanguage' => $nowLanguage,
-  	        'identity' => $model,
+  	        'usersReyting' => $usersReyting,
   	    ]) ?>
     </div>
 </section>

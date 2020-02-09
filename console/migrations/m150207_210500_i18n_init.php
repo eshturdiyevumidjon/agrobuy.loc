@@ -98,7 +98,7 @@ class m150207_210500_i18n_init extends Migration
             "Bu sahifa mavjud emas" => "Бу сахифа мавжуд эмас",
             "Siz notog'ri yoki o'chib ketgan havoladan foydalangan bo'lishingiz mumkin" => "Сиз нотўғри ёки ўчиб кетган хаволадан фойдаланган бўлишингиз мумкин",
             "E'lon qo'shish" => "Эълон қўшиш",
-            "Uchun" => "Учун",
+            "ga" => "га",
             "So'm" => "Сум",
             "Chiqish" => "Чиқиш",
             "Shaxshiy kabinet" => "Шахсий кабинет",
@@ -134,8 +134,9 @@ class m150207_210500_i18n_init extends Migration
             "Yakka tadbirkor yoki yur. shaxs" => "ИП ёки Юр. шахс",
             "Saqlash" => "Сақлаш",
             "Pasport ma'lumotlari" => "Паспорт малумотлари",
-            "Pasport seriyalari" => "Паспорт сериялари",
+            "Pasport seriyasi" => "Паспорт серияси",
             "Kim tomonidan berilgan" => "Ким томонидан берилган",
+            "Berilgan vaqti" => "Дата выдачи",
             "Foto biriktirish" => "Фото бириктириш",
             "Pasport nomeri" => "Паспорт номери",
             "Jis. yoki yur. shaxs haqida mu'lumot" => "Жис. ёки юридик шахс хақида маълумот",
@@ -191,6 +192,7 @@ class m150207_210500_i18n_init extends Migration
             "E'lonni o'chirish" => "Эълон ўчириш",
             "Siz haqiqatdan ham e'lonni o'chirmoqchimisiz?" => "Сиз хақиқатдан хам эълонни ўчирмоқчимисиз?",
             "Ha" => "Ха",
+            "Kerakli fayllar ro'yxati" => "Керакли файллар рўйхати",
         ];
 
         $translations_uz_ru = [
@@ -249,7 +251,7 @@ class m150207_210500_i18n_init extends Migration
             "Bu sahifa mavjud emas" => "Эта страница недоступна",
             "Siz notog'ri yoki o'chib ketgan havoladan foydalangan bo'lishingiz mumkin" => "Возможно вы воспользовались недействительной ссылкой или страница была удалена",
             "E'lon qo'shish" => "Подать объявления",
-            "Uchun" => "За",
+            "ga" => "За",
             "So'm" => "Сум",
             "Chiqish" => "Выход",
             "Shaxshiy kabinet" => "Личный кабинет",
@@ -286,8 +288,9 @@ class m150207_210500_i18n_init extends Migration
             "Yakka tadbirkor yoki yur. shaxs" => "ИП или Юр. лицо",
             "Saqlash" => "Cохранить",
             "Pasport ma'lumotlari" => "Паспортные данные",
-            "Pasport seriyalari" => "Серия паспорта",
+            "Pasport seriyasi" => "Серия паспорта",
             "Kim tomonidan berilgan" => "Кем выдан",
+            "Berilgan vaqti" => "Дата выдачи",
             "Foto biriktirish" => "Прикрепить фото",
             "Pasport nomeri" => "Номер паспорта",
             "Jis. yoki yur. shaxs haqida mu'lumot" => "Данные о физ./Юр. лице",
@@ -342,6 +345,7 @@ class m150207_210500_i18n_init extends Migration
             "E'lonni o'chirish" => "Удалить объявления",
             "Siz haqiqatdan ham e'lonni o'chirmoqchimisiz?" => "Вы уверены, что хотите удалить объявление?",
             "Ha" => "Да",
+            "Kerakli fayllar ro'yxati" => "Список необходимых файлов",
         ];
 
         $keys = array_keys($translations);

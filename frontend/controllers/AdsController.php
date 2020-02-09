@@ -116,7 +116,7 @@ class AdsController extends \yii\web\Controller
     	$news = News::findOne($id);
     	$identity = Yii::$app->user->identity;
 
-        return $this->render('view',[
+        return $this->render('view_other_ads',[
         	'identity' => $identity,
             'news' => $news,
         	'nowLanguage' => Yii::$app->language,

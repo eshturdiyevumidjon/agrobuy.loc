@@ -10,6 +10,8 @@ use yii\data\ActiveDataProvider;
 use backend\models\Translates;
 use backend\models\Advertisings;
 use common\models\Regions;
+use backend\models\UsersReyting;
+use backend\models\Reyting;
 
 /**
  * Signup form
@@ -202,6 +204,34 @@ class Sessions extends Model
         }
 
         return '';
+    }
+
+    public function setLastSeen()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $session = Yii::$app->session;
+            $identity = Yii::$app->user->identity;
+            if($session['last_seen'] == null) {
+                $reyting = Reyting::find()->where(['key' => 'visit_site'])->one();
+                $userReyting = new UsersReyting();
+                $userReyting->user_id = $identity->id;
+                $userReyting->reyting_id = $reyting->id;
+                $userReyting->ball = $reyting->ball;
+                $userReyting->save();
+                $session['last_seen'] = date('Y-m-d');
+            }
+            else {
+                if($session['last_seen'] != date('Y-m-d')) {
+                    $reyting = Reyting::find()->where(['key' => 'visit_site'])->one();
+                    $userReyting = new UsersReyting();
+                    $userReyting->user_id = $identity->id;
+                    $userReyting->reyting_id = $reyting->id;
+                    $userReyting->ball = $reyting->ball;
+                    $userReyting->save();
+                    $session['last_seen'] = date('Y-m-d');
+                }
+            }
+        }
     }
 
 

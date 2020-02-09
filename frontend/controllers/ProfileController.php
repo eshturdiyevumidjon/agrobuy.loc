@@ -17,6 +17,7 @@ use backend\models\AdvertisingItems;
 use common\models\Regions;
 use backend\models\PriceList;
 use yii\widgets\ActiveForm;
+use backend\models\UsersReyting;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -160,8 +161,13 @@ class ProfileController extends \yii\web\Controller
             ->where(['ads.user_id' => $identity->id])
             ->all();
 
+        $usersReyting = UsersReyting::find()
+            ->joinWith(['reyting'])
+            ->where(['user_id' => $model->id])
+            ->all();
+
         return $this->render('_form',[
-            //'identity' => $identity,
+            'usersReyting' => $usersReyting,
             'model' => $model,
             'myAds' => $myAds,
             'favorites' => $favorites,

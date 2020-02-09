@@ -94,7 +94,8 @@ class AdsController extends Controller
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
-                $model->upload();
+                $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
+                if(!empty($model->imageFiles)) $model->upload();
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Объявление",
@@ -143,6 +144,7 @@ class AdsController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
+                $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
                 if(!empty($model->imageFiles))
                 {
                     $model->unlinkFile($file);

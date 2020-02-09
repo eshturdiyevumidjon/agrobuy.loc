@@ -21,6 +21,7 @@ if($pathInfo == 'site/index') $pathInfo = '';
 $session = new Sessions();
 $about_company = $session->getCompany();
 $session->setTranslates();
+$session->setLastSeen();
 $siteName = Yii::$app->params['siteName'];
 
 if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {

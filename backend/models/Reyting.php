@@ -62,4 +62,14 @@ class Reyting extends \yii\db\ActiveRecord
     {
         return $this->hasMany(UsersReyting::className(), ['reyting_id' => 'id']);
     }
+
+    public function getUnit()
+    {
+        return [
+            1 => '%',
+            2 => 'день',
+            3 => 'штук',
+            4 => 'сум',
+        ];
+    }
 }

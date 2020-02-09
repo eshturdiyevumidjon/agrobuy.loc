@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use common\models\Users;
 
 /**
  * This is the model class for table "users_reyting".
@@ -52,6 +53,14 @@ class UsersReyting extends \yii\db\ActiveRecord
             'date_cr' => 'Дата создание',
             'ball' => 'Балл',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->date_cr = date("Y-m-d H:i:s");
+        }        
+        return parent::beforeSave($insert);
     }
 
     /**
