@@ -58,6 +58,7 @@ class Ads extends \yii\db\ActiveRecord
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr','comment'], 'safe'],
+            [['type', 'title', 'currency_id', 'category_id', 'subcategory_id'], 'required'],
             [['title', 'unit_price'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
@@ -241,6 +242,43 @@ class Ads extends \yii\db\ActiveRecord
         return ArrayHelper::map($cur, 'id', 'name');
     }
 
+    public function getCategoryListForSite()
+    {
+        $categories = Category::find()->all();
+        $result = [ '' => Yii::t('app', "Tanlang") ];
+        foreach ($categories as $value) {
+            $result += [
+                $value->id => $value->title,
+            ];
+        }
+        return $result;
+    }
+
+    public function getSubcategoryListForSite($category_id)
+    {
+        $subcategories = Subcategory::find()->where(['category_id' => $category_id])->all();
+        $result = [ '' => Yii::t('app', "Tanlang") ];
+        foreach ($subcategories as $value) {
+            $result += [
+                $value->id => $value->name,
+            ];
+        }
+        return $result;
+    }
+
+    /*public function getRegionsListForSite()
+    {
+        $region = Regions::find()->all();
+        $result = [ '' => 'Выберите' ];
+        foreach ($region as $value) {
+            $result += [
+                $value->id => $value->name,
+            ];
+        }
+        return $result;
+    }*/
+
+
     public function getSubcategoryList()
     {
         $subcategories = Subcategory::find()->all();
@@ -272,8 +310,8 @@ class Ads extends \yii\db\ActiveRecord
         }
         if($for == 'main_page') {
             $siteName = Yii::$app->params['siteName'];
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $this->images)) {
-                return $siteName . '/backend/web/img/no-logo.png';
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $this->images) || $this->images == null) {
+                return $siteName . '/backend/web/img/no-images.jpg';
             } else {
                 return $siteName . '/backend/web/uploads/ads/' . $this->images;
             }
@@ -302,5 +340,16 @@ class Ads extends \yii\db\ActiveRecord
             if($value->field_id == $this->id) return true;
         }
         return false;
+    }
+
+    public function getAddress()
+    {
+        if($this->region_id != null) {
+            if($this->district_id != null) {
+                return $this->region->name . ' ' . $this->district->name;
+            }
+            return $this->region->name;
+        }
+        else return '';
     }
 }

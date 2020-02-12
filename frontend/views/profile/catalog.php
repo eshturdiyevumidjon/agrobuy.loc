@@ -1,5 +1,6 @@
 <?php
-	
+
+	use yii\helpers\Html;
 ?>
 
 <section class="catalog">
@@ -8,7 +9,7 @@
           	<img src="<?=$reklama->getImage('main_page')?>" alt="<?=$reklama->title?>">
         </div>
         <div class="block-main-user border-all">
-          	<a href="#" class="img-main-user">
+          	<a href="<?=$path?>" class="img-main-user">
             	<img src="<?=$identity->getAvatarForSite()?>" alt="User Avatar">
           	</a>
           	<div class="about-main-user">
@@ -26,7 +27,7 @@
           	<div class="about-main-user-right width-btn">
 	            <a href="#" class="btn-template link-btn"><?= Yii::t('app',"Katalogni baham ko'ring") ?></a>
           	</div>
-        </div>        
+        </div>
         <?= $this->render('search', [
           	'regions' => $regions,
             'cat' => $cat,

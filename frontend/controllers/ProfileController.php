@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\HttpException;
 use frontend\models\Sessions;
+use yii\web\NotFoundHttpException;
 use common\models\Users;
 use common\models\Ads;
 use common\models\AdsSearch;
@@ -18,10 +19,42 @@ use common\models\Regions;
 use backend\models\PriceList;
 use yii\widgets\ActiveForm;
 use backend\models\UsersReyting;
+use common\models\Complaints;
+use yii\db\Expression;
+use common\models\User;
+use yii\filters\VerbFilter;
+use backend\models\UsersBall;
+
 
 class ProfileController extends \yii\web\Controller
 {
-    public function beforeAction($action)
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['user', 'catalog'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    /*public function beforeAction($action)
     {
         if(Yii::$app->user->identity->id === null)
         {
@@ -30,12 +63,11 @@ class ProfileController extends \yii\web\Controller
 
 	        $this->enableCsrfValidation = ($action->id !== "set-img"); 
 	        return parent::beforeAction($action);
-        /*if($action->id == "set-img"){
-        }
-
-        $this->enableCsrfValidation = false;
-        return parent::beforeAction($action);*/
-    }
+        //if($action->id == "set-img"){
+        //}
+        //$this->enableCsrfValidation = false;
+        //return parent::beforeAction($action);
+    }*/
 
     public function actionIndex()
     {
@@ -51,12 +83,6 @@ class ProfileController extends \yii\web\Controller
         }
 
         $searchModel = new AdsSearch();
-        /*$favoriteAds = Ads::find()
-            ->joinWith(['category', 'user', 'currency'])
-            ->where(['in', 'ads.id', $favId])
-            ->andWhere(['ads.status' => 1])
-            ->all();*/
-
         $favoriteAdsdataProvider = $searchModel->filtrMyFavorites($favId);
         $favoriteAdsdataProvider->pagination = ['pageSize' => $adsPagination,];
 
@@ -75,8 +101,17 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionCatalog()
+    public function actionCatalog($user_id = null)
     {
+        if($user_id != null) {
+            $identity = User::findOne($user_id);
+            if($identity == null) throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        else {
+            $identity = Yii::$app->user->identity;
+            if($identity == null) throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
         $request = Yii::$app->request;
         $session = new Sessions();
         $get = null;
@@ -84,7 +119,6 @@ class ProfileController extends \yii\web\Controller
         $searchModel = new AdsSearch();
         $adv = $session->getCatalogAdv();
         $regions = $session->getRegionsList();
-        $identity = Yii::$app->user->identity;
         $categories = Category::getAllCategoryList();
         $adsPagination = Yii::$app->params['adsPagination'];
         $usersCatalog = UsersCatalog::find()
@@ -118,6 +152,7 @@ class ProfileController extends \yii\web\Controller
             'cat' => $cat,
             'reg' => $reg,
             'get' => $get,
+            'path' => Yii::$app->user->identity == null ? '/profile/user?id=' . $identity->id : '/profile',
             'categories' => $categories,
             'reklama' => $reklama,
             'dataProvider' => $dataProvider,
@@ -162,8 +197,10 @@ class ProfileController extends \yii\web\Controller
             ->all();
 
         $usersReyting = UsersReyting::find()
+            ->select([new Expression('SUM(users_reyting.ball) as ball'), 'reyting_id',])
             ->joinWith(['reyting'])
             ->where(['user_id' => $model->id])
+            ->groupBy('reyting_id')
             ->all();
 
         return $this->render('_form',[
@@ -234,32 +271,78 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionPersonal()
+    public function actionComplaint($id)
     {
         $request = Yii::$app->request;
-        echo "<pre>";
-        print_r(Yii::$app->request->post());
-        echo "</pre>";
-        die;
+        $identity = Yii::$app->user->identity;
+        $model = new Complaints();
+        $model->user_from = $identity->id;
+        $model->ads_id = $id;
+        $model->user_id = $model->ads->user_id;
 
-        $model = new Users();
-        $siteName = Yii::$app->params['siteName'];
-
-        /*if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
 
-        if($model->load($request->post()) && $model->validate() && $model->login()) {
-            return $this->goBack();
+        if($model->load($request->post()) && $model->validate() && $model->save()) {
+            return $this->redirect(['/ads/view?id=' . $id]);
         }
         else {
-            return $this->renderAjax('login', [
+            return $this->renderAjax('forms/_complaint_form', [
                 'model' => $model,
-                'path' => $path,
+            ]);
+        }
+    }
+
+    public function actionUser($id)
+    {
+        $session = new Sessions();
+        $user = User::findOne($id);
+        if(Yii::$app->user->identity != null) $identity = Yii::$app->user->identity;
+        else $identity = null;
+        $adsPagination = Yii::$app->params['adsPagination'];
+        $searchModel = new AdsSearch();
+        $favorites = Favorites::find()->where(['type' => 1])->all();
+
+        $myAdsdataProvider = $searchModel->filtrMyAds($user);
+        $myAdsdataProvider->pagination = ['pageSize' => $adsPagination,];
+
+        return $this->render('user',[
+            'identity' => $user,
+            //'user' => $user,
+            'favorites' => $favorites,
+            'myAdsdataProvider' => $myAdsdataProvider,
+            'nowLanguage' => Yii::$app->language,
+        ]);
+    }
+
+
+    public function actionStar($id)
+    {
+        $request = Yii::$app->request;
+        $identity = Yii::$app->user->identity;
+        $model = UsersBall::find()->where(['user_from' => $identity->id, 'user_to' => $id])->one();
+        if($model == null) {
+            $model = new UsersBall();
+            $model->user_from = $identity->id;
+            $model->user_to = $id;
+        }
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if($model->load($request->post()) && $model->validate() && $model->save()) {
+            return $this->redirect(['/profile/user?id=' . $id]);
+        }
+        else {
+            return $this->renderAjax('forms/_star', [
+                'model' => $model,
                 'nowLanguage' => Yii::$app->language,
             ]);
-        }*/
+        }
     }
 
     public function actionSetImg()

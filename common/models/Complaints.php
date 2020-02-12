@@ -38,6 +38,7 @@ class Complaints extends \yii\db\ActiveRecord
         return [
             [['user_id', 'ads_id', 'user_from'], 'integer'],
             [['text'], 'string'],
+            [['text'], 'required'],
             [['date_cr'], 'safe'],
             [['ads_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ads::className(), 'targetAttribute' => ['ads_id' => 'id']],
             [['user_from'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_from' => 'id']],
@@ -58,6 +59,15 @@ class Complaints extends \yii\db\ActiveRecord
             'date_cr' => 'Дата создание',
             'user_from' => 'Кто отправил',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->date_cr = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);
     }
 
     /**

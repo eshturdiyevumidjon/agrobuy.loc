@@ -124,6 +124,9 @@ use yii\helpers\Html;
     </div>  
 
     <div id="send-complaint" style="display: none;" class="popup-style">
+        <div id="complaintContent"></div>
+    </div>
+    <!-- <div id="send-complaint" style="display: none;" class="popup-style">
       <h2>Отправьте <span>жалобу</span></h2>
       <form>
         <div class="form-group">
@@ -133,7 +136,7 @@ use yii\helpers\Html;
           <button type="submit" class="btn-template">Отправить жалобу</button>
         </div>
       </form>
-    </div>    
+    </div> -->    
 
     <div id="registration-2" style="display: none;" class="popup-style">
       <img src="/images/logo.png" alt="" class="logo-popup-top">
@@ -226,6 +229,10 @@ use yii\helpers\Html;
         <div id="deleteAdsContent"></div>
     </div>
 
+    <div id="star-popup" style="display: none;" class="popup-style">
+        <div id="starContent"></div>
+    </div>
+
 
 <?php 
 $this->registerJs(<<<JS
@@ -242,6 +249,15 @@ $this->registerJs(<<<JS
     $('.delete_ads').on('click', function () {
         $('#delete-ads-popup').find('#deleteAdsContent').load($(this).attr('value'));
     });
+
+    $('.complaint_class').on('click', function () {
+        $('#send-complaint').find('#complaintContent').load($(this).attr('value'));
+    });
+
+    $('.star_class').on('click', function () {
+        $('#star-popup').find('#starContent').load($(this).attr('value'));
+    });
+    
   });
 
 

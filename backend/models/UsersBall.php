@@ -4,6 +4,7 @@ namespace backend\models;
 
 use Yii;
 use common\models\Ads;
+use common\models\Users;
 
 /**
  * This is the model class for table "users_ball".
@@ -36,6 +37,7 @@ class UsersBall extends \yii\db\ActiveRecord
             [['user_from', 'user_to'], 'integer'],
             [['ball'], 'number'],
             [['date_cr'], 'safe'],
+            [['ball'], 'required'],
             [['user_from'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_from' => 'id']],
             [['user_to'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_to' => 'id']],
         ];

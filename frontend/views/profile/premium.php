@@ -25,7 +25,7 @@ use yii\widgets\LinkPager;
                             <?php } ?>
                         </div>
                         <div class="address-item-product">
-                            <?=$ads->city_name?>
+                            <?=$ads->getAddress()?>
                         </div>
                         <div class="block-id-product">
                             <span><?= $ads->getDate($ads->date_cr)?></span>

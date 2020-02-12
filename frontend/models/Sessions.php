@@ -86,10 +86,10 @@ class Sessions extends Model
     public function getAdsType($ads_type = null)
     {
         $session = Yii::$app->session;
-        if($session['ads_type'] == null) $session['ads_type'] = 1;
+        if($session['ads_type'] == null) $session['ads_type'] = 2;
         if($ads_type != null) {
             if($ads_type == '1' || $ads_type == '2') $session['ads_type'] = $ads_type;
-            else $session['ads_type'] = '1';
+            else $session['ads_type'] = 2;
         }
         return $session['ads_type'];
     }

@@ -483,8 +483,8 @@ class Users extends \yii\db\ActiveRecord
     {
         $siteName = Yii::$app->params['siteName'];
 
-        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/avatars/' . $this->avatar)) {
-            $path = $siteName . '/backend/web/img/no-logo.png';
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/avatars/' . $this->avatar) || $this->avatar == '') {
+            $path = $siteName . '/backend/web/img/nouser.png';
         } else {
             $path = $siteName . '/backend/web/uploads/avatars/' . $this->avatar;
         }

@@ -54,7 +54,7 @@ else $avt = false;
                         <?php } ?>
 	                </div>
 	                <div class="address-item-product">
-	                  	<?=$ads->city_name?>
+	                  	<?=$ads->getAddress()?>
 	                </div>
 	            </div>
 	            <div class="category-item-product-right">

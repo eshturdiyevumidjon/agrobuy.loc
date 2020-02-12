@@ -9,7 +9,7 @@
 	<form class="form-search" action="/profile/catalog" method="get">
         <div class="form-group select2-style">
             <select class="js-select2" name="category">
-              	<option value="" disabled selected><?= Yii::t('app',"Kategoriya") ?></option>
+              	<option value="" selected><?= Yii::t('app',"Kategoriya") ?></option>
               	<?php foreach ($categories as $category) {
               		$selected = '';
                 	if($cat == $category['id']) $selected = 'selected';
@@ -22,7 +22,7 @@
         </div>
         <div class="form-group select2-style">
             <select class="js-select2" name="region">
-              	<option value="" disabled selected><?= Yii::t('app',"Joylashuvi") ?></option>
+              	<option value="" selected><?= Yii::t('app',"Joylashuvi") ?></option>
 	            <?php foreach ($regions as $region) { ?>
 	                <option value="<?=$region->id?>" <?=$reg == $region->id ? 'selected' : ''?> ><?=$region->name?></option>
 	            <?php } ?>

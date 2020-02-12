@@ -82,4 +82,19 @@ class UsersReyting extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
+
+    public function getUserReyting($user_id)
+    {
+        $reyting = Reyting::find()->all();
+        $result = [];
+        foreach ($reyting as $value) {
+            $usersReyting = UsersReyting::find()
+                ->where(['user_id' => $user_id, 'reyting_id' => $value->id])
+                ->all();
+            foreach ($usersReyting as $userRey) {
+                
+            }
+            
+        }
+    }
 }

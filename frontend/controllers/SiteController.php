@@ -1,9 +1,9 @@
 <?php
 namespace frontend\controllers;
 
+use Yii;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
-use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -25,6 +25,7 @@ use backend\models\UsersBall;
 use yii\widgets\ActiveForm;
 use common\models\Favorites;
 use common\models\AdsSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -120,14 +121,6 @@ class SiteController extends Controller
             ->orderBy(['date_cr' => SORT_DESC, 'id' => SORT_DESC])
             ->all();
 
-        /*$trustedAds = Ads::find()
-            ->joinWith(['category', 'user', 'currency'])
-            ->where(['in', 'users.id', $usersID])
-            ->andWhere(['ads.status' => 1])
-            ->limit(4)
-            ->orderBy(['rand()' => SORT_DESC])
-            ->all();*/
-
         return $this->render('index', [
             'banners' => $banners,
             'regions' => $regions,
@@ -168,6 +161,8 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+
+        //if(!Yii::$app->request->isAjax) throw new NotFoundHttpException('The requested page does not exist.');
 
         $session = new Sessions();
         $request = Yii::$app->request;

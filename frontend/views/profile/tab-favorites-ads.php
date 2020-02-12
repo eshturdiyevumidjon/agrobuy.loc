@@ -19,7 +19,7 @@ use yii\widgets\LinkPager;
                     <?= $star ?>
                 </span>
                       
-                <a href="#">
+                <a href="/ads/view?id=<?=$ads->id?>">
                     <div class="item-product-img">
                       	<img src="<?=$ads->getImage('main_page')?>" alt="">
                     </div>
@@ -34,7 +34,7 @@ use yii\widgets\LinkPager;
                         <?php } ?>
                     </div>
                     <div class="address-item-product">
-                      	<?=$ads->city_name?>
+                      	<?=$ads->getAddress()?>
                     </div>
                     <div class="block-id-product">
                       	<span><?= $ads->getDate($ads->date_cr)?></span>

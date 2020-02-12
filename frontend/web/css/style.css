@@ -332,7 +332,7 @@ form.form-search .btn-template{
 	display: none;
 }
 .select2-results__options>li:first-child{
-	display: none;
+	/*display: none;*/
 }
 .but_копия_2 {
   position: absolute;
