@@ -235,6 +235,9 @@ class UsersController extends Controller
             if($type == 5) { $fileName = 'forms/request';
                 $size = 'normal';
             }
+            if($type == 6) { $fileName = 'forms/accesses';
+                $size = 'normal';
+            }
             return [
                  'title'=> "Изменить пользователя",
                  'size' => $size,

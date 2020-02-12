@@ -1,6 +1,10 @@
 <?php
 
 namespace common\models;
+use backend\models\SubCategories;
+use frontend\models\Sessions;
+use yii\data\ActiveDataProvider;
+use backend\models\Translates;
 
 use Yii;
 
@@ -28,6 +32,7 @@ class Regions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -43,6 +48,16 @@ class Regions extends \yii\db\ActiveRecord
         ];
     }
 
+
+ public function beforeDelete()
+    {
+        $subs = SubCategories::find()->where(['category_id' => $this->id])->all();
+        foreach ($subs as $sub){
+            $sub->delete();
+        }
+        return parent::beforeDelete();
+    }
+
     /**
      * Gets query for [[Ads]].
      *
@@ -51,6 +66,26 @@ class Regions extends \yii\db\ActiveRecord
     public function getAds()
     {
         return $this->hasMany(Ads::className(), ['district_id' => 'id']);
+    }
+
+
+
+     public function getSubcategories()
+    {
+        return $this->hasMany(Subcategory::className(), ['regions_id' => 'id']);
+    }
+
+    public function getSubCategoryList()
+    {
+        $query = Districts::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => false,
+        ]);
+
+        $query->andFilterWhere(['region_id' => $this->id]);
+        return $dataProvider;
     }
 
     /**
@@ -63,3 +98,4 @@ class Regions extends \yii\db\ActiveRecord
         return $this->hasMany(Districts::className(), ['region_id' => 'id']);
     }
 }
+

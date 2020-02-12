@@ -59,7 +59,6 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
         </table>
     </div>
 </div>
-
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-inverse">
@@ -99,7 +98,46 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
         </div>
     </div>
 </div>
-
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <?=Html::a('<i class="fa fa-pencil"></i>', ['/users/change-personal?id='.$model->id.'&type=6'],['role'=>'modal-remote','title'=> 'Изменить', 'class' => 'btn-sm btn-icon btn-circle btn-info'])?>
+                </div>
+                <h4 class="panel-title"><b>Доступы</b></h4>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Проверка телефона</th>
+                        <td><?=$model->check_phone == 1 ? 'Да' : 'Нет' ?></td>
+                        <th>Проверка почту</th>
+                        <td><?=$model->check_mail == 1 ? 'Да' : 'Нет' ?></td>
+                    </tr>
+                    <tr>
+                        <th>Проверка паспорта</th>
+                        <td><?=$model->check_passport == 1 ? 'Да' : 'Нет' ?></td>
+                        <th>Проверка машины</th>
+                        <td><?=$model->check_car == 1 ? 'Да' : 'Нет' ?></td>
+                    </tr>
+                    <tr>
+                        <th>Instagram</th>
+                        <td><?=$model->instagram != null ? 'Есть' : 'Нет' ?></td>
+                        <th>Facebook</th>
+                        <td><?=$model->facebook != null ? 'Есть' : 'Нет' ?></td>
+                    </tr>
+                    <tr>
+                        <th>Telegram</th>
+                        <td><?=$model->telegram != null ? 'Есть' : 'Нет' ?></td>
+                        <th>Web Site</th>
+                        <td><?=$model->web_site != null ? 'Есть' : 'Нет' ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-inverse">

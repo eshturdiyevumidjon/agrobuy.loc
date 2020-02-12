@@ -63,6 +63,7 @@ use common\models\Users;
                             ['label' => 'Валюты', 'icon' => 'dollar', 'url' => ['/currency'],],
                             ['label' => 'Платные услуги', 'icon' => 'tags', 'url' => ['/promotions'],],
                             ['label' => 'Категории', 'icon' => 'book', 'url' => ['/categories'],],
+                            ['label' => 'Регионы', 'icon' => 'book', 'url' => ['/regions'],],
                             ['label' => 'Ссылки подвала сайта', 'icon' => 'book', 'url' => ['/settings'],],
                             ['label' => 'Настройки пополнения счета', 'icon' => 'fas fa-th-list', 'url' => ['/price-list'],],
                             ['label' => 'Языки', 'icon' => 'language', 'url' => ['/language'],],

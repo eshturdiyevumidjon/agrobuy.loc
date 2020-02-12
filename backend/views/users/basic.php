@@ -67,7 +67,6 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
         </table>
     </div>
 </div>
-
 <div class="panel panel-inverse">
     <div class="panel-heading">
         <div class="panel-heading-btn">
@@ -156,5 +155,4 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
         </table>
     </div>
 </div>
-
 <?php Pjax::end(); ?>

@@ -30,6 +30,7 @@ class Districts extends \yii\db\ActiveRecord
     {
         return [
             [['region_id'], 'integer'],
+            [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
             [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Regions::className(), 'targetAttribute' => ['region_id' => 'id']],
         ];
