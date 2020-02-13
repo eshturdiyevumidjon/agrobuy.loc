@@ -30,26 +30,21 @@ CrudAsset::register($this);
             'filterModel' => $searchModel,
             'tableOptions' => ['class' => 'table table-bordered'],
             'pjax'=>true,
+            'rowOptions' => function ($model){
+                if($model->access == 1) return ['style'=>'background:white'];
+                else return ['class' => 'danger'];
+            },
             'columns' => require(__DIR__.'/_columns.php'),
-            'panelBeforeTemplate' =>    Html::a('Добавить <i class="fa fa-plus"></i>', ['create'],
-                    ['role'=>'modal-remote','title'=> 'Добавить пользователя','class'=>'btn btn-success']).'&nbsp;',
+            'panelBeforeTemplate' => Html::a('Добавить <i class="fa fa-plus"></i>', ['create'],
+                    ['role'=>'modal-remote','title'=> 'Добавить пользователя','class'=>'btn btn-success']).'&nbsp;' . 
+                    Html::a('История удалении', ['history'],
+                    ['data-pjax'=>'0','title'=> 'История удалении','class'=>'btn btn-warning']),
             'striped' => true,
             'condensed' => true,
             'responsive' => true,
             'panel' => [
             'headingOptions' => ['style' => 'display: none;'],
-            'after'=>BulkButtonWidget::widget([
-            'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Удалить',
-            ["bulk-delete"] ,
-            [
-            "class"=>"btn btn-danger btn-xs",
-            'role'=>'modal-remote-bulk',
-            'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-            'data-request-method'=>'post',
-            'data-confirm-title'=>'Подтвердите действие',
-            'data-confirm-message'=>'Вы уверены что хотите удалить этого элемента?'
-            ]),
-            ]).
+            'after'=>
             '<div class="clearfix"></div>',
             ]
             ])?>

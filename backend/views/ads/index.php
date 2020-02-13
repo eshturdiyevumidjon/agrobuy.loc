@@ -35,6 +35,10 @@ CrudAsset::register($this);
             'filterModel' => $searchModel,
             'tableOptions' => ['class' => 'table table-bordered'],
             'pjax'=>true,
+            'rowOptions' => function ($model){
+                if($model->status == 1) return ['style'=>'background:white'];
+                else return ['class' => 'danger'];
+            },
             'columns' => require(__DIR__.'/_columns.php'),
             'panelBeforeTemplate' =>  (Yii::$app->user->identity->type == 1) ? Html::a('Добавить <i class="fa fa-plus"></i>', ['create'],
                     ['role'=>'modal-remote','title'=> 'Добавить','class'=>'btn btn-success']).'&nbsp;': '',

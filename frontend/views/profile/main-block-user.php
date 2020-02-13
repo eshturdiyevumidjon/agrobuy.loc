@@ -3,10 +3,10 @@
 $_csrf = \Yii::$app->request->getCsrfToken();
 
 ?>
-	<div class="block-main-user">
+  <div class="block-main-user">
         <form action="" class="img-main-user" method="post" enctype="multipart/form-data">
-        	<div id="user_logo_file<?=$identity->id?>">
-            	<img src="<?=$identity->getAvatarForSite()?>" alt="user image" id="image_upload_preview" >
+          <div id="user_logo_file<?=$identity->id?>">
+              <img src="<?=$identity->getAvatarForSite()?>" alt="user image" id="image_upload_preview" >
             </div>
             <input type="file" id="ad1" accept="image/*" name="ad1">
             <label for="ad1" id="write">
@@ -151,7 +151,9 @@ $_csrf = \Yii::$app->request->getCsrfToken();
             </a>
             <div class="my-catalog-block">
               <a href="/profile/catalog" class="btn-template link-btn"><?= Yii::t('app',"Mening katalogim") ?></a>
-              <a href="/profile/chat" class="btn-template link-btn"><?= Yii::t('app',"Mening chatim") ?></a>
+              <a href="/profile/chat" class="btn-template link-btn"><?= Yii::t('app',"Mening chatim") ?>
+                <div class="chat_message_count">15</div>
+              </a>
             </div>
             <div class="ratings">
               <b><?= Yii::t('app',"Reyting") ?>:</b>

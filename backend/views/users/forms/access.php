@@ -5,11 +5,14 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="users-form">
-
     <?php $form = ActiveForm::begin(); ?>
-    <div class="row">
-        <div class="col-md-12">
-            <?= $form->field($model, 'legal_status')->dropDownList($model->getLegal(), [/* 'prompt' => 'Выберите ...',*/]) ?>
+        <div class="row">
+            <div class="col-md-12">
+                <?= $form->field($model, 'access')->dropDownList($model->getAccessType(), []) ?>
+            </div>
+            <div class="col-md-12">              
+              <?= $form->field($model, 'access_comment')->textArea(['rows' => 3]) ?>
+            </div>
         </div>
     </div>
   

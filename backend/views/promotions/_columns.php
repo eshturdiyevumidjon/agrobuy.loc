@@ -50,10 +50,10 @@ return [
             return $data->getTopDescription();
         }
     ],
-    [
+    /*[
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'discount',
-    ],
+    ],*/
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

@@ -18,7 +18,7 @@ class UsersSearch extends Users
    public function rules()
     {
         return [
-            [['id', 'type', 'expiret_at'], 'integer'],
+            [['id', 'type', 'expiret_at', 'access'], 'integer'],
             [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token'], 'safe'],
         ];
     }
@@ -45,6 +45,7 @@ class UsersSearch extends Users
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -58,6 +59,7 @@ class UsersSearch extends Users
         $query->andFilterWhere([
             'id' => $this->id,
             'type' => $this->type,
+            'access' => $this->access,
         ]);
 
         $query->andFilterWhere(['like', 'fio', $this->fio])

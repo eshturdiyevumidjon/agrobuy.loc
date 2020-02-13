@@ -19,7 +19,7 @@ class AdsSearch extends Ads
     public function rules()
     {
         return [
-            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id', 'region_id', 'district_id', 'status'], 'integer'],
+            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id', 'region_id', 'district_id', 'status', 'is_checked'], 'integer'],
             [['title', 'images', 'city_name', 'text', 'unit_price', 'treaty', 'date_cr'], 'safe'],
             [['price', 'old_price'], 'number'],
         ];
@@ -47,6 +47,7 @@ class AdsSearch extends Ads
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -59,6 +60,7 @@ class AdsSearch extends Ads
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'is_checked' => $this->is_checked,
             'status' => $this->status,
             'user_id' => $this->user_id,
             'type' => $this->type,
@@ -91,6 +93,7 @@ class AdsSearch extends Ads
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -128,6 +131,7 @@ class AdsSearch extends Ads
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -170,6 +174,7 @@ class AdsSearch extends Ads
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         $this->load($params);

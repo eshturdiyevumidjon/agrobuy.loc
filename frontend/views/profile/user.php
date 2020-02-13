@@ -1,5 +1,5 @@
 <?php
-	
+    
 use yii\widgets\LinkPager;
 if(!Yii::$app->user->isGuest) $avt = true; 
 else $avt = false;
@@ -119,14 +119,14 @@ else $avt = false;
                     <?php if(Yii::$app->user->identity != null) { ?>
                         <a href="/chat?user_id=<?=$identity->id?>" class="writed">
                     <?php } else { ?>
-                        <a href="#" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="writed avtorization_class">
+                        <a href="#" data-touch="false" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="writed avtorization_class">
                     <?php } ?>
                         <?= Yii::t('app',"Yozish") ?>
                         </a>
                     <?php if(Yii::$app->user->identity != null) { ?>
-                        <a href="#" data-fancybox data-src="#star-popup" value="/<?=$nowLanguage?>/profile/star?id=<?=$identity->id?>" class="link-template-img star_class">
+                        <a href="#" data-touch="false" data-fancybox data-src="#star-popup" value="/<?=$nowLanguage?>/profile/star?id=<?=$identity->id?>" class="link-template-img star_class">
                     <?php } else { ?>
-                        <a href="#" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="link-template-img avtorization_class">
+                        <a href="#" data-touch="false" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="link-template-img avtorization_class">
                     <?php } ?>
                             <span>
                                 <svg id="color" enable-background="new 0 0 24 24" height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg"><path d="m23.363 8.584-7.378-1.127-3.307-7.044c-.247-.526-1.11-.526-1.357 0l-3.306 7.044-7.378 1.127c-.606.093-.848.83-.423 1.265l5.36 5.494-1.267 7.767c-.101.617.558 1.08 1.103.777l6.59-3.642 6.59 3.643c.54.3 1.205-.154 1.103-.777l-1.267-7.767 5.36-5.494c.425-.436.182-1.173-.423-1.266z" fill="#ffc107"/></svg>

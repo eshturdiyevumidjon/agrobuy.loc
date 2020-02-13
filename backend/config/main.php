@@ -12,9 +12,9 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'language' =>'ru-RU',
-    'name' => 'AgroBuy',
-    'timeZone' =>'Europe/Moscow',
-    'defaultRoute' =>'/users',
+    'name' => 'Agrobuy.uz',
+    'timeZone' =>'Asia/Tashkent',
+    'defaultRoute' =>'ads',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',

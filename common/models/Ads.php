@@ -54,7 +54,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg',],
-            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id', 'status'], 'integer'],
+            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id', 'status', 'is_checked'], 'integer'],
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr','comment'], 'safe'],
@@ -104,6 +104,7 @@ class Ads extends \yii\db\ActiveRecord
             'region_id' => 'Город,Регион',
             'district_id' => 'Район',
             'status' => 'Статус',
+            'is_checked' => 'Просмотрено',
         ];
     }
 
@@ -111,6 +112,7 @@ class Ads extends \yii\db\ActiveRecord
     {
         if ($this->isNewRecord) {
             $this->status = 1;
+            $this->is_checked = 0;
             $this->date_cr = date('Y-m-d H:i:s');
         }
         
@@ -207,6 +209,14 @@ class Ads extends \yii\db\ActiveRecord
         return [
             1 => "Куплю",
             2 => "Продам",
+        ];
+    }
+
+    public function getIsCheckedList()
+    {
+        return [
+            1 => "Да",
+            0 => "Нет",
         ];
     }
 

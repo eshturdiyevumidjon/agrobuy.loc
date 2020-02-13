@@ -64,7 +64,7 @@ class ChatMessage extends \yii\db\ActiveRecord
         if ($this->isNewRecord)
         {
             $this->date_cr = date("Y-m-d H:i:s");
-            $this->is_read = 1;
+            $this->is_read = 0;
         }
         return parent::beforeSave($insert);
     }

@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
+use yii\web\HttpException;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -26,6 +27,7 @@ use yii\widgets\ActiveForm;
 use common\models\Favorites;
 use common\models\AdsSearch;
 use yii\web\NotFoundHttpException;
+use common\models\Users;
 
 /**
  * Site controller
@@ -180,8 +182,16 @@ class SiteController extends Controller
             return ActiveForm::validate($model);
         }
 
-        if($model->load($request->post()) && $model->validate() && $model->login()) {
-            return $this->goBack();
+        if($model->load($request->post()) && $model->validate() ) {
+            $user = Users::find()->where(['login' => $model->username])->one();
+            if($user != null && $user->access == 1) {
+                $model->login();
+                return $this->goBack();
+            }
+            else {
+                throw new HttpException(403, $user->access_comment);
+            }
+            
         }
         else {
             return $this->renderAjax('login', [

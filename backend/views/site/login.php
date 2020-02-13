@@ -43,7 +43,7 @@ $fieldOptions2 = [
             ->passwordInput(['value'=>'admin','placeholder' => $model->getAttributeLabel('password'), 'class' => 'form-control input-lg inverse-mode no-border']) ?>
         <div class="login-buttons">
             <?= Html::submitButton('Войти', ['class' => 'btn btn-success btn-block btn-lg', 'name' => 'login-button']) ?>
-            <br>
+            <!-- <br>
             <div class="row">
                 <div class="col-md-6">
                     <div class="col-md-12 text-center  voyti-a">
@@ -55,7 +55,7 @@ $fieldOptions2 = [
                         <a href="/admin/site/register" class="btn">Регистрация</a>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <?php ActiveForm::end(); ?>
     </div>

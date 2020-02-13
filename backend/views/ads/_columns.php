@@ -52,17 +52,17 @@ return [
         'attribute'=>'category_id',
         'filter' => Ads::getCategoryList(),
         'content'=>function($data){
-            return $data->getCategoryList()[$data->category_id];
+            return $data->getCategoryList()[$data->category_id] . ', ' . $data->getSubcategoryList()[$data->subcategory_id];
         },
     ],
-    [
+    /*[
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'subcategory_id',
         'filter' => Ads::getSubcategoryList(),
         'content'=>function($data){
             return $data->getSubcategoryList()[$data->subcategory_id];
         },
-    ],
+    ],*/
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'region_id',
@@ -78,21 +78,33 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'price',
+        'content'=>function($data){
+            return $data->price . ' ' . $data->getCurrencyList()[$data->currency_id];
+        },
     ],
-    [
+    /*[
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'currency_id',
         'filter' => Ads::getCurrencyList(),
         'content'=>function($data){
             return $data->getCurrencyList()[$data->currency_id];
         },
-    ],
+    ],*/
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'status',
         'filter' => Ads::getStatusList(),
         'content'=>function($data){
             return $data->getStatusList()[$data->status];
+        },
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'is_checked',
+        'filter' => Ads::getIsCheckedList(),
+        'content'=>function($data){
+            $class = $data->is_checked == 1 ? 'btn-info' : 'btn-warning';
+            return Html::a($data->getIsCheckedList()[$data->is_checked], ['#'],['class' => $class . ' btn btn-xs']);
         },
     ],
     // [
@@ -126,7 +138,7 @@ return [
             // 'data-confirm-title'=>'Подтвердите действие',
             // 'data-confirm-message'=>'Вы уверены что хотите удалить этого элемента?'
         ],
-        'template' => '{view} {update} {leadDelete}',
+        'template' => '{view} {leadDelete}',
         'viewOptions'=>['data-pjax'=>'0','title'=>'Просмотр','data-toggle'=>'tooltip'],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Изменить', 'data-toggle'=>'tooltip'],
         'buttons'  => [

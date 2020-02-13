@@ -66,4 +66,13 @@ class ChatUsers extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
+
+    public function sendMessageAboutDeletingAds($text)
+    {
+        $chatMessage = new ChatMessage();
+        $chatMessage->chat_id = $this->chat_id;
+        $chatMessage->user_id = $this->user_id;
+        $chatMessage->message = $text;
+        $chatMessage->save(false);
+    }
 }

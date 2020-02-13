@@ -141,6 +141,7 @@ class PromotionsController extends Controller
             }else{
                  return [
                     'title'=> Yii::t('app','Update'),
+                    'size' => 'large',
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),

@@ -12,6 +12,8 @@ use yii\web\UploadedFile;
 use \yii\web\Response;
 use common\models\Complaints;
 use yii\helpers\Html;
+use common\models\Chats;
+use common\models\ChatUsers;
 
 /**
  * AdsController implements the CRUD actions for Ads model.
@@ -67,6 +69,11 @@ class AdsController extends Controller
     public function actionView($id)
     {   
         $request = Yii::$app->request;
+        $model = $this->findModel($id);
+        if($model->is_checked == 0) {
+            $model->is_checked = 1;
+            $model->save(false);
+        }
 
         $searchModel = new Complaints();
         $complaintsProvider = $searchModel->getComplaintsList(Yii::$app->request->queryParams, $id);
@@ -194,23 +201,28 @@ class AdsController extends Controller
         $model = $this->findModel($id);
         $file = $model->images;
         $model->scenario = Ads::SCENARIO_DELETING;
+
         if($request->isAjax){
+
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($request->post()) && $model->validate()){
-
-                if($file)
+            if($model->load($request->post()) && $model->validate()) {
+                if($file) {
                     $model->unlinkFile($file);
+                }
+                $chatUser = ChatUsers::find()
+                    ->joinWith('chat')
+                    ->where(['chats.type' => 1, 'chat_users.user_id' => $model->user_id])
+                    ->one();
 
-                $chat = \common\models\Chats::find()->where(['name'=>'support']);
-
+                $chatUser->sendMessageAboutDeletingAds($model->comment);
                 $model->delete();
 
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'forceClose'=>true,
                 ];    
-            }else{
-                 return [
+            } else {
+                return [
                     'title'=> Yii::t('app','Delete'),
                     'size' => 'normal',
                     'content'=>$this->renderAjax('delete_form', [
@@ -221,47 +233,7 @@ class AdsController extends Controller
                 ];        
             }
         }
-
-        // $request = Yii::$app->request;
-        // $model = $this->findModel($id);
-        // $file = $model->images;
-        // $model->unlinkFile($file);
-        // $model->delete();
-
-        // if($request->isAjax){
-        //     Yii::$app->response->format = Response::FORMAT_JSON;
-        //     return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        // }else{
-        //     return $this->redirect(['index']);
-        // }
     }
-
-     /**
-     * Delete multiple existing Ads model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    /*public function actionBulkDelete()
-    {        
-        $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            $model->delete();
-        }
-
-        if($request->isAjax){
-
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-
-            return $this->redirect(['index']);
-        }
-       
-    }*/
 
     /**
      * Finds the Ads model based on its primary key value.

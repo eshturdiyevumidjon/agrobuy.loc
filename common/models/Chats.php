@@ -32,7 +32,7 @@ class Chats extends \yii\db\ActiveRecord
     {
         return [
             [['date_cr'], 'safe'],
-            [['type'], 'integer'],
+            [['type'], 'integer'], //(1=> admin, 2 => oddiy_chat) (Тип чата)
             [['name'], 'string', 'max' => 255],
         ];
     }

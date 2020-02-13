@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use common\models\Users;
 
 return [
-    [
+    /*[
         'class' => 'kartik\grid\CheckboxColumn',
         'width' => '20px',
         'checkboxOptions' => function($model) {
@@ -14,7 +14,7 @@ return [
                return [];
             }
          },
-    ],
+    ],*/
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -39,7 +39,7 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'email',
+        'attribute'=>'phone',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -58,8 +58,17 @@ return [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
-        'template' => '{view} {leadDelete}',
+        'template' => '{view} {leadAccess} {leadDelete}',
         'buttons'  => [
+            'leadAccess' => function ($url, $model) {
+                    if($model->access == 1) $class = '<span class="fa fa-unlock-alt"></span>';
+                    else $class = '<span class="fa fa-unlock"></span>';
+                    $url = Url::to(['/users/access', 'id' => $model->id]);
+                    return Html::a($class, $url, [
+                        'role'=>'modal-remote','title'=> 'Доступ', 
+                        'data-toggle'=>'tooltip',
+                    ]);
+            },
             'leadDelete' => function ($url, $model) {
                 if($model->id != 1){
                     $url = Url::to(['/users/delete', 'id' => $model->id]);

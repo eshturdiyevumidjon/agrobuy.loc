@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 
-
 if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null) {
     $path = 'http://' . $_SERVER['SERVER_NAME'].'/backend/web/img/nouser.png';
 } else {
@@ -13,7 +12,6 @@ $user = Yii::$app->user->identity;
 ?>
 
 <div class="users-form">
-
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-3">
@@ -31,70 +29,70 @@ $user = Yii::$app->user->identity;
         </div>
         <div class="col-md-9">
             <div class="row">
-            <div class="col-md-6">
-                <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
-            </div>
-            <div class="col-md-6">
-                <?= $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
-                  'mask' => '+\9\9899-999-99-99',
-                 'options' => [
-                      'placeholder' => '+998-99-999-99-99',
-                     'class'=>'form-control',
-                 ]
-                ]) ?>
-            </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'fio')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+                      'mask' => '+\9\9899-999-99-99',
+                     'options' => [
+                          'placeholder' => '+998-99-999-99-99',
+                         'class'=>'form-control',
+                     ]
+                    ]) ?>
+                </div>
             </div>
             <div class="row">
-            <div class="col-md-6 ">
-                <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+                <div class="col-md-6 ">
+                    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'facebook')->textInput(['maxlength' => true]) ?>
+                </div>
             </div>
-
-            <div class="col-md-6">
-                <?= $form->field($model, 'facebook')->textInput(['maxlength' => true]) ?>
-            </div>
-        </div>
             <div class="row">
-             <div class="col-md-6">
-                <?= $form->field($model, 'instagram')->textInput(['maxlength' => true]) ?>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'instagram')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'telegram')->textInput(['maxlength' => true]) ?>
+                 </div>
             </div>
-             <div class="col-md-6">
-                <?= $form->field($model, 'telegram')->textInput(['maxlength' => true]) ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'birthday')->widget(
+                        DatePicker::className(), [
+                          'inline' => false,
+                          'language' => 'ru',
+                          'clientOptions' => [
+                                  'autoclose' => true,
+                              'maxlength' => true,
+                              'format' => 'dd.mm.yyyy'
+                          ]
+                    ])?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'login')->textInput(['maxlength' => true]) ?>
+                </div>
             </div>
-        </div>
-        <div class="row">
-             <div class="col-md-6">
-                
-                   <?= $form->field($model, 'birthday')->widget(
-                DatePicker::className(), [
-                    'inline' => false,
-                    'language' => 'ru',
-                    'clientOptions' => [
-                            'autoclose' => true,
-                        'maxlength' => true,
-                        'format' => 'dd.mm.yyyy'
-                    ]
-                ])
-            ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $model->isNewRecord ? $form->field($model, 'password')->textInput(['maxlength' => true]) : $form->field($model, 'new_password')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-6">
+                    <?php if( $user->type == 1) { ?>
+                        <?= $form->field($model, 'type')->dropDownList(($model->type == 4 || $model->type == 3) ? $model->getTypeEdu() : $model->getType(), ['prompt' => 'Выберите должность','disabled'=>($model->type == 4 || $model->type == 3)? true : false ]) ?>
+                    <?php } ?>
+                </div>
             </div>
-            <div class="col-md-6">
-                <?= $form->field($model, 'login')->textInput(['maxlength' => true]) ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'web_site')->textInput(['maxlength' => true]) ?>
+                </div>
+                <!-- <div class="col-md-6">
+                    <?php // $form->field($model, 'access')->dropDownList($model->getAccessType(), []) ?>
+                </div> -->
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <?= $model->isNewRecord ? $form->field($model, 'password')->textInput(['maxlength' => true]) : $form->field($model, 'new_password')->textInput(['maxlength' => true]) ?>
-            </div>
-            <div class="col-md-6">
-                <?php if( $user->type == 1) { ?>
-                    <?= $form->field($model, 'type')->dropDownList(($model->type == 4 || $model->type == 3) ? $model->getTypeEdu() : $model->getType(), ['prompt' => 'Выберите должность','disabled'=>($model->type == 4 || $model->type == 3)? true : false ]) ?>
-                <?php } ?>
-            </div>
-        </div>
-        <div class="row">
-             <div class="col-md-12">
-                <?= $form->field($model, 'web_site')->textInput(['maxlength' => true]) ?>
-            </div>
-        </div>
         </div>
     </div>
   

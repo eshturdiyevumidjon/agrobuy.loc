@@ -29,15 +29,18 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'expiret_at', 'legal_status', 'check_phone', 'check_mail', 'check_passport', 'check_car'], 'integer'],
+            [['type', 'expiret_at', 'legal_status', 'check_phone', 'check_mail', 'check_passport', 'check_car', 'access'], 'integer'],
             [['balance'], 'number'],
             [['birthday'], 'safe'],
             [['email'], 'email'],
+            [['login', 'phone'], 'unique'],
+            [['login', 'type', 'phone'], 'required'],
             [['inn'], 'string', 'min' => 9],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
             [['image','new_password', 'passport_image', 'company_image'], 'safe'],
-            [['company_files', 'passport_issue'], 'string'],
+            [['company_files', 'passport_issue', 'access_comment'], 'string'],
             [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site'], 'string', 'max' => 255],
+            [['access_comment'], 'required', 'when' => function($model) {return $this->access == 2;}, 'enableClientValidation' => false],
         ];
     }
 
@@ -56,6 +59,7 @@ class Users extends \yii\db\ActiveRecord
             'type' => 'Должность',
             'email' => Yii::t('app', 'E-mail'),
             'balance' =>'Баланс',
+            'access' => 'Доступ',
             'access_token' => Yii::t('app', 'Access Token'),
             'expiret_at' =>'Время окончание токена',
             'user_number' => 'ID номер',
@@ -80,14 +84,17 @@ class Users extends \yii\db\ActiveRecord
             'code_for_phone' => 'Смс код',
             'passport_image' => 'Картинка паспорта',
             'company_image' => 'Файлы компании',
+            'new_password' => 'Новый пароль',
+            'access_comment' => "Текст заблокировки",
+            'is_checked' => 'Проверено или нет',
         ];
     }
-
 
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
             $this->balance = 0;
+            $this->access = 1;
             $this->password = Yii::$app->security->generatePasswordHash($this->password);
             $this->access_token = Yii::$app->getSecurity()->generateRandomString();
             $this->expiret_at = time() + $this::EXPIRE_TIME;
@@ -122,6 +129,12 @@ class Users extends \yii\db\ActiveRecord
 
                 $chat1->save();
                 $chat2->save();
+
+                $chatMessage = new ChatMessage();
+                $chatMessage->chat_id = $chat->id;
+                $chatMessage->user_id = 1;
+                $chatMessage->message = '"Поздравляем! Вы успешно зарегистрировались на лучшей онлайн платформе куплепродажи в аграрной сфере. Это чат техподдержки. В случае технических неполадок Вы можете направлять сюда Ваши письма. Команда наших модераторов ответит на Ваше письмо в течении 2 рабочих дней. Так же в данный чат будут приходить рассылки и различные объявления от нашей администрации. Благодарим Вас то что выбрали нас. Удачи. С уважением команда Agrobuy.uz."';
+                $chatMessage->save();
             }
         } // else qismi reytingni hisoblash uchun kerak
         else {
@@ -434,6 +447,14 @@ class Users extends \yii\db\ActiveRecord
         }
     }
 
+    public function getAccessType()
+    {
+        return [
+            1 => "Активирован",
+            2 => "Заблокирован",
+        ];
+    }
+
     public static function getLegal()
     {
         return [
@@ -489,5 +510,17 @@ class Users extends \yii\db\ActiveRecord
             $path = $siteName . '/backend/web/uploads/avatars/' . $this->avatar;
         }
         return $path;
+    }
+
+    public function getActiveMenu($url)
+    {
+        if($url == 'currency') return 1;
+        if($url == 'promotions') return 1;
+        if($url == 'categories') return 1;
+        if($url == 'regions') return 1;
+        if($url == 'settings') return 1;
+        if($url == 'price-list') return 1;
+        if($url == 'language') return 1;
+        return 0;
     }
 }

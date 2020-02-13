@@ -5,11 +5,11 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="users-form">
-
     <?php $form = ActiveForm::begin(); ?>
-    <div class="row">
-        <div class="col-md-12">
-            <?= $form->field($model, 'legal_status')->dropDownList($model->getLegal(), [/* 'prompt' => 'Выберите ...',*/]) ?>
+        <div class="row">
+            <div class="col-md-12">              
+              <?= $form->field($model, 'text')->textArea(['rows' => 3]) ?>
+            </div>
         </div>
     </div>
   
@@ -20,5 +20,4 @@ use yii\widgets\ActiveForm;
 	<?php } ?>
 
     <?php ActiveForm::end(); ?>
-    
 </div>
