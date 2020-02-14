@@ -110,10 +110,10 @@ class SiteController extends Controller
         $reklama = AdvertisingItems::find()
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
-            ->one();
-        if($reklama != null) {
-            $reklama->view_count = $reklama->view_count + 1;
-            $reklama->save();
+            ->all();
+        foreach ($reklama as $value) {
+            $value->view_count = $value->view_count + 1;
+            $value->save();
         }
 
         $newAds = Ads::find()
@@ -272,19 +272,19 @@ class SiteController extends Controller
         $reklamaBig = AdvertisingItems::find()
             ->where(['advertising_id' => $search_big->id])
             ->orderBy(['rand()' => SORT_DESC])
-            ->one();
-        if($reklamaBig != null) {
-            $reklamaBig->view_count = $reklamaBig->view_count + 1;
-            $reklamaBig->save();
+            ->all();
+        foreach ($reklamaBig as $value) {
+            $value->view_count = $value->view_count + 1;
+            $value->save();
         }
 
         $reklamaSmall = AdvertisingItems::find()
             ->where(['advertising_id' => $search_small->id])
             ->orderBy(['rand()' => SORT_DESC])
-            ->one();
-        if($reklamaSmall != null) {
-            $reklamaSmall->view_count = $reklamaSmall->view_count + 1;
-            $reklamaSmall->save();
+            ->all();
+        foreach ($reklamaSmall as $value) {
+            $value->view_count = $value->view_count + 1;
+            $value->save();
         }
 
         $cat = null; $reg = null; $sub = null;

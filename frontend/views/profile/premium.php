@@ -10,7 +10,7 @@ use yii\widgets\LinkPager;
             <?php foreach ($dataProvider->getModels() as $ads) { ?>
             <div class="col-xl-3 col-lg-4 col-6">
                 <div class="item-product">
-                    <a href="#">
+                    <a href="/ads/view?id=<?=$ads->id?>">
                         <div class="item-product-img">
                             <img src="<?=$ads->getImage('main_page')?>" alt="">
                         </div>

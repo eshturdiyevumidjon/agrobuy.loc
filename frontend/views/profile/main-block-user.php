@@ -19,6 +19,9 @@ $_csrf = \Yii::$app->request->getCsrfToken();
                 <path d="m462 166h-20c-5.522 0-10 4.477-10 10s4.478 10 10 10h20c5.522 0 10-4.477 10-10s-4.478-10-10-10z"></path>
             </svg>
             <?= Yii::t('app',"Profil rasmini o'zgartirish") ?></label>
+            <button class="btn btn-template" type="button" style="display: none;" id="user_avatar">
+              <?= Yii::t('app',"Saqlash") ?>
+            </button>
         </form>
           <div class="about-main-user">
             <div class="about-main-user-top">

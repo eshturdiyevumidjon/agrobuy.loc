@@ -42,10 +42,20 @@ $this->title = 'AgroBuy';
                 ]) : '' 
             ?>
 
-            <div class="reclama">
-                <img src="<?=$reklama->getImage('main_page')?>" alt="<?=$reklama->title?>">
-                <!-- <p><?php //$reklama->title?></p> -->
+            <div class="swiper-container reclama">
+            <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <?php foreach ($reklama as $value) { ?>
+                        <a href="<?=$value->link?>" class="swiper-slide">
+                            <img src="<?=$value->getImage('main_page')?>" alt="<?=$value->title?>">
+                        </a>
+                    <?php } ?>
+                </div>
             </div>
+            <!-- <div class="reclama">
+                <img src="<?php //$reklama->getImage('main_page')?>" alt="<?=$reklama->title?>">
+                <p><?php //$reklama->title?></p>
+            </div> -->
 
             <?= count($newAds) > 0 ? 
                 $this->render('new_ads', [

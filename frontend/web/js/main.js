@@ -1,11 +1,11 @@
 $(document).ready(function () {
-  // $('.item-product .address-item-product').each(function(i){
-  //   $(i).css('display', 'inline')
-  //   if($(i).height()<36){
-  //     $(i).addClass('min-pro')
-  //   }
-  //   $(i).css('display', '-webkit-box')
-  // })
+
+  var swiper_recl = new Swiper('.swiper-container.reclama', {
+      loop: true,
+      autoplay: {
+        delay: 5000
+      }
+    });
 
 
   $('[data-fancybox]').fancybox();

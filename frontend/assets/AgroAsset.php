@@ -25,7 +25,7 @@ class AgroAsset extends AssetBundle
 	      'css/media.css',
     ];
     public $js = [
-        'js/chat.js',
+        //'js/chat.js',
         //'js/jquery.min.js',
 	    'js/swiper.min.js',
 	    'js/popper.min.js',

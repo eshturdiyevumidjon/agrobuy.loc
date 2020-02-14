@@ -1198,7 +1198,6 @@
 		margin-bottom: 30px;
 		text-align: center;
 		height: 200px;
-		padding: 15px;
 		-ms-align-items: center;
 		align-items: center;
 	}
@@ -1206,8 +1205,12 @@
 		font-size: 30px;
 		margin-top: 25px;
 	}
+	.reclama a{
+		padding: 15px;
+	}
+
 	.reclama img{
-		max-width: 170px;
+		/*max-width: 170px;*/
 		margin-bottom: 0;
 	}
 	section.news{
@@ -1577,7 +1580,7 @@
 	.ads-user{
 		padding: 15px;
 	}
-	.ads-user a.link-template-img{
+	.ads-user .link-template-img{
 		padding: 0;
 		padding-left: 30px;
 	}
@@ -2254,7 +2257,7 @@
 		height: 125px;
     	flex: 0 0 125px;
 	}
-	.mboard a.link-template-img, .mboard a.writed{
+	.mboard .link-template-img, .mboard a.writed{
 		line-height: 1.2;
 		height: 50px;
 		display: -webkit-flex;
@@ -2401,7 +2404,7 @@
 	section.not-found h1{
     	font-size: 120px;
     }
-    .mboard a.link-template-img, .mboard a.writed{
+    .mboard .link-template-img, .mboard a.writed{
     	font-size: 14px;
     }
     a.writed{

@@ -13,7 +13,7 @@
             <p>Продукты растениеводства всегда пользуются большим спросом. Для начала займитесь семейным бизнесом, когда он принесет свои первые плоды, нанимайте рабочих людей.</p>
           </div>
           <div class="col-lg-6 straw">
-            <!-- <img src="images/strawberry.jpg" alt=""> -->
+            <!-- <img src="/images/strawberry.jpg" alt=""> -->
             <iframe width="1519" height="586" src="https://www.youtube.com/embed/Dr5jWhUacGw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
             <p>Как Убрать Живот за 1 Неделю</p>
           </div>
@@ -81,80 +81,80 @@
         <div class="container">
           <div class="swiper-container swiper-container-horizontal">
             <div class="swiper-wrapper" style="transform: translate3d(-1170px, 0px, 0px); transition-duration: 0ms;"><div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="0">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div><div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-next" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="1">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div><div class="swiper-slide swiper-slide-duplicate" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="2">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div><div class="swiper-slide swiper-slide-duplicate swiper-slide-prev" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="3">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div>
               <div class="swiper-slide swiper-slide-active" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="0">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div>
               <div class="swiper-slide swiper-slide-next" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="1">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div>
               <div class="swiper-slide" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="2">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div>
               <div class="swiper-slide swiper-slide-duplicate-prev" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="3">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div>
             <div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="0">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div><div class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-next" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="1">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div><div class="swiper-slide swiper-slide-duplicate" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="2">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div><div class="swiper-slide swiper-slide-duplicate" style="width: 272.5px; margin-right: 20px;" data-swiper-slide-index="3">
-                <a href="images/razz.jpg" data-fancybox="gallery">
+                <a href="/images/razz.jpg" data-fancybox="gallery">
                   <div class="new-slider-img">
-                    <img src="images/razz.jpg" alt="">
+                    <img src="/images/razz.jpg" alt="">
                   </div>
                 </a>
               </div></div>

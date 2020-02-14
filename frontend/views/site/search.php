@@ -8,9 +8,19 @@ Yii::$app->getRequest()->getUrl()*/
 ?>
 <section class="subcategory">
     <div class="container">
-        <div class="reclama">
-	        <img src="<?=$reklamaBig->getImage('main_page')?>" alt="<?=$reklamaBig->title?>">
+        <div class="swiper-container reclama">
+            <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <?php foreach ($reklamaBig as $value) { ?>
+                        <a href="<?=$value->link?>" class="swiper-slide">
+                            <img src="<?=$value->getImage('main_page')?>" alt="<?=$value->title?>">
+                        </a>
+                    <?php } ?>
+                </div>
         </div>
+        <!-- <div class="reclama">
+	        <img src="<?php //$reklamaBig->getImage('main_page')?>" alt="<?php //$reklamaBig->title?>">
+        </div> -->
         <h2 class="title"><?=$session->getCategoryName($categories, $cat, $sub)?></h2>
         <?= $this->render('search_form', [
 	        'regions' => $regions,
@@ -49,7 +59,17 @@ Yii::$app->getRequest()->getUrl()*/
               		</ul>
             	</div>
 	            <div class="reclama fixed-baner">
-	              	<img src="<?=$reklamaSmall->getImage('main_page')?>" alt="<?=$reklamaSmall->title?>">
+                <div class="swiper-container reclama">
+                    <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <?php foreach ($reklamaSmall as $value) { ?>
+                                <a href="<?=$value->link?>" class="swiper-slide">
+                                    <img src="<?=$value->getImage('main_page')?>" alt="<?=$value->title?>">
+                                </a>
+                            <?php } ?>
+                        </div>
+                </div>
+	              	<!-- <img src="<?php //$reklamaSmall->getImage('main_page')?>" alt="<?php //$reklamaSmall->title?>"> -->
 	            </div>
           	</div>
           	<div class="category-body-right">

@@ -139,10 +139,10 @@ class ProfileController extends \yii\web\Controller
         $reklama = AdvertisingItems::find()
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
-            ->one();
-        if($reklama != null) {
-            $reklama->view_count = $reklama->view_count + 1;
-            $reklama->save();
+            ->all();
+        foreach ($reklama as $value) {
+            $value->view_count = $value->view_count + 1;
+            $value->save();
         }
 
         return $this->render('catalog',[

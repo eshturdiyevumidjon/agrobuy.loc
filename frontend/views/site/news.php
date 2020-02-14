@@ -32,5 +32,6 @@ echo "</pre>";*/
         </div>
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
+        <a href="/site/news" class="btn-template"><?= Yii::t('app',"Barchanisi ko'rish") ?></a>
       </div>
     </section>
