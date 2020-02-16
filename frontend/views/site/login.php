@@ -11,7 +11,7 @@ use yii\bootstrap\ActiveForm;
     <img src="<?=$path?>" alt="Logo" class="logo-popup-top">
     <h2><span><?= Yii::t('app',"Avtorizatsiya") ?></span></h2>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([ 'options' => [ 'id' => 'login-form' ] ]); ?>
 
         <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => Yii::t('app',"Login") ])->label(false) ?>
 
@@ -23,8 +23,23 @@ use yii\bootstrap\ActiveForm;
 
         <button type="submit" class="btn-template"><?= Yii::t('app',"Avtorizatsiyadan o'tish") ?></button>
         <p class="text-center"><?= Yii::t('app',"yoki") ?></p>
-        <a href="javascript;" data-touch="false" data-fancybox data-src="#registration" value="/<?=$nowLanguage?>/site/signup" class="link-popup registration_class">
-          <?= Yii::t('app',"Registratsiyadan o'tish") ?>
+        <a href="#" data-touch="false" onclick="$.fancybox.close();" data-fancybox data-src="#registration" value="/<?=$nowLanguage?>/site/signup" class="link-popup registration_class">
+            <?= Yii::t('app',"Registratsiyadan o'tish") ?>
         </a>
 
     <?php ActiveForm::end(); ?>
+
+<div id="registration" style="display: none;" class="popup-style">
+    <div id="registrationContent"></div>
+</div>
+
+<?php 
+$this->registerJs(<<<JS
+$(function () {
+    $('.registration_class').on('click', function () {
+        $('#registration').find('#registrationContent').load($(this).attr('value'));
+    });    
+});
+JS
+)
+?>

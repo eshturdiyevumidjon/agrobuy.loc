@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 ?>
-    <?php $form = ActiveForm::begin(['id' => '_legal_status', 'options' => ['method' => 'post', 'class' => 'edit-item', ]]); ?>
+    <?php $form = ActiveForm::begin(['id' => '_legal_status', 'options' => ['method' => 'post', 'class' => 'edit-item', 'autocomplete'=>"off"]]); ?>
         <div class="title-edit"><?=Yii::t('app', "Huquqiy maqomi")?></div>
         <div class="edit-item-body">
             <div class="row">

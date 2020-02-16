@@ -1,11 +1,21 @@
 <?php
 
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 $_csrf = \Yii::$app->request->getCsrfToken();
 
 ?>
   <div class="block-main-user">
-        <form action="" class="img-main-user" method="post" enctype="multipart/form-data">
-          <div id="user_logo_file<?=$identity->id?>">
+      <?php $form = ActiveForm::begin([
+          'id' => 'user-avatar-form', 
+          //'action' => '/profile/avatar', 
+          'method' => 'post', 
+          'options' => [
+              'enctype' => 'multipart/form-data', 
+              'class' => 'img-main-user'
+          ]
+      ]) ?>
+            <div id="user_logo_file<?=$identity->id?>">
               <img src="<?=$identity->getAvatarForSite()?>" alt="user image" id="image_upload_preview" >
             </div>
             <input type="file" id="ad1" accept="image/*" name="ad1">
@@ -19,10 +29,8 @@ $_csrf = \Yii::$app->request->getCsrfToken();
                 <path d="m462 166h-20c-5.522 0-10 4.477-10 10s4.478 10 10 10h20c5.522 0 10-4.477 10-10s-4.478-10-10-10z"></path>
             </svg>
             <?= Yii::t('app',"Profil rasmini o'zgartirish") ?></label>
-            <button class="btn btn-template" type="button" style="display: none;" id="user_avatar">
-              <?= Yii::t('app',"Saqlash") ?>
-            </button>
-        </form>
+            <?= Html::submitButton(Yii::t('app',"Saqlash"), ['class' => 'btn btn-template', 'style' => 'display:none;', 'id' => 'user_avatar']) ?>
+        <?php ActiveForm::end(); ?>
           <div class="about-main-user">
             <div class="about-main-user-top">
               <h2><?=$identity->fio?></h2>
@@ -35,7 +43,6 @@ $_csrf = \Yii::$app->request->getCsrfToken();
               </div>
               <div class="person-socials">
                 <span class="<?=$identity->check_phone ? 'first' : 'second'?>-person-socials">
-                  <!--?xml version="1.0" encoding="UTF-8"?-->
                   <a href="tel:<?=$identity->phone?>">
                     <svg enable-background="new 0 0 512.076 512.076" version="1.1" viewBox="0 0 512.08 512.08" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
                     <g transform="translate(-1 -1)">
@@ -155,7 +162,7 @@ $_csrf = \Yii::$app->request->getCsrfToken();
             <div class="my-catalog-block">
               <a href="/profile/catalog" class="btn-template link-btn"><?= Yii::t('app',"Mening katalogim") ?></a>
               <a href="/profile/chat" class="btn-template link-btn"><?= Yii::t('app',"Mening chatim") ?>
-                <div class="chat_message_count">15</div>
+                <div class="chat_message_count">12</div>
               </a>
             </div>
             <div class="ratings">
@@ -186,58 +193,37 @@ $_csrf = \Yii::$app->request->getCsrfToken();
 $this->registerJs(<<<JS
     $(document).ready(function(){
         $(function(){        
-            $(document).on('drop dragover', function (e) {
-                e.preventDefault();
-            });
-
+            $(document).on('drop dragover', function (e) { e.preventDefault(); });
             $('input[name^=\'ad1\']').on('change', fileUpload); 
         });
 
-    function fileUpload(event){
-        files = event.target.files;
-        var data  = new FormData();                                   
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            if(!file.type.match('image.*')) {              
-                //check file type
-                $("#write").html("Пожалуйста, выберите файл изображения.");
-            }else{
-                //append the uploadable file to FormData object
-                data.append('file', file, file.name);
-                data.append('_csrf', '{$_csrf}');
-                data.append('id', '{$identity->id}');
-
-                var fileCollection = new Array();
-                fileCollection.push(file);
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function(e){
-                    var template = '<img id="image_upload_preview" src="'+e.target.result+'">';
-                    $('#user_logo_file$identity->id').html('');
-                    $('#user_logo_file$identity->id').append(template);
-                };
-                
-                //create a new XMLHttpRequest
-                var xhr = new XMLHttpRequest();     
-                
-                //post file data for upload
-                xhr.open('POST', '/profile/set-img', true);
-                xhr.send(data);
-                xhr.onload = function () {
-                    //get response and show the uploading status
-                    var response = JSON.parse(xhr.responseText);
-                    if(xhr.status === 200 && response.status == 'ok'){
-                        //$("#write").html("Файл был успешно загружен. Нажмите, чтобы загрузить другой.");
-                    }else {
-                        $("#write").html(response.status);
-                        console.log(data);
+        function fileUpload(event){
+            files = event.target.files;
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if(!file.type.match('image.*')) {              
+                    //check file type
+                    $("#write").html("Пожалуйста, выберите файл изображения.");
+                    $('#user_avatar').hide(); 
+                }
+                else {
+                    var fileCollection = new Array();
+                    fileCollection.push(file);
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function(e) {
+                        var template = '<img id="image_upload_preview" src="'+e.target.result+'">';
+                        $('#user_logo_file$identity->id').html('');
+                        $('#user_logo_file$identity->id').append(template);
                     }
-                };
+                }
             }
         }
-    }
-     });
+
+        $('#ad1').on('change', function() {  
+            $('#user_avatar').show(); 
+        });
+  });
 JS
 );
 ?>

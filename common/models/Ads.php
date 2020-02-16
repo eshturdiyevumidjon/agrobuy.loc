@@ -54,10 +54,10 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg',],
-            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id', 'status', 'is_checked'], 'integer'],
+            [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id', 'status', 'is_checked', 'top', 'premium'], 'integer'],
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
-            [['date_cr','comment'], 'safe'],
+            [['date_cr','comment', 'top_date', 'premium_date'], 'safe'],
             [['type', 'title', 'currency_id', 'category_id', 'subcategory_id'], 'required'],
             [['title', 'unit_price'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
@@ -341,7 +341,10 @@ class Ads extends \yii\db\ActiveRecord
 
     public function unlinkFile($file)
     {
-        if( file_exists('uploads/ads/' . $file) ) unlink('uploads/ads/' . $file);
+        if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/ads/' . $file) && $file != null)
+        {
+            if( file_exists('uploads/ads/' . $file) ) unlink('uploads/ads/' . $file);
+        }
     }
 
     public function getStar($favorites)

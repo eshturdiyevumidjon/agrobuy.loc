@@ -13,6 +13,8 @@ use backend\models\Lang;
 use yii\web\UploadedFile;
 use backend\models\Translates;
 use yii\helpers\Html;
+use backend\models\NewsSlider;
+use backend\models\NewsSort;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -65,7 +67,7 @@ class NewsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    /*public function actionView($id)
     {   
         $request = Yii::$app->request;
         if($request->isAjax){
@@ -97,7 +99,7 @@ class NewsController extends Controller
                 'model' => $this->findModel($id),
             ]);
         }
-    }
+    }*/
 
     /**
      * Creates a new News model.
@@ -111,88 +113,52 @@ class NewsController extends Controller
         $model = new News();  
         $langs = Lang::getLanguages();
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            $post = $request->post();
-            if($model->load($post)){
-
-                $attr = News::NeedTranslation();
-                foreach ($langs as $lang) {
-                        $l = $lang->url;
-                        if($l == 'kr')
-                        {
-                            if(!$model->save())
-                              return [
-                                'title'=> Yii::t('app','Create'),
-                                'size'=>'large',
-                                'content'=>$this->renderAjax('create', [
-                                    'model' => $model,
-                                ]),
-                                'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                            Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-                    
-                            ]; 
-                           else continue;
-                        }
-                    foreach ($attr as $key=>$value) {
-                       $t=new Translates();
-                       $t->table_name=$model->tableName();
-                       $t->field_id=$model->id;
-                       $t->field_name=$key;
-                       $t->field_value=$post["News"][$value][$l];
-                       $t->field_description=$value;
-                       $t->language_code=$l;
-                       $t->save();
+        $post = $request->post();
+        if($model->load($post)) {
+            $attr = News::NeedTranslation();
+            foreach ($langs as $lang) {
+                $l = $lang->url;
+                if($l == 'kr') {
+                    if( !$model->save() ) {
+                        return $this->render('create', [
+                            'model' => $model,
+                        ]);
                     }
+                    else continue;
                 }
+                    
+                foreach ($attr as $key => $value) {
+                    $t = new Translates();
+                    $t->table_name = $model->tableName();
+                    $t->field_id = $model->id;
+                    $t->field_name = $key;
+                    $t->field_value = $post["News"][$value][$l];
+                    $t->field_description = $value;
+                    $t->language_code = $l;
+                    $t->save();
+                }
+            }
                 
-                $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
-                if(!empty($model->imageFiles))
-                {
-                    $name = $model->id . '-' . time();
+            $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
+            if(!empty($model->imageFiles)) {
+                $name = $model->id . '-' . time();
 
-                    $model->imageFiles->saveAs('uploads/news/' . $name.'.'.$model->imageFiles->extension);
-                    Yii::$app->db->createCommand()->update('news', ['image' => $name.'.'.$model->imageFiles->extension], [ 'id' => $model->id ])->execute();
-                }
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                     'title'=> Yii::t('app','Create'),
-                    'size'=>'normal',
-
-                    'content'=>'<span class="text-success">'.Yii::t('app','Complete successfully').'</span>',
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                           Html::a(Yii::t('app','Create more'),['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                     'title'=> Yii::t('app','Create'),
-                     'size'=>'large',
-                    'content'=>$this->renderAjax('create', [
-                        'model' => $model,
-
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
+                $model->imageFiles->saveAs('uploads/news/' . $name . '.' . $model->imageFiles->extension);
+                Yii::$app->db->createCommand()
+                    ->update('news', 
+                    ['image' => $name . '.' . $model->imageFiles->extension], 
+                    [ 'id' => $model->id ])
+                    ->execute();
             }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
-        }
-       
+            return $this->redirect(['index']);         
+        } 
+        else {
+            return $this->render('create', [
+                'model' => $model,
+                'sliderProvider' => null,
+                'sortProvider' => null,
+            ]);
+        }       
     }
 
     /**
@@ -205,123 +171,107 @@ class NewsController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $post=$request->post();
+        $post = $request->post();
         $langs = Lang::getLanguages();
-        $model = $this->findModel($id);  
-             
-        if($request->isAjax){
+        $model = $this->findModel($id);
+
+        $searchSliderModel = new NewsSlider();
+        $sliderProvider = $searchSliderModel->search(Yii::$app->request->queryParams, $id);
+
+        $searchSortModel = new NewsSort();
+        $sortProvider = $searchSortModel->search(Yii::$app->request->queryParams, $id);
+
+        $translations = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id])->all();
+        foreach ($translations as $key => $value) {
+            switch ($value->field_name) {
+                case 'title':
+                    $translation_title[$value->language_code] = $value->field_value;
+                    break;
+                case 'sort_title':
+                    $translation_sort_title[$value->language_code] = $value->field_value;
+                    break;
+                case 'sort_items':
+                    $translation_sort_items[$value->language_code] = $value->field_value;
+                    break;
+                case 'landing_title':
+                    $translation_landing_title[$value->language_code] = $value->field_value;
+                    break;
+                case 'landing_text':
+                    $translation_landing_text[$value->language_code] = $value->field_value;
+                    break;
+                case 'important':
+                    $translation_important[$value->language_code] = $value->field_value;
+                    break;
+                case 'growing_title':
+                    $translation_growing_title[$value->language_code] = $value->field_value;
+                    break;
+                case 'growing_text':
+                    $translation_growing_text[$value->language_code] = $value->field_value;
+                    break;
+                case 'growing_items':
+                    $translation_growing_items[$value->language_code] = $value->field_value;
+                    break;
+                default:
+                    $translation_text[$value->language_code] = $value->field_value;
+                    break;
+            }                
+        }
+
+        if($model->load($request->post()) && $model->validate() && $model->save()) {
+            $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
+            if(!empty($model->imageFiles)) {
+                if($model->image != null&&file_exists('uploads/news/'.$model->image)) {
+                    unlink(('uploads/news/'.$model->image));
+                }
+                $name = $model->id . '-' . time();
+                $model->imageFiles->saveAs('uploads/news/' . $name.'.'.$model->imageFiles->extension);
+                Yii::$app->db->createCommand()->update('news', ['image' => $name.'.'.$model->imageFiles->extension], [ 'id' => $model->id ])->execute();
+            }
             
-            $translations = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id])->all();
-            foreach ($translations as $key => $value) {
-               switch ($value->field_name) {
-                    case 'title':
-                        $translation_title[$value->language_code] = $value->field_value;
-                        break;
-                    default:
-                        $translation_text[$value->language_code] = $value->field_value;
-                        break;
-                }                
-            }
-
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($request->post()) && $model->validate()){
-                $model->save();
-                $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
-                if(!empty($model->imageFiles))
-                {   
-                     if($model->image != null&&file_exists('uploads/news/'.$model->image))
-                    {
-                        unlink(('uploads/news/'.$model->image));
+            $attr = News::NeedTranslation();
+            foreach ($langs as $lang) {
+                $l = $lang->url;
+                if($l == 'kr') {
+                   continue;
+                }
+                foreach ($attr as $key=>$value) {
+                    $t = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id,'language_code' => $l,'field_name' => $key]);
+                    if($t->count() == 1) {
+                        $tt = $t->one();
+                        $tt->field_value=$post["News"][$value][$l];
+                        $tt->save();
                     }
-                    $name = $model->id . '-' . time();
-
-                    $model->imageFiles->saveAs('uploads/news/' . $name.'.'.$model->imageFiles->extension);
-                    Yii::$app->db->createCommand()->update('news', ['image' => $name.'.'.$model->imageFiles->extension], [ 'id' => $model->id ])->execute();
+                    else{
+                        $tt = new Translates();
+                        $tt->table_name = $model->tableName();
+                        $tt->field_id = $model->id;
+                        $tt->field_name = $key;
+                        $tt->field_value = $post["News"][$value][$l];
+                        $tt->field_description = $value;
+                        $tt->language_code = $l;
+                        $tt->save();
+                    }
                 }
-                
-
-                $attr = News::NeedTranslation();
-                
-                foreach ($langs as $lang) {
-                       
-                        $l = $lang->url;
-                        if($l == 'kr')
-                        {
-                           continue;
-                        }
-                      foreach ($attr as $key=>$value) {
-                          $t = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id,'language_code' => $l,'field_name'=>$key]);
-                          if($t->count() == 1){
-                             $tt = $t->one();
-                             $tt->field_value=$post["News"][$value][$l];
-                             $tt->save();
-                           }
-                           else{
-                               $tt=new Translates();
-                               $tt->table_name=$model->tableName();
-                               $tt->field_id=$model->id;
-                               $tt->field_name=$key;
-                               $tt->field_value=$post["News"][$value][$l];
-                               $tt->field_description=$value;
-                               $tt->language_code=$l;
-                               $tt->save();
-                           }
-                      }
-                }
-
-               $translations=Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id])->all();
-                foreach ($translations as $key => $value) {
- 
-                switch ($value->field_name) {
-                    case 'title':
-                        $translation_title[$value->language_code] = $value->field_value;
-                        break;
-                    default:
-                        $translation_text[$value->language_code] = $value->field_value;
-                        break;
-                }
-            }   
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> Yii::t('app','News'),
-                    'size'=>'normal',
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                        'titles'=>$translation_title,
-                        'texts'=>$translation_text,
-                        
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-            }else{
-                           
-                 return [
-                    'title'=> Yii::t('app','Update'),
-                    'size'=>'large',
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                        'titles'=>$translation_title,
-                        'texts'=>$translation_text,
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
             }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+  
+            return $this->redirect(['index']);    
+        }
+        else {
+            return $this->render('update', [
+                'model' => $model,
+                'sliderProvider' => $sliderProvider,
+                'sortProvider' => $sortProvider,
+                'titles' => $translation_title,
+                'texts' => $translation_text,
+                'sort_title' => $translation_sort_title,
+                'sort_items' => $translation_sort_items,
+                'landing_title' => $translation_landing_title,
+                'landing_text' => $translation_landing_text,
+                'important' => $translation_important,
+                'growing_title' => $translation_growing_title,
+                'growing_text' => $translation_growing_text,
+                'growing_items' => $translation_growing_items,
+            ]);
         }
     }
 
@@ -335,28 +285,19 @@ class NewsController extends Controller
     public function actionDelete($id)
     {
         $request = Yii::$app->request;
-        $model=$this->findModel($id);
-        if(file_exists('uploads/news/'.$model->image)&&$model->image!=null)
-            {
-                unlink('uploads/news/'.$model->image);
-            }
-        Translates::deleteAll(['table_name' => $model->tableName(),'field_id' => $id]);
-
+        $model = $this->findModel($id);
+        if(file_exists('uploads/news/'.$model->image) && $model->image != null) {
+            unlink('uploads/news/'.$model->image);
+        }
+        Translates::deleteAll(['table_name' => $model->tableName(), 'field_id' => $id]);
         $model->delete();
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
+
+        if($request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
         }else{
-            /*
-            *   Process for non-ajax request
-            */
             return $this->redirect(['index']);
         }
-
-
     }
 
      /**
@@ -408,6 +349,158 @@ class NewsController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionCreateSort($id)
+    {
+        $request = Yii::$app->request;
+        $model = new NewsSort();
+        $model->news_id = $id;  
+
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($model->load($request->post()) && $model->save()) {
+                return [
+                    'forceReload'=>'#sort-pjax',
+                    'title'=> "Таблица",
+                    'forceClose'=>true,
+                ];         
+            }else{           
+                return [
+                    'title'=> "Создать",
+                    'size' => 'large',
+                    'content'=>$this->renderAjax('_sort_form', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
+                ];
+            }
+        }
+    }
+
+    public function actionUpdateSort($id)
+    {
+        $request = Yii::$app->request;
+        $model = NewsSort::findOne($id);
+
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($model->load($request->post()) && $model->save()){
+                return [
+                    'forceReload'=>'#sort-pjax',
+                    'title'=> "Таблица",
+                    'forceClose'=>true,
+                ];         
+            }else{           
+                return [
+                    'title'=> "Создать",
+                    'size' => 'large',
+                    'content'=>$this->renderAjax('_sort_form', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
+                ];
+            }
+        }
+    }
+
+    public function actionDeleteSort($id)
+    {
+        $request = Yii::$app->request;
+        $model = NewsSort::findOne($id);
+        $model->delete();
+
+        if($request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose'=>true,'forceReload'=>'#sort-pjax'];
+        }
+    }
+
+    public function actionCreateSlider($id)
+    {
+        $request = Yii::$app->request;
+        $model = new NewsSlider();
+        $model->news_id = $id;  
+
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($model->load($request->post()) && $model->save()) {
+                $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
+                if(!empty($model->imageFiles)) {
+                    if($model->image != null&&file_exists('uploads/news_slider/'.$model->image)) {
+                        unlink(('uploads/news_slider/'.$model->image));
+                    }
+                    $name = $model->id . '-' . time();
+                    $model->imageFiles->saveAs('uploads/news_slider/' . $name.'.'.$model->imageFiles->extension);
+                    Yii::$app->db->createCommand()->update('news_slider', ['image' => $name.'.'.$model->imageFiles->extension], [ 'id' => $model->id ])->execute();
+                }
+                return [
+                    'forceReload'=>'#slider-pjax',
+                    'title'=> "Таблица",
+                    'forceClose'=>true,
+                ];         
+            }else{           
+                return [
+                    'title'=> "Создать",
+                    'size' => 'large',
+                    'content'=>$this->renderAjax('_slider_form', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
+                ];
+            }
+        }
+    }
+
+    public function actionUpdateSlider($id)
+    {
+        $request = Yii::$app->request;
+        $model = NewsSlider::findOne($id);
+
+        if($request->isAjax){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($model->load($request->post()) && $model->save()) {
+                $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
+                if(!empty($model->imageFiles)) {
+                    if($model->image != null&&file_exists('uploads/news_slider/'.$model->image)) {
+                        unlink(('uploads/news_slider/'.$model->image));
+                    }
+                    $name = $model->id . '-' . time();
+                    $model->imageFiles->saveAs('uploads/news_slider/' . $name.'.'.$model->imageFiles->extension);
+                    Yii::$app->db->createCommand()->update('news_slider', ['image' => $name.'.'.$model->imageFiles->extension], [ 'id' => $model->id ])->execute();
+                }
+                return [
+                    'forceReload'=>'#slider-pjax',
+                    'title'=> "Таблица",
+                    'forceClose'=>true,
+                ];         
+            }else{           
+                return [
+                    'title'=> "Создать",
+                    'size' => 'large',
+                    'content'=>$this->renderAjax('_slider_form', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Отмена',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
+                ];
+            }
+        }
+    }
+
+    public function actionDeleteSlider($id)
+    {
+        $request = Yii::$app->request;
+        $model = NewsSlider::findOne($id);
+        $model->delete();
+
+        if($request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose'=>true,'forceReload'=>'#slider-pjax'];
         }
     }
 }

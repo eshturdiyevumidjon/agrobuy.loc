@@ -1,5 +1,9 @@
 $(document).ready(function () {
-$( ".datetimepicker" ).datepicker();
+  
+$( ".datetimepicker" ).datepicker({
+  dateFormat: 'dd.mm.yy'
+});
+
 var previewNode = document.querySelector("#template");
 if(previewNode){
         previewNode.id = "";

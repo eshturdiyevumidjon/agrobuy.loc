@@ -24,6 +24,8 @@ use yii\db\Expression;
 use common\models\User;
 use yii\filters\VerbFilter;
 use backend\models\UsersBall;
+use yii\web\UploadedFile;
+use \yii\web\Response;
 
 
 class ProfileController extends \yii\web\Controller
@@ -54,36 +56,36 @@ class ProfileController extends \yii\web\Controller
         ];
     }
 
-    /*public function beforeAction($action)
-    {
-        if(Yii::$app->user->identity->id === null)
-        {
-            throw new HttpException(403, 'У вас нет разрешения на доступ к этому действию.');
-        }
-
-	        $this->enableCsrfValidation = ($action->id !== "set-img"); 
-	        return parent::beforeAction($action);
-        //if($action->id == "set-img"){
-        //}
-        //$this->enableCsrfValidation = false;
-        //return parent::beforeAction($action);
-    }*/
-
     public function actionIndex()
     {
+        $request = Yii::$app->request;
+        $identity = Yii::$app->user->identity;
+        $model = $this->findModel($identity->id);
+
+        if($request->post()) {
+        /*echo "<pre>";
+        print_r($request->post());
+        echo "</pre>";
+        die;*/
+            //$model->image = UploadedFile::getInstance($model, 'image');
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $model->image = UploadedFile::getInstanceByName('ad1');
+            $model->uploadFromSite();
+
+            //return ['message'=>'success'];
+            return $this->redirect(['/profile']);
+        }
+
+        $this->getAccess();
     	$session = new Sessions();
     	$identity = Yii::$app->user->identity;
-        $favorites = Favorites::find()->where(['type' => 1])->all();
         $adsPagination = Yii::$app->params['adsPagination'];
         $promotions = Promotions::find()->all();
         $history = HistoryOperations::find()->where(['user_id' => $identity->id])->all();
-        $favId = [];
-        foreach ($favorites as $value) {
-            $favId [] = $value->field_id;
-        }
+        $favorites = Favorites::find()->select('field_id')->where(['type' => 1, 'user_id' => $identity->id])->column();
 
         $searchModel = new AdsSearch();
-        $favoriteAdsdataProvider = $searchModel->filtrMyFavorites($favId);
+        $favoriteAdsdataProvider = $searchModel->filtrMyFavorites($favorites);
         $favoriteAdsdataProvider->pagination = ['pageSize' => $adsPagination,];
 
         $myAdsdataProvider = $searchModel->filtrMyAds($identity);
@@ -93,7 +95,6 @@ class ProfileController extends \yii\web\Controller
         	'identity' => $identity,
             'myAdsdataProvider' => $myAdsdataProvider,
             'favoriteAdsdataProvider' => $favoriteAdsdataProvider,
-            'favorites' => $favorites,
             'favoriteAds' => $favoriteAds,
             'promotions' => $promotions,
             'history' => $history,
@@ -110,11 +111,12 @@ class ProfileController extends \yii\web\Controller
         else {
             $identity = Yii::$app->user->identity;
             if($identity == null) throw new NotFoundHttpException('The requested page does not exist.');
+            $this->getAccess();
         }
 
         $request = Yii::$app->request;
         $session = new Sessions();
-        $get = null;
+        $get = $request->get();
         $dataProvider = null;
         $searchModel = new AdsSearch();
         $adv = $session->getCatalogAdv();
@@ -127,8 +129,7 @@ class ProfileController extends \yii\web\Controller
             ->all();
 
         $cat = null; $reg = null;
-        if($request->get()){
-            $get = $request->get();
+        if($get){
             if(isset($get['category'])) $cat = $get['category'];
             if(isset($get['region'])) $reg = $get['region'];
         }
@@ -137,6 +138,7 @@ class ProfileController extends \yii\web\Controller
         $dataProvider->pagination = ['pageSize' => $adsPagination,];
 
         $reklama = AdvertisingItems::find()
+            ->joinWith('advertising')
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
@@ -162,6 +164,7 @@ class ProfileController extends \yii\web\Controller
 
     public function actionEdit()
     {
+        $this->getAccess();
         $request = Yii::$app->request;
         $model = Users::findOne(Yii::$app->user->identity->id);
 
@@ -171,30 +174,8 @@ class ProfileController extends \yii\web\Controller
         }
 
         if($model->load($request->post()) && $model->validate() && $model->save()) {
-            \Yii::$app->getSession()->setFlash('success', 'Muvafaqqiyatli bajarildi');
-            return $this->redirect(['/profile/edit']);
+            return $this->redirect(['/profile']);
         }
-
-        $session = new Sessions();
-        //$identity = Yii::$app->user->identity;
-        $favorites = Favorites::find()->where(['type' => 1])->all();
-        $promotions = Promotions::find()->all();
-        $history = HistoryOperations::find()->where(['user_id' => $model->id])->all();
-        $favId = [];
-        foreach ($favorites as $value) {
-            $favId [] = $value->field_id;
-        }
-
-        $favoriteAds = Ads::find()
-            ->joinWith(['category', 'user', 'currency'])
-            ->where(['in', 'ads.id', $favId])
-            ->andWhere(['ads.status' => 1])
-            ->all();
-
-        $myAds = Ads::find()
-            ->joinWith(['category', 'user', 'currency'])
-            ->where(['ads.user_id' => $identity->id])
-            ->all();
 
         $usersReyting = UsersReyting::find()
             ->select([new Expression('SUM(users_reyting.ball) as ball'), 'reyting_id',])
@@ -206,17 +187,13 @@ class ProfileController extends \yii\web\Controller
         return $this->render('_form',[
             'usersReyting' => $usersReyting,
             'model' => $model,
-            'myAds' => $myAds,
-            'favorites' => $favorites,
-            'favoriteAds' => $favoriteAds,
-            'promotions' => $promotions,
-            'history' => $history,
             'nowLanguage' => Yii::$app->language,
         ]);
     }
 
     public function actionChat()
     {
+        $this->getAccess();
         $session = new Sessions();
         $identity = Yii::$app->user->identity;
         $favorites = Favorites::find()->where(['type' => 1])->all();
@@ -251,8 +228,11 @@ class ProfileController extends \yii\web\Controller
 
     public function actionReplenish()
     {
+        $this->getAccess();
         $request = Yii::$app->request;
         $identity = Yii::$app->user->identity;
+        $pliceList = PriceList::find()->orderBy(['number' => SORT_ASC])->all();
+
         if ($request->post()) {
             /*shartli ravishda balans toldirish imkoniyati bor*/
             $identity->balance = $identity->balance + $request->post()['summ'];
@@ -261,11 +241,8 @@ class ProfileController extends \yii\web\Controller
             /**/
         }
 
-        $pliceList = PriceList::find()->orderBy(['number' => SORT_ASC])->all();
-
         return $this->render('replenish',[
             'identity' => $identity,
-            'myAds' => $myAds,
             'pliceList' => $pliceList,
             'nowLanguage' => Yii::$app->language,
         ]);
@@ -273,6 +250,7 @@ class ProfileController extends \yii\web\Controller
 
     public function actionComplaint($id)
     {
+        $this->getAccess();
         $request = Yii::$app->request;
         $identity = Yii::$app->user->identity;
         $model = new Complaints();
@@ -298,28 +276,25 @@ class ProfileController extends \yii\web\Controller
     public function actionUser($id)
     {
         $session = new Sessions();
-        $user = User::findOne($id);
-        if(Yii::$app->user->identity != null) $identity = Yii::$app->user->identity;
-        else $identity = null;
+        $user = $this->findUser($id);
         $adsPagination = Yii::$app->params['adsPagination'];
-        $searchModel = new AdsSearch();
-        $favorites = Favorites::find()->where(['type' => 1])->all();
 
+        $searchModel = new AdsSearch();
         $myAdsdataProvider = $searchModel->filtrMyAds($user);
         $myAdsdataProvider->pagination = ['pageSize' => $adsPagination,];
+        $favorites = Favorites::find()->where(['type' => 1, 'user_id' => $id])->all();
 
         return $this->render('user',[
             'identity' => $user,
-            //'user' => $user,
             'favorites' => $favorites,
             'myAdsdataProvider' => $myAdsdataProvider,
             'nowLanguage' => Yii::$app->language,
         ]);
     }
 
-
     public function actionStar($id)
     {
+        $this->getAccess();
         $request = Yii::$app->request;
         $identity = Yii::$app->user->identity;
         $model = UsersBall::find()->where(['user_from' => $identity->id, 'user_to' => $id])->one();
@@ -345,7 +320,26 @@ class ProfileController extends \yii\web\Controller
         }
     }
 
-    public function actionSetImg()
+    public function actionAvatar()
+    {
+        $request = Yii::$app->request;
+        $identity = Yii::$app->user->identity;
+        $model = $this->findModel($identity->id);
+        //Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if($model->load($request->post()) && $model->save()) {
+        echo "<pre>";
+        print_r($request->post());
+        echo "</pre>";
+        die;
+            $model->image = UploadedFile::getInstance($model, 'image');
+            $model->upload();
+
+            return ['message'=>'success'];    
+        }
+    }
+
+    /*public function actionSetImg()
     {
          if(isset($_POST) == true){
             //generate unique file name
@@ -379,6 +373,31 @@ class ProfileController extends \yii\web\Controller
             //render response data in JSON format
             return json_encode($response);
         }
+    }*/
+
+    protected function getAccess()
+    {
+        $identity = Yii::$app->user->identity;
+        if($identity != null && $identity->access == 2) {
+            throw new HttpException(403, $identity->access_comment);
+        }
     }
 
+    protected function findUser($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = Users::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
 }

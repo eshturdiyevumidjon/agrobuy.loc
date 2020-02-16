@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 ?>
-    <?php $form = ActiveForm::begin(['id' => '_passport', 'options' => ['method' => 'post', 'class' => 'edit-item', ]]); ?>
+    <?php $form = ActiveForm::begin(['id' => '_passport', 'options' => ['method' => 'post', 'class' => 'edit-item', 'autocomplete'=>"off"]]); ?>
             <div class="title-edit"><?=Yii::t('app', "Pasport ma'lumotlari")?></div>
             <div class="edit-item-body">
                 <div class="row">
@@ -23,7 +23,7 @@ use yii\bootstrap\ActiveForm;
                                 ])->label(Yii::t('app', "Pasport nomeri")) ?>
                             </div>
                         </div>
-                        <?= $form->field($model, 'passport_date', ['options' => ['class' => 'form-group inpt-min']])->textInput(['class' => 'form-control datetimepicker hasDatepicker', 'id'=>"dp1580923370520"])->label(Yii::t('app', "Berilgan vaqti")) ?>
+                        <?= $form->field($model, 'passport_date', ['options' => ['class' => 'form-group inpt-min']])->textInput(['class' => 'form-control datetimepicker ', 'id'=>"dp1580923370520"])->label(Yii::t('app', "Berilgan vaqti")) ?>
                         <?= $form->field($model, 'passport_issue', ['options' => ['class' => 'form-group inpt-min']])->textInput(['class' => 'form-control',])->label(Yii::t('app', "Kim tomonidan berilgan")) ?>             
                     </div>
                 </div>

@@ -30,6 +30,7 @@ class Advertisings extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'key'], 'string', 'max' => 255],
+            [['time'], 'number', 'min' => 1],
         ];
     }
 
@@ -42,6 +43,7 @@ class Advertisings extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => 'Наименование',
             'key' => 'Ключ',
+            'time' => 'Время (секунд)',
         ];
     }
 

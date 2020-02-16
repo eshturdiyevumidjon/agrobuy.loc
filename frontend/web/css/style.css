@@ -2047,10 +2047,11 @@ section.catalog .reclama{
     cursor: pointer;
     width: 100%;
     text-align: center;
-    text-decoration: none;
+    text-decoration: none !important;
     margin-left: 0;
 }
 .link-template-img:hover{
+    color: #37a930;
 	box-shadow: 0 0 15px rgba(78,195,82,.7);
 }
 .link-template-img svg {
@@ -4309,6 +4310,9 @@ div#ads-type .radio{
 	background-color: #007bff;
 	color: #fff;
 }
+.ads-right.obe{
+	overflow: visible;
+}
 .share_button .dropdown-item:focus svg,.share_button .dropdown-item:hover svg{
 	color: #fff;
 	fill: #fff;
@@ -4323,7 +4327,9 @@ button#user_avatar {
     z-index: 3;
     font-weight: 700;
 }
-
+.category-body-left-in.fixed-got{
+	margin-bottom: 460px;
+}
 /*Umid yozgan kodlar*/
 .my-nav-bottom ul li.active a{
 	    color: #aeaeae;

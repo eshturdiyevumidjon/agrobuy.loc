@@ -23,7 +23,7 @@ use yii\helpers\Html;
 
     </div>
     
-    <div id="ad-promotion" style="display: none;" class="popup-style">
+    <!-- <div id="ad-promotion" style="display: none;" class="popup-style">
       <h2>Продвижение <span>объявления</span>?</h2>
       <div class="dropdown">
         <div class="ad-promo-button">
@@ -111,7 +111,7 @@ use yii\helpers\Html;
           <span class="prem-vip-price">5 000 сумма</span>
         </div>
       </div>
-    </div> 
+    </div>  -->
   
     <div id="purchase-service" style="display: none;" class="popup-style">
       <h2>Вы <span>действительно хотите </span> <br>приобрести <span>данную услугу</span>?</h2>
@@ -125,18 +125,7 @@ use yii\helpers\Html;
 
     <div id="send-complaint" style="display: none;" class="popup-style">
         <div id="complaintContent"></div>
-    </div>
-    <!-- <div id="send-complaint" style="display: none;" class="popup-style">
-      <h2>Отправьте <span>жалобу</span></h2>
-      <form>
-        <div class="form-group">
-          <textarea name="" class="form-control" cols="30" rows="10" placeholder="Подробно опишите причину жалобы..."></textarea>
-        </div>
-        <div class="text-right w-100">
-          <button type="submit" class="btn-template">Отправить жалобу</button>
-        </div>
-      </form>
-    </div> -->    
+    </div> 
 
     <div id="registration-2" style="display: none;" class="popup-style">
       <img src="/images/logo.png" alt="" class="logo-popup-top">
@@ -157,28 +146,6 @@ use yii\helpers\Html;
         <button type="submit" class="btn-template">Зарегистрироваться</button>
       </form>
     </div>
-
-    <div id="registration" style="display: none;" class="popup-style">
-      <div id="registrationContent"></div>
-    </div>
-    <!-- <div id="registration" style="display: none;" class="popup-style">
-      <img src="/images/logo.png" alt="" class="logo-popup-top">
-      <h2><span>Регистрация</span></h2>
-      <form>
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Придумайте логин">
-        </div>
-        <div class="form-group">
-          <input type="tel" class="form-control" placeholder="+ 998 __ ___ __ __">
-        </div>
-        <div class="form-group">
-          <input type="password" class="form-control" placeholder="Придумайте пароль">
-        </div>
-        <button type="submit" class="btn-template">Отправить код</button>
-        <p class="text-center">или</p>
-        <p>Уже есть аккаунт? <a href="#" class="link-popup">Войти</a></p>
-      </form>
-    </div> -->
     
     <div id="recovery-password-2" style="display: none;" class="popup-style">
       <img src="/images/logo.png" alt="" class="logo-popup-top">
@@ -233,34 +200,6 @@ use yii\helpers\Html;
         <div id="starContent"></div>
     </div>
 
-
-<?php 
-$this->registerJs(<<<JS
-  $(function () {
-    // add
-    $('.avtorization_class').on('click', function () {
-        $('#avtorization').find('#avtorizationContent').load($(this).attr('value'));
-    });
-
-    $('.registration_class').on('click', function () {
-        $('#registration').find('#registrationContent').load($(this).attr('value'));
-    });
-
-    $('.delete_ads').on('click', function () {
-        $('#delete-ads-popup').find('#deleteAdsContent').load($(this).attr('value'));
-    });
-
-    $('.complaint_class').on('click', function () {
-        $('#send-complaint').find('#complaintContent').load($(this).attr('value'));
-    });
-
-    $('.star_class').on('click', function () {
-        $('#star-popup').find('#starContent').load($(this).attr('value'));
-    });
-    
-  });
-
-
-JS
-)
-?>
+    <div id="ad-promotion" style="display: none;" class="popup-style">
+        <div id="premiumContent"></div>
+    </div>

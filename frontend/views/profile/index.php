@@ -9,11 +9,10 @@
         <li class="breadcrumb-item active" aria-current="page">Личный кабинет</li>
     </ol>
 </nav>
-     
 
 <section class="personal-area">
     <div class="container">
-        <?= $this->render('main-block-user', [
+        <?= $this->render('main-block', [
   	        'nowLanguage' => $nowLanguage,
   	        'identity' => $identity,
   	    ]) ?>
@@ -29,7 +28,6 @@
               <?= $this->render('tab-my-ads', [
                 'myAdsdataProvider' => $myAdsdataProvider,
   		        	'nowLanguage' => $nowLanguage,
-  		        	'favorites' => $favorites,
               ]) ?>
             </div>
             <div class="tab-pane fade" id="secondtab">
@@ -39,13 +37,13 @@
               ]) ?>
             </div>
             <div class="tab-pane fade" id="thirdtab">
-              <?= $this->render('buy-tab-person', [
+              <?= $this->render('tab-promotions', [
                   'nowLanguage' => $nowLanguage,
                   'promotions' => $promotions,
               ]) ?>
             </div>
             <div class="tab-pane fade" id="fourthtab">
-                <?= $this->render('operation-history', [
+                <?= $this->render('tab-operation-history', [
                   'nowLanguage' => $nowLanguage,
                   'history' => $history,
               ]) ?>

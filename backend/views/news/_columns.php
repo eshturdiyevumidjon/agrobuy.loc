@@ -49,12 +49,13 @@ return [
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
+        'template' => '{update} {delete}',
         'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },
         'viewOptions'=>['role'=>'modal-remote','title'=>Yii::t('app','Просмотр'),'data-toggle'=>'tooltip'],
-        'updateOptions'=>['role'=>'modal-remote','title'=>Yii::t('app','Изменить'), 'data-toggle'=>'tooltip'],
+        'updateOptions'=>['data-pjax'=>'0','title'=>Yii::t('app','Изменить'), 'data-toggle'=>'tooltip'],
         'deleteOptions'=>['role'=>'modal-remote','title'=>Yii::t('app','Удалить'), 
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                           'data-request-method'=>'post',

@@ -1,11 +1,10 @@
 <?php
-
-namespace common\models;
+namespace api\modules\v1\models;
 
 use Yii;
-use backend\models\Translates;
-use backend\models\SubCategories;
-use frontend\models\Sessions;
+use api\modules\v1\models\Translates;
+use api\modules\v1\models\SubCategory;
+use api\modules\v1\models\Ads;
 
 /**
  * This is the model class for table "category".
@@ -49,34 +48,60 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeDelete()
-    {
-        $subs = SubCategories::find()->where(['category_id' => $this->id])->all();
-        foreach ($subs as $sub){
-            $sub->delete();
-        }
-        return parent::beforeDelete();
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+   
     public function getAds()
     {
         return $this->hasMany(Ads::className(), ['category_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+  
+     
     public function getSubcategories()
     {
         return $this->hasMany(Subcategory::className(), ['category_id' => 'id']);
     }
+    //  Ads jadvalidagi categoriyalar soni
+    public function getCountCategory()
+    {
+        return Ads::find()->where(['category_id'=>$this->id])->count();
+    }
 
+    //  Ads jadvalidagi SubCatgoriyalar soni
+    public function getCountSubCategory($id)
+    {
+        return Ads::find()->where(['subcategory_id'=>$id])->count();
+    }
+
+    public function getNameTranslates($value, $lang,$name)
+    {
+        $name = Translates::find()
+            ->where(['table_name' => $value->tableName(),'field_id' => $value->id,'field_name'=>$name, 'language_code' => $lang])
+            ->one()->field_value;
+
+            if($name == null){
+                $name = $value->name;
+            }
+
+        return $name;
+    }
+
+    // translate
+    public function getTitleTranslates($value, $lang,$title)
+    {
+        $title = Translates::find()
+            ->where(['table_name' => $value->tableName(),'field_id' => $value->id,'field_name'=>$title, 'language_code' => $lang])
+            ->one()->field_value;
+
+            if($title == null){
+                $title = $value->title;
+            }
+
+        return $title;
+    }
+
+    // SubCategorylarni royxati
     public function getSubCategoryList($category, $subCategories)
     {
-        $session = new Sessions();
         $result = [];
 
         foreach ($subCategories as $value) {
@@ -85,13 +110,15 @@ class Category extends \yii\db\ActiveRecord
                     $result [] = [
                         'id' => $value->id,
                         'name' => $value->name,
+                        'count_sub_category' =>$this->getCountSubCategory($value->id), 
                     ];
                 }
                 else {
-                    $name = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'name');
+                    $name = $this->getNameTranslates($value, Yii::$app->language,'name');
                     $result [] = [
                         'id' => $value->id,
                         'name' => $name,
+                        'count_sub_category' =>$this->getCountSubCategory($value->id), 
                     ];
                 }
             }
@@ -100,40 +127,4 @@ class Category extends \yii\db\ActiveRecord
         return $result;
     }
 
-    public function getAllCategoryList()
-    {
-        $session = new Sessions();
-        $category = Category::find()->all();
-        $subCategories = SubCategories::find()->all();
-        $result = [];
-        $siteName = Yii::$app->params['siteName'];
-
-        foreach ($category as $value) {
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/category/' . $value->image) || $value->image == null) {
-                $path = $siteName . '/backend/web/img/no-images.png';
-            } 
-            else {
-                $path = $siteName . '/backend/web/uploads/category/' . $value->image;
-            }
-            if(Yii::$app->language == 'kr') {
-                $result [] = [
-                    'id' => $value->id,
-                    'title' => $value->title,
-                    'image' => $path,
-                    'subCategory' => $value->getSubCategoryList($value, $subCategories),
-                ];
-            }
-            else {
-                $title = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'title');
-                $result [] = [
-                    'id' => $value->id,
-                    'title' => $title,
-                    'image' => $path,
-                    'subCategory' => $value->getSubCategoryList($value, $subCategories),
-                ];
-            }
-        }
-
-        return $result;
-    }
 }

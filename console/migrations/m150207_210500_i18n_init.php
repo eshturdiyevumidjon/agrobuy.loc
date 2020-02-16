@@ -198,6 +198,15 @@ class m150207_210500_i18n_init extends Migration
             "Katalog" => "Каталог",
             "Tanlang" => "Танланг",
             "Tahrirlash" => "Таҳрирлаш",
+            "Barchasini ko'rish" => "Барчасини кўриш",
+            "Ushbu login allaqachon band qilingan." => "Ушбу логин аллақачон банд қилинган",
+            "Ushbu telefon nomer allaqachon band qilingan." => "Ушбу телефон номер аллақачон банд қилинган",
+            "Sort" => "Сорт",
+            "Nomlanishi" => "Номланиши",
+            "Og'irligi" => "Оғирлиги",
+            "Hosildorlik" => "Хосилдорлик",
+            "Muhim" => "Мухим",
+            "Amalga oshirish" => "Амалга ошириш",
         ];
 
         $translations_uz_ru = [
@@ -356,6 +365,15 @@ class m150207_210500_i18n_init extends Migration
             "Katalog" => "Каталог",
             "Tanlang" => "Выберите",
             "Tahrirlash" => "Изменить",
+            "Barchasini ko'rish" => "Смотреть все",
+            "Ushbu login allaqachon band qilingan." => "Этот логин уже был занят.",
+            "Ushbu telefon nomer allaqachon band qilingan." => "Этот телефон номер уже был занят.",
+            "Sort" => "Сорт",
+            "Nomlanishi" => "Название",
+            "Og'irligi" => "Вес",
+            "Hosildorlik" => "Урожайность",
+            "Muhim" => "Важно",
+            "Amalga oshirish" => "Применить",
         ];
 
         $keys = array_keys($translations);

@@ -18,15 +18,15 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'name',
     ],
-    //[
-      //  'class'=>'\kartik\grid\DataColumn',
-        //'attribute'=>'key',
-    //],
+    [
+       'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'time',
+    ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
-        'template' => '{view}',
+        'template' => '{view} {update}',
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },

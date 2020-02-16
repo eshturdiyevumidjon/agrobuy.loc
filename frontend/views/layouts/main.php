@@ -36,7 +36,7 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
 <html lang="<?= $nowLanguage ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
       	<meta name="viewport" content="width=device-width, initial-scale=1.0">
       	<meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php $this->registerCsrfMetaTags() ?>

@@ -3,17 +3,16 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model;
-use common\models\User;
+use common\models\Users;
 
 /**
  * Signup form
  */
 class SignupForm extends Model
 {
-    public $username;
-    public $email;
+    public $login;
+    public $phone;
     public $password;
-
 
     /**
      * {@inheritdoc}
@@ -21,19 +20,27 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['login', 'trim'],
+            ['login', 'required'],
+            ['login', 'unique', 'targetClass' => '\common\models\Users', 'message' => Yii::t('app',"Ushbu login allaqachon band qilingan.") ],
+            ['login', 'string', 'min' => 6, 'max' => 255],
 
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['phone', 'trim'],
+            ['phone', 'required'],
+            ['phone', 'string', 'max' => 255],
+            ['phone', 'unique', 'targetClass' => '\common\models\Users', 'message' => Yii::t('app',"Ushbu telefon nomer allaqachon band qilingan.")],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'login' => Yii::t('app',"Login"),
+            'password' => Yii::t('app',"Parol"),
+            'phone' => Yii::t('app',"Telefon nomer"),
         ];
     }
 
@@ -48,14 +55,12 @@ class SignupForm extends Model
             return null;
         }
         
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
-        return $user->save() && $this->sendEmail($user);
-
+        $user = new Users();
+        $user->login = $this->login;
+        $user->phone = $this->phone;
+        $user->type = 3;
+        $user->password = $this->password;
+        return $user->save();
     }
 
     /**

@@ -181,6 +181,17 @@ class Sessions extends Model
         return $session['search_small'];
     }
 
+    public function getMainNews()
+    {
+        $session = Yii::$app->session;
+        if($session['news_adv'] == null) {
+            $adv = Advertisings::find()->where(['key' => 'news'])->one();
+            $session['news_adv'] = $adv;
+            return $session['news_adv'];
+        }
+        return $session['news_adv'];
+    }
+
     public function getRegionsList()
     {
         $session = Yii::$app->session;

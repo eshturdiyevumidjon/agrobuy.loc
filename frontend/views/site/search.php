@@ -12,7 +12,7 @@ Yii::$app->getRequest()->getUrl()*/
             <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
                     <?php foreach ($reklamaBig as $value) { ?>
-                        <a href="<?=$value->link?>" class="swiper-slide">
+                        <a href="<?=$value->link?>" class="swiper-slide" data-swiper-autoplay="<?=$value->advertising->time * 1000 ?>" >
                             <img src="<?=$value->getImage('main_page')?>" alt="<?=$value->title?>">
                         </a>
                     <?php } ?>
@@ -63,7 +63,7 @@ Yii::$app->getRequest()->getUrl()*/
                     <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                             <?php foreach ($reklamaSmall as $value) { ?>
-                                <a href="<?=$value->link?>" class="swiper-slide">
+                                <a href="<?=$value->link?>" class="swiper-slide" data-swiper-autoplay="<?=$value->advertising->time * 1000 ?>">
                                     <img src="<?=$value->getImage('main_page')?>" alt="<?=$value->title?>">
                                 </a>
                             <?php } ?>

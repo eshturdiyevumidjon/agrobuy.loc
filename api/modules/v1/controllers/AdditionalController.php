@@ -3,25 +3,16 @@
 namespace api\modules\v1\controllers;
 
 use Yii;
-/*use yii\web\Controller;*/
 use yii\web\Response;
-/*use yii\helpers\Url;*/
 use yii\filters\auth\CompositeAuth;
-/*use yii\filters\auth\HttpBasicAuth;
-use yii\filters\auth\HttpBearerAuth;
-use yii\filters\auth\QueryParamAuth;*/
 use yii\filters\ContentNegotiator;
-/*use yii\filters\AccessControl;*/
-/*use yii\filters\VerbFilter;*/
 use yii\filters\Cors;
 use yii\rest\ActiveController;
 use api\modules\v1\models\Category;
 use api\modules\v1\models\SubCategory;
+use api\modules\v1\models\Ads;
 
 
-/**
- * Default controller for the `api` module
- */
 class AdditionalController extends ActiveController
 {
     public $modelClass = 'api\modules\v1\models\Users';
@@ -52,17 +43,41 @@ class AdditionalController extends ActiveController
         return $behaviors;
     }
 
-     public function actionCategoriesList()
+    // Categoriyalar va SubCategorilar ro'yxati , parametr kelmaydi
+     public function actionCategorySubList()
     {
-        $array = [];
-        $categories = Category::find()->all();
-        foreach ($categories as $value) {
-            $array [] = [
-                'id' => $value->id,
-                'title' => $value->title,
-            ];
+        $category = Category::find()->all();
+        $subCategories = SubCategory::find()->all();
+        $result = [];
+        $siteName = Yii::$app->params['siteName'];
+        foreach ($category as $value) {
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/category/' . $value->image) || $value->image == null) {
+                $path = $siteName . 'backend/web/img/no-images.png';
+            } 
+            else {
+                $path = $siteName . 'backend/web/uploads/category/' . $value->image;
+            }
+            if(Yii::$app->language == 'kr') {
+                $result [] = [
+                    'id' => $value->id,
+                    'title' => $value->title,
+                    'count_category'=>$value->getCountCategory(),
+                    'image' => $path,
+                    'subCategory' => $value->getSubCategoryList($value, $subCategories),
+                ];
+            }
+            else {
+                $title = $value->getTitleTranslates($value, Yii::$app->language, 'title');
+                $result [] = [
+                    'id' => $value->id,
+                    'title' => $title,
+                    'count_category'=>$value->getCountCategory(),
+                    'image' => $path,
+                    'subCategory' => $value->getSubCategoryList($value, $subCategories),
+                ];
+            }
         }
-        return $array;
+            return $result;
     }
 
   

@@ -107,6 +107,14 @@ class Users extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    public function afterFind()
+    {
+        if($this->birthday != null) $this->birthday = date("d.m.Y", strtotime($this->birthday ));
+        if($this->passport_date != null) $this->passport_date = date("d.m.Y", strtotime($this->passport_date ));
+        
+        return parent::afterFind();
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         if($insert){
@@ -347,6 +355,21 @@ class Users extends \yii\db\ActiveRecord
 
             $fileName = time() . '_' . $this->image->baseName . '.' . $this->image->extension;
             $this->image->saveAs('uploads/avatars/' . $fileName);
+            Yii::$app->db->createCommand()->update('users', ['avatar' => $fileName], [ 'id' => $this->id ])->execute();
+        }
+    }
+
+    public function uploadFromSite()
+    {
+        if(!empty($this->image))
+        {   
+            if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/avatars/' . $this->avatar) && $this->avatar != null)
+            {
+                unlink($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/avatars/' . $this->avatar);
+            }
+
+            $fileName = time() . '_' . $this->image->baseName . '.' . $this->image->extension;
+            $this->image->saveAs('@backend/web/uploads/avatars/' . $fileName);
             Yii::$app->db->createCommand()->update('users', ['avatar' => $fileName], [ 'id' => $this->id ])->execute();
         }
     }

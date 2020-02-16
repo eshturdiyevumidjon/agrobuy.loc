@@ -24,7 +24,7 @@ class m191205_073237_create_users_table extends Migration
             'phone' => $this->string(255)->comment("Телефон"),
             'type' => $this->integer()->comment("Тип"),
             'email' => $this->string(255)->comment("Эмаил"),
-            'balance' => $this->float()->comment("Баланс"),
+            'balance' => $this->float()->defaultValue(0)->comment("Баланс"),
             'access_token' => $this->string(255)->comment("Токен"),
             'expiret_at' => $this->integer()->comment("Время окончание токена"),
             'user_number' =>$this->string(255)->comment("ID номер"),

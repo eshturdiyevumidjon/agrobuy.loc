@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 
 ?>
-<div class="edit-item">
-    <div class="title-edit"><?=Yii::t('app', "Reyting")?></div>
+    <div class="edit-item">
+        <div class="title-edit"><?=Yii::t('app', "Reyting")?></div>
         <div class="edit-item-body">
             <table class="table">
                 <thead>

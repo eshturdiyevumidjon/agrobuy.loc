@@ -8,6 +8,7 @@ use api\modules\v1\models\User;
 use api\modules\v1\models\LoginForm;
 use api\modules\v1\models\ForRegister;
 use api\modules\v1\models\RegisterForm;
+use api\modules\v1\models\ResetPassword;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile; 
@@ -82,7 +83,7 @@ class LoginController extends \yii\rest\ActiveController
             Yii::$app->user->logout(false);
             return true;
         }
-        throw new HttpException(422, "xatolik");
+        throw new HttpException(422, "The reuestsed page does not exist.");
     }
 
     //  Register 1-qadam uchun
@@ -94,7 +95,7 @@ class LoginController extends \yii\rest\ActiveController
         $response = \Yii::$app->getResponse();
     	
         if($model->validate() && $model->register()){
-            $responseData = ['register' => true];
+            $responseData = ['status' => true];
             return $responseData;
         }else{
             throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE ));
@@ -124,7 +125,32 @@ class LoginController extends \yii\rest\ActiveController
         }else{
             throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE ));
         }
+    }
 
+    public function actionSendCode()
+    {
+        $model = new ResetPassword();
+        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $model->step = 1;
+        if($model->validate()){
+            return $model->getValidatePhone();
+        }
+        else { 
+            throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE ));
+        }
+    }
+
+     public function actionResetPassword()
+    {
+        $model = new ResetPassword();
+        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $model->step = 2;
+        if($model->validate()){
+            return $model->ResetPassword();
+        }
+        else { 
+            throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE ));
+        }
     }
 
 }

@@ -10,7 +10,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use common\models\LoginFormUser;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -28,6 +28,7 @@ use common\models\Favorites;
 use common\models\AdsSearch;
 use yii\web\NotFoundHttpException;
 use common\models\Users;
+use \yii\web\Response;
 
 /**
  * Site controller
@@ -92,7 +93,6 @@ class SiteController extends Controller
         $adv = $session->getMainAdv();
         $news = News::getAllNewsList();
         $trustedAds = UsersBall::getTrustedAds();
-        $userID = UsersPromotion::getUsersID();
         $about_company = $session->getCompany();
         $banners = Banners::getAllBannersList();
         $categories = Category::getAllCategoryList();
@@ -101,13 +101,14 @@ class SiteController extends Controller
 
         $premiumAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
-            ->where(['in', 'users.id', $userID])
+            ->where(['ads.premium' => 1])
             ->andWhere(['ads.status' => 1])
             ->limit(8)
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
 
         $reklama = AdvertisingItems::find()
+            ->joinWith('advertising')
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
@@ -168,7 +169,7 @@ class SiteController extends Controller
 
         $session = new Sessions();
         $request = Yii::$app->request;
-        $model = new LoginForm();
+        $model = new LoginFormUser();
         $about_company = $session->getCompany();
         $siteName = Yii::$app->params['siteName'];
 
@@ -220,24 +221,39 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        /*return $this->goHome();*/
+        $request = Yii::$app->request;
+        $model = new SignupForm();
         $session = new Sessions();
         $about_company = $session->getCompany();
         $siteName = Yii::$app->params['siteName'];
+
         if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
             $path = $siteName . '/backend/web/img/no-logo.png';
         } else {
             $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
         }
-        $request = Yii::$app->request;
-        $model = new SignupForm();
+
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
 
         if($model->load($request->post()) && $model->validate() && $model->signup()){
-            return $this->goHome();
+            $loginForm = new LoginFormUser();
+            $loginForm->username = $model->login;
+            $loginForm->password = $model->password;
+            $loginForm->validate();
+            $loginForm->login();
+            if($loginForm->validate() && $loginForm->login() ) {
+                return $this->redirect(['/profile']);
+            }
+            else{
+                return $this->renderAjax('signup', [
+                    'model' => $model,
+                    'path' => $path,
+                    'nowLanguage' => Yii::$app->language,
+                ]);
+            }
         }
         else {
             return $this->renderAjax('signup', [
@@ -270,6 +286,7 @@ class SiteController extends Controller
         }
 
         $reklamaBig = AdvertisingItems::find()
+            ->joinWith('advertising')
             ->where(['advertising_id' => $search_big->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
@@ -279,6 +296,7 @@ class SiteController extends Controller
         }
 
         $reklamaSmall = AdvertisingItems::find()
+            ->joinWith('advertising')
             ->where(['advertising_id' => $search_small->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();

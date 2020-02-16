@@ -19,8 +19,8 @@ class AdsSearch extends Ads
     public function rules()
     {
         return [
-            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id', 'region_id', 'district_id', 'status', 'is_checked'], 'integer'],
-            [['title', 'images', 'city_name', 'text', 'unit_price', 'treaty', 'date_cr'], 'safe'],
+            [['id', 'user_id', 'type', 'category_id', 'subcategory_id', 'currency_id', 'region_id', 'district_id', 'status', 'is_checked', 'top', 'premium'], 'integer'],
+            [['title', 'images', 'city_name', 'text', 'unit_price', 'treaty', 'date_cr', 'top_date', 'premium_date'], 'safe'],
             [['price', 'old_price'], 'number'],
         ];
     }
@@ -69,6 +69,10 @@ class AdsSearch extends Ads
             'price' => $this->price,
             'old_price' => $this->old_price,
             'date_cr' => $this->date_cr,
+            'top_date' => $this->top_date,
+            'premium_date' => $this->premium_date,
+            'top' => $this->top,
+            'premium' => $this->premium,
             'currency_id' => $this->currency_id,
         ]);
 

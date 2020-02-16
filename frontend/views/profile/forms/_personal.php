@@ -2,10 +2,11 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use dosamigos\datepicker\DatePicker;
 
 ?>
     <!-- <form class="edit-item"> -->
-    <?php $form = ActiveForm::begin(['id' => '_personal', /*'action' => 'personal',*/ 'options' => ['method' => 'post', 'class' => 'edit-item', ]]); ?>
+    <?php $form = ActiveForm::begin(['id' => '_personal', /*'action' => 'personal',*/ 'options' => ['method' => 'post', 'class' => 'edit-item', 'autocomplete'=>"off"]]); ?>
         <div class="title-edit"><?=Yii::t('app', "Shaxsiy ma'lumot")?></div>
         <div class="edit-item-body">
             <div class="row">
@@ -27,7 +28,8 @@ use yii\bootstrap\ActiveForm;
                         <input type="email" class="form-control">
                     </div> -->
                     <?= $form->field($model, 'fio')->textInput(['class' => 'form-control'])->label(Yii::t('app', "F.I.O.")) ?>
-                    <?= $form->field($model, 'birthday')->textInput(['class' => 'form-control datetimepicker hasDatepicker', 'id'=>"datet"])->label(Yii::t('app', "Tug'ilgan kun")) ?>
+                    <!-- <input type="input" class="form-control datetimepicker" id="inputDate"> -->
+                    <?= $form->field($model, 'birthday')->textInput(['class' => 'form-control datetimepicker', 'id'=>"inputDate"])->label(Yii::t('app', "Tug'ilgan kun")) ?>
                     <?= $form->field($model, 'phone')->textInput(['class' => 'form-control', 'placeholder'=>"+998 99 999 99 99"])->label(Yii::t('app', "Telefon nomer")) ?>
                     <?= $form->field($model, 'email')->textInput(['class' => 'form-control'])->label(Yii::t('app', "E-mail")) ?>
                 </div>

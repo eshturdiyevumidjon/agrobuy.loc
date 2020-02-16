@@ -89,7 +89,7 @@ class UsersController extends Controller
         ]);
     }
 
-    public function actionChangeAvatar()
+    /*public function actionChangeAvatar()
     {
         $path = 'uploads/avatars/';  
         $img = $_POST['name'];
@@ -104,7 +104,7 @@ class UsersController extends Controller
         if(move_uploaded_file($tmp,$path)) 
         {
         }
-    }
+    }*/
 
     /**
      * Creates a new Users model.

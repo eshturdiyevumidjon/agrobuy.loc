@@ -22,16 +22,21 @@ use yii\widgets\LinkPager;
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="/ads/edit?id=<?=$ads->id?>"><?= Yii::t('app',"E'lonni tahrirlash") ?></a>
-                        <a class="dropdown-item" href="/ads/premium?id=<?=$ads->id?>"><?= Yii::t('app',"Targ'ib qilish") ?></a>
+                        <a class="dropdown-item premium_ads" href="#" data-touch="false" value="/<?=$nowLanguage?>/ads/premium?id=<?=$ads->id?>" data-fancybox data-src="#ad-promotion" ><?=Yii::t('app', "Targ'ib qilish")?></a>
                         <a class="dropdown-item" href="/ads/status?id=<?=$ads->id?>"><?= Yii::t('app',"Faollashtirish/O'chirish") ?></a>
-                        <a class="dropdown-item delete_ads" href="#" value="/<?=$nowLanguage?>/ads/delete-form?id=<?=$ads->id?>" data-fancybox data-src="#delete-ads-popup" ><?=Yii::t('app', "E'lonni o'chirish")?></a>
+                        <a class="dropdown-item delete_ads" href="#" data-touch="false" value="/<?=$nowLanguage?>/ads/delete-form?id=<?=$ads->id?>" data-fancybox data-src="#delete-ads-popup" ><?=Yii::t('app', "E'lonni o'chirish")?></a>
                         <a class="dropdown-item" href="/ads/catalog?id=<?=$ads->id?>"><?= $catalogTitle ?></a>
                     </div>
                 </div>
                 <?php if($ads->status == 2) { ?>
                     <div class="sub-prime status">
-                        <!-- <img src="/images/crown.png" alt=""> -->
                         <?= Yii::t('app',"Faollashtirilmagan") ?>
+                    </div>
+                <?php } ?>
+                <?php if($ads->premium == 1) { ?>
+                    <div class="sub-prime premium">
+                        <img src="/images/crown.png" alt="">
+                        <?= Yii::t('app',"Pullik") ?>
                     </div>
                 <?php } ?>
                 <a href="/ads/view?id=<?=$ads->id?>">

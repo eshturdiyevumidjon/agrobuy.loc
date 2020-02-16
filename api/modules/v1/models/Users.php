@@ -19,6 +19,7 @@ class Users extends \yii\db\ActiveRecord
     public $image;
     public $passport_image;
     public $company_image;
+    public $step_validate;
     const EXPIRE_TIME = 3600 * 24 * 7;
 
     public static function tableName()
@@ -31,12 +32,21 @@ class Users extends \yii\db\ActiveRecord
         return [
             [['type', 'expiret_at', 'legal_status', 'check_phone', 'check_mail', 'check_passport', 'check_car'], 'integer'],
             [['balance'], 'number'],
-            [['birthday'], 'safe'],
+            [['birthday','step_validate'], 'safe'],
             [['email'], 'email'],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
             [['image','new_password', 'passport_image', 'company_image'], 'safe'],
             [['company_files', 'passport_issue'], 'string'],
             [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'inn', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site'], 'string', 'max' => 255],
+            // ['passport_serial_number', 'getPassportSeriaValidate'],
+            ['passport_serial_number', 'getPassportSeriaValidate', 'when' => function($model) {return $this->step_validate == 3;}, 'enableClientValidation' => false],
+            ['passport_number', 'getPassportNumberValidate', 'when' => function($model) {return $this->step_validate == 3;}, 'enableClientValidation' => false],
+            ['passport_date', 'getPassportDateValidate', 'when' => function($model) {return $this->step_validate == 3;}, 'enableClientValidation' => false],
+            ['inn', 'getInnValidate', 'when' => function($model) {return $this->step_validate == 4;}, 'enableClientValidation' => false],
+
+
+
+
         ];
     }
 
@@ -446,8 +456,81 @@ class Users extends \yii\db\ActiveRecord
             'access_token' => $this->access_token,
             'expiret_at' => $this->expiret_at,
             'login' => $this->login,
-            // 'firebase_token' => $this->firebase_token,
+            'code_for_phone' => $this->code_for_phone,
         ];
         return $result;
+    }
+
+    public function getUsersAllValues()
+    {
+         $result = [
+            'userId' => $this->id,
+            'fio' => $this->fio,
+            'birthday' => $this->birthday,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'instagram' => $this->instagram,
+            'facebook' => $this->facebook,
+            'telegram' => $this->telegram,
+            'web_site' => $this->web_site,
+            'legal_status' => $this->legal_status,
+            'passport_serial_number' => $this->passport_serial_number,
+            'passport_number' => $this->passport_number,
+            'passport_date' => $this->passport_date,
+            'passport_issue' => $this->passport_issue,
+            'passport_file' => $this->passport_file,
+            'inn' => $this->inn,
+            'company_name' => $this->company_name,
+            'company_files' => $this->company_files,
+        ];
+        return $result;
+    }
+    //  validatsiya pasport danniylar uchun
+    public function getPassportSeriaValidate($attribute)
+    {
+        $passport_serial_number = $this->passport_serial_number;
+        $strlen = strlen( $passport_serial_number );
+        $numeric = 0; $char = "";
+        for( $i = 0; $i <= $strlen; $i++ ) 
+        {
+            $char = substr( $passport_serial_number, $i, 1 );             
+            if(ord($char) > 64 && ord($char) < 91) $numeric++;            
+        }
+        if($numeric != 2) $this->addError($attribute,'Вводите полностью полю «Серия паспорта»');
+    }
+
+    public function getPassportNumberValidate($attribute)
+    {
+        $passport_number = $this->passport_number;
+        $strlen = strlen( $passport_number );
+        $numeric = 0; $char = "";
+        for( $i = 0; $i <= $strlen; $i++ ) 
+        {
+            $char = substr( $passport_number, $i, 1 );             
+            if(ord($char) > 47 && ord($char) < 58) $numeric++;            
+        }
+        if($numeric != 7) $this->addError($attribute,'Вводите полностью полю «Номер паспорта»');
+    }
+
+    public function getPassportDateValidate($attribute)
+    { 
+        $now = date('Y');
+        $value = Yii::$app->formatter->asDate($this->passport_date, 'php:Y');
+        if(($now - $value) > 10 || ($now - $value) < 0)
+        $this->addError($attribute, 'Дата выдачи паспорта должна быть внутри ['.($now-10).', '.($now-0). ']');
+    }
+
+    // Validatsiya INN
+    public function getInnValidate()
+    {
+        $inn = $this->inn;
+        $strlen = strlen( $inn );
+        $numeric = 0; $char = "";
+        for( $i = 0; $i <= $strlen; $i++ ) 
+        {
+            $char = substr( $inn, $i, 1 );             
+            if(ord($char) > 47 && ord($char) < 58) $numeric++;            
+        }
+        if($numeric != 9) $this->addError($attribute,'Вводите полностью полю «Номер ИНН'); 
     }
 }

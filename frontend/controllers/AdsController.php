@@ -15,6 +15,8 @@ use common\models\Category;
 use backend\models\Subcategory;
 use common\models\Regions;
 use yii\widgets\ActiveForm;
+use backend\models\Promotions;
+use common\models\Users;
 
 class AdsController extends \yii\web\Controller
 {
@@ -131,12 +133,39 @@ class AdsController extends \yii\web\Controller
 
     public function actionPremium($id)
     {
+        $request = Yii::$app->request;
         $model = $this->findModel($id);
-        /*if($model->status == 1) $model->status = 2;
-        else $model->status = 1;
-        $model->save();*/
+        $promotions = Promotions::find()->all();
 
-        return $this->redirect(['/profile']);
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if($request->post()) {
+            $promotion = Promotions::findOne($request->post()['promotion']);
+            if($promotion->premium == 1) {
+                $model->premium = 1;
+                $model->premium_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
+            }
+            if($promotion->top == 1) {
+                $model->top = 1;
+                $model->top_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
+            }
+            $user = Users::findOne(Yii::$app->user->identity->id);
+            $user->balance = $user->balance - $promotion->price;
+            $user->save(false);
+            $model->save();
+
+            return $this->redirect(['/profile']);
+        }
+        else {
+            return $this->renderAjax('_premium_form', [
+                'model' => $model,
+                'promotions' => $promotions,
+                'nowLanguage' => Yii::$app->language,
+            ]);
+        }
     }
 
     public function actionDeleteForm($id)

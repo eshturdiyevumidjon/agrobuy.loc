@@ -19,7 +19,7 @@ class AdvertisingsSearch extends Advertisings
     {
         return [
             [['id'], 'integer'],
-            [['name', 'key'], 'safe'],
+            [['name', 'key', 'time'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class AdvertisingsSearch extends Advertisings
      */
     public function search($params)
     {
-        $query = Advertisings::find();
+        $query = Advertisings::find()->where(['<=', 'id', 5]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,6 +57,7 @@ class AdvertisingsSearch extends Advertisings
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'time' => $this->time,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

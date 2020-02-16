@@ -36,7 +36,7 @@ CrudAsset::register($this);
             'pjax'=>true,
             'columns' => require(__DIR__.'/_columns.php'),
             'panelBeforeTemplate' =>    Html::a('Добавить <i class="fa fa-plus"></i>', ['create'],
-                    ['role'=>'modal-remote','title'=> 'Добавить пользователя','class'=>'btn btn-success']).'&nbsp;',      
+                    ['data-pjax' => '0', 'title'=> 'Добавить','class'=>'btn btn-success']).'&nbsp;',      
             'striped' => true,
             'condensed' => true,
             'responsive' => true,          

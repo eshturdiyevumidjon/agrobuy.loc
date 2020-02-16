@@ -19,7 +19,7 @@ class NewsSearch extends News
     {
         return [
             [['id'], 'integer'],
-            [['title', 'text', 'date', 'image'], 'safe'],
+            [['title', 'text', 'date', 'image', 'video', 'video_title', 'sort_title', 'sort_items', 'landing_title', 'landing_text', 'important', 'growing_title', 'growing_text', 'growing_items'], 'safe'],
         ];
     }
 
@@ -59,6 +59,16 @@ class NewsSearch extends News
         $query->andFilterWhere([
             'id' => $this->id,
             'date' => $this->date,
+            'video' => $this->video,
+            'video_title' => $this->video_title,
+            'sort_title' => $this->sort_title,
+            'sort_items' => $this->sort_items,
+            'landing_title' => $this->landing_title,
+            'landing_text' => $this->landing_text,
+            'important' => $this->important,
+            'growing_title' => $this->growing_title,
+            'growing_text' => $this->growing_text,
+            'growing_items' => $this->growing_items,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
