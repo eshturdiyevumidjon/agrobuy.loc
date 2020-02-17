@@ -130,11 +130,10 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
     </div>
     <div class="panel-body">
         <table class="table table-bordered">
-        <tr>
-            </td>
-            <th><?=Yii::t('app', 'Inn')?></th>
-            <td><?=$model->inn?></td>
-        </tr>
+            <tr>
+                <th><?=Yii::t('app', 'Inn')?></th>
+                <td><?=$model->inn?></td>
+            </tr>
         </table>
     </div>
 </div>
@@ -148,14 +147,45 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
     </div>
     <div class="panel-body">
         <table class="table table-bordered">
-        <tr>
-            </td>
-            <th><?=Yii::t('app', 'Company Name')?></th>
-            <td><?=$model->company_name?></td>
-            <th><?=Yii::t('app', 'Company Files')?></th>
-            <td><?=$model->company_files?></td>
-     </tr>
-        
+            <tr>
+                <th><?=Yii::t('app', 'Company Name')?></th>
+                <td><?=$model->company_name?></td>
+                <th><?=Yii::t('app', 'Company Files')?></th>
+                <td><?=$model->company_files?></td>
+            </tr>        
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-inverse">
+    <div class="panel-heading">
+        <div class="panel-heading-btn">
+            <?=Html::a('<i class="fa fa-pencil"></i>', ['/users/change-personal?id='.$model->id.'&type=6'],['role'=>'modal-remote','title'=> 'Изменить', 'class' => 'btn-sm btn-icon btn-circle btn-info'])?>
+        </div>
+        <h4 class="panel-title"><b>Доступы</b></h4>
+    </div>
+    <div class="panel-body">
+        <table class="table table-bordered">
+            <tr>
+                <th>Проверка телефона</th>
+                <td><?=$model->check_phone == 1 ? 'Да' : 'Нет'?></td>
+                <th>Проверка почту</th>
+                <td><?=$model->check_mail == 1 ? 'Да' : 'Нет'?></td>
+                <th>Instagram</th>
+                <td><?=$model->instagram != null ? 'Да' : 'Нет'?></td>
+                <th>Facebook</th>
+                <td><?=$model->facebook != null ? 'Да' : 'Нет'?></td>
+            </tr>
+            <tr>
+                <th>Проверка паспорта</th>
+                <td><?=$model->check_passport == 1 ? 'Да' : 'Нет'?></td>
+                <th>Проверка машины</th>
+                <td><?=$model->check_car == 1 ? 'Да' : 'Нет'?></td>
+                <th>Telegram</th>
+                <td><?=$model->telegram != null ? 'Да' : 'Нет'?></td>
+                <th>Web Site</th>
+                <td><?=$model->web_site != null ? 'Да' : 'Нет'?></td>
+            </tr>
         </table>
     </div>
 </div>

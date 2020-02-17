@@ -34,7 +34,7 @@ else $avt = false;
             $star = '<a data-fancybox data-src="#avtorization" value="/' . $nowLanguage . '/site/login" class="avtorization_class"><img src="/images/star-free.png" alt=""><img src="/images/star-free.png" alt=""></a>';
         }
 	?>
-	    <div class="category-item-product item-product">
+	    <div class="category-item-product item-product <?= $ads->top == 1 ? 'ads_ten' : '' ?>">
 	        <span class="star-item">
 	            <?= $star ?>
 	        </span>

@@ -17,6 +17,7 @@ use common\models\Regions;
 use yii\widgets\ActiveForm;
 use backend\models\Promotions;
 use common\models\Users;
+use common\models\HistoryOperations;
 
 class AdsController extends \yii\web\Controller
 {
@@ -156,6 +157,13 @@ class AdsController extends \yii\web\Controller
             $user->balance = $user->balance - $promotion->price;
             $user->save(false);
             $model->save();
+
+            $history = new HistoryOperations();
+            $history->user_id = $user->id;
+            $history->type = 2;
+            $history->field_id = "" . $promotion->id;
+            $history->summa = $promotion->price;
+            $history->save();
 
             return $this->redirect(['/profile']);
         }

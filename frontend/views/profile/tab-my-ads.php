@@ -12,7 +12,7 @@ use yii\widgets\LinkPager;
         ?>
         <div class="col-xl-3 col-lg-4 col-6">
             <div class="item-product">
-                <div class="dropdown-person">
+                <div class="dropdown-person three_point">
                     <button type="button" class="" data-toggle="dropdown">
                         <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="256" cy="256" r="64"></circle>

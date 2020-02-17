@@ -21,12 +21,12 @@ else $avt = false;
                 if($avt) {
                     $fav = $ads->getStar($favorites);
                     if($fav) {
-                        $star = '<img src="/images/star-full.png" alt="" id="remove-'.$ads->id.'" class="remove_star" lang="'.$nowLanguage.'">
-                            <img src="/images/star-free.png" alt="" id="set-'.$ads->id.'" class="set_star" lang="'.$nowLanguage.'">';
+                        $star = '<img src="/images/star-full.png" alt="" id="remove_premium-'.$ads->id.'" class="remove_star" lang="'.$nowLanguage.'">
+                            <img src="/images/star-free.png" alt="" id="set_premium-'.$ads->id.'" class="set_star" lang="'.$nowLanguage.'">';
                     }
                     else {
-                        $star = '<img src="/images/star-free.png" alt="" id="set-'.$ads->id.'" class="set_star" lang="'.$nowLanguage.'">
-                            <img src="/images/star-full.png" alt="" id="remove-'.$ads->id.'" class="remove_star" lang="'.$nowLanguage.'">';
+                        $star = '<img src="/images/star-free.png" alt="" id="set_premium-'.$ads->id.'" class="set_star" lang="'.$nowLanguage.'">
+                            <img src="/images/star-full.png" alt="" id="remove_premium-'.$ads->id.'" class="remove_star" lang="'.$nowLanguage.'">';
                     }
                 }
                 else {

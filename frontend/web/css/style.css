@@ -646,7 +646,11 @@ section.premium-ads h2{
 	background-color: #fff;
 	transition: all .15s linear;
 }
-.item-product:hover{
+.category-item-product.item-product.ads_ten{
+	/*box-shadow: 0 0 10px rgba(78,195,82,.8);*/
+	border: 3px solid #ffc107;
+}
+.item-product:hover, .category-item-product.item-product.ads_ten:hover{
   	box-shadow: 0px 0px 15px 0px rgb( 0, 3, 6, .31 );
 }
 /*.item-product:hover .item-product-img img{
@@ -3410,17 +3414,20 @@ form.img-main-user label{
 	-ms-align-items: center;
 	align-items: center;
 	justify-content: center;
-	white-space: nowrap;
+	/*white-space: nowrap;*/
 	text-decoration: underline;
 	text-underline-position: under;
 	z-index: 3;
 	cursor: pointer;
+	text-align: center;
 }
 form.img-main-user label svg{
 	color: #fff;
 	fill: #fff;
-	margin-right: 10px;
+	margin-right: 0px;
 	width: 32px;
+	flex: 0 0 32px;
+	margin-left: 25px;
 }
 /********************************************SECTION*************************************************/
 section.personal-area{
@@ -3678,6 +3685,13 @@ span.second-person-socials svg{
 	background: transparent;
 	border: 0;
 	outline: none;
+}
+.dropdown-person.three_point{
+	top: 0;
+	padding-top: 5px;
+	background-color: #ccc;
+	border-bottom-left-radius: 5px;
+	border-top-right-radius: 10px;
 }
 .dropdown-person>button svg{
 	color: #fff;
@@ -4330,6 +4344,47 @@ button#user_avatar {
 .category-body-left-in.fixed-got{
 	margin-bottom: 460px;
 }
+.premium_form{
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	-moz-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	-o-flex-wrap: wrap;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+.premium_form .form-group input{
+	display: none;
+}
+.premium_form .form-group{
+	flex: 0 0 48%;
+	width: 48%;
+}
+.premium_form .form-group label{
+	cursor: pointer;
+}
+.premium_form .form-group .prem-vip-item{
+	max-width: 100%;
+	margin-bottom: 0;
+}
+
+.premium_form .form-group input:checked+label .prem-vip-item{
+    box-shadow: 0px 0px 30px 0px rgb(9, 152, 0);
+}
+
+
+
+
+
+
+
+
+
+
 /*Umid yozgan kodlar*/
 .my-nav-bottom ul li.active a{
 	    color: #aeaeae;

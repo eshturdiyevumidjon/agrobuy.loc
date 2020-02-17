@@ -94,8 +94,8 @@ Yii::$app->getRequest()->getUrl()*/
 	        		<div class="not-product">
                   <div class="category-title sorted">
                     <div>
-                      <a href="<?='/site/search?' . $params . '&type=1' ?>" class="<?=$session->getAdsType() == 1 ? 'active' : ''?>"><?= Yii::t('app',"Sotib olaman") ?></a>
-                      <a href="<?='/site/search?' . $params . '&type=2' ?>" class="<?=$session->getAdsType() == 2 ? 'active' : ''?>"><?= Yii::t('app',"Sotaman") ?></a>
+                      <a href="<?='/site/search?' . $params . '&type=2' ?>" class="<?=$session->getAdsType() == 2 ? 'active' : ''?>"><?= Yii::t('app',"Sotib olaman") ?></a>
+                    <a href="<?='/site/search?' . $params . '&type=1' ?>" class="<?=$session->getAdsType() == 1 ? 'active' : ''?>"><?= Yii::t('app',"Sotaman") ?></a>
                     </div>
                     <div>
                       <span><?= Yii::t('app',"Saralash") ?>:</span>

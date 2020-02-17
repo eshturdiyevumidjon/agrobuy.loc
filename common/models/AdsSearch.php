@@ -219,7 +219,11 @@ class AdsSearch extends Ads
      */
     public function filtr($get)
     {
-        $query = Ads::find()->joinWith(['category', 'user', 'currency'])->where(['ads.status' => 1]);
+        $query = Ads::find()
+            ->joinWith(['category', 'user', 'currency'])
+            ->where(['ads.status' => 1])
+            ->orderBy(['top' => SORT_DESC]);
+            
         $session = new Sessions();
         if(isset($get['sortingAds'])) {
             $sortingAds = $session->setSortingAds($get['sortingAds']);

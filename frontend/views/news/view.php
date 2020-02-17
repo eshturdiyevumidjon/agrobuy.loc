@@ -42,6 +42,7 @@
             </div>
             <?php } ?>
         </div>
+        <?php if(count($sort) > 0) { ?>
         <table class="table table-sample">
             <thead>
                 <tr>
@@ -62,7 +63,9 @@
                 <?php } ?>
             </tbody>
         </table>
+        <?php } ?>
     </div>
+    <?php if(count($slider) > 0) { ?>
     <div class="growing pagination-styles">
         <div class="container">
             <div class="swiper-container">
@@ -88,6 +91,7 @@
             </svg>
         </div>
     </div>
+    <?php } ?>
     <?php if($model['growing_title'] != null && $model['growing_title'] != '') { ?>
     <div class="container">
         <h3><?=$model['growing_title']?></h3>

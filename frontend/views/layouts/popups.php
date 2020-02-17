@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 ?>
-<div class="pp">
+<!-- <div class="pp">
 
       <span data-fancybox data-src="#recovery-password" >Popup1</span>
 
@@ -21,7 +21,7 @@ use yii\helpers\Html;
 
       <span data-fancybox data-src="#avtorization" >Popup8</span>
 
-    </div>
+    </div> -->
     
     <!-- <div id="ad-promotion" style="display: none;" class="popup-style">
       <h2>Продвижение <span>объявления</span>?</h2>
