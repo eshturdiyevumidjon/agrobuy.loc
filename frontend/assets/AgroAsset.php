@@ -28,7 +28,6 @@ class AgroAsset extends AssetBundle
         //'js/chat.js',
         //'js/jquery.min.js',
         'js/modal.js',
-        'js/bootstrap-datepicker.js',
 	    'js/swiper.min.js',
 	    'js/popper.min.js',
 	    'js/bootstrap.min.js',

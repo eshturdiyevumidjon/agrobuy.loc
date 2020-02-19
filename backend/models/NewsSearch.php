@@ -18,8 +18,8 @@ class NewsSearch extends News
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['title', 'text', 'date', 'image', 'video', 'video_title', 'sort_title', 'sort_items', 'landing_title', 'landing_text', 'important', 'growing_title', 'growing_text', 'growing_items'], 'safe'],
+            [['id', 'data_type'], 'integer'],
+            [['title', 'text', 'date', 'image', 'video', 'video_title', 'sort_title', 'sort_items', 'landing_title', 'landing_text', 'important', 'growing_title', 'growing_text', 'growing_items', 'description', 'in_photo'], 'safe'],
         ];
     }
 
@@ -69,6 +69,9 @@ class NewsSearch extends News
             'growing_title' => $this->growing_title,
             'growing_text' => $this->growing_text,
             'growing_items' => $this->growing_items,
+            'description' => $this->description,
+            'data_type' => $this->data_type,
+            'in_photo' => $this->in_photo,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

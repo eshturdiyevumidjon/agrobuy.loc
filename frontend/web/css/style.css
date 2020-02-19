@@ -4210,6 +4210,7 @@ div#ads-type .radio{
   left: 0;
   top: 0;
   opacity: 0;
+  color: gold;
 }
 .rating-form label:hover .fa-star,
 .rating-form label:focus .fa-star,

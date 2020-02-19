@@ -10,12 +10,19 @@
             <div class="col-lg-6">
                 <p><?=$model['text']?></p>
             </div>
-            <?php if($model['video'] != null && $model['video'] != '') { ?>
-                <div class="col-lg-6 straw">
-                    <iframe width="1519" height="586" src="<?=$model['video']?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
-                    <p><?=$model['video_title']?></p>
-                </div>
-            <?php } ?>
+            <div class="col-lg-6 straw">
+                <?php if($model['type'] == 1) { ?>
+                    <?php if($model['video'] != null && $model['video'] != '') { ?>
+                        <iframe width="1519" height="586" src="<?=$model['video']?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+                    <?php } ?>
+                <?php } else {?>
+                    <img src="<?=$model['fone']?>">
+                <?php } ?>
+                <p><?=$model['video_title']?></p>
+            </div>
+            <div class="col-lg-12">
+                <p><?=$model['description']?></p>
+            </div>
         </div>
         <div class="row one-year">
             <?php if($model['sort_title'] != null && $model['sort_title'] != '') { ?>
@@ -46,19 +53,23 @@
         <table class="table table-sample">
             <thead>
                 <tr>
-                    <th scope="col"><?= Yii::t('app',"Sort") ?></th>
-                    <th scope="col"><?= Yii::t('app',"Nomlanishi") ?></th>
-                    <th scope="col"><?= Yii::t('app',"Og'irligi") ?></th>
-                    <th scope="col"><?= Yii::t('app',"Hosildorlik") ?></th>
+                    <th scope="col"></th>
+                    <th scope="col">1</th>
+                    <th scope="col">2</th>
+                    <th scope="col">3</th>
+                    <th scope="col">4</th>
+                    <th scope="col">5</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($sort as $value) { ?>
                     <tr>
-                        <td><?=$value->sort_name?></td>
                         <td><?=$value->name?></td>
+                        <td><?=$value->sort_name?></td>
                         <td><?=$value->weight?></td>
                         <td><?=$value->productivity?></td>
+                        <td><?=$value->five?></td>
+                        <td><?=$value->six?></td>
                     </tr>
                 <?php } ?>
             </tbody>

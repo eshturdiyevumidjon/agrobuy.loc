@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'growing_title' => $growing_title,
             'growing_text' => $growing_text,
             'growing_items' => $growing_items,
+            'description' => $description,
 	    ]) ?>
 	</div>
 </div>

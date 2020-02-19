@@ -110,7 +110,8 @@ class NewsController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
-        $model = new News();  
+        $model = new News();
+        $model->data_type = 1;
         $langs = Lang::getLanguages();
 
         $post = $request->post();
@@ -150,6 +151,17 @@ class NewsController extends Controller
                     [ 'id' => $model->id ])
                     ->execute();
             }
+
+            $model->fone_file = UploadedFile::getInstance($model,'fone_file');
+            if(!empty($model->fone_file)) {
+                if($model->in_photo != null && file_exists('uploads/news/' . $model->in_photo)) {
+                    unlink(('uploads/news/' . $model->in_photo));
+                }
+                $name = $model->id . '-' . time();
+                $model->fone_file->saveAs('uploads/news/' . $name.'.'.$model->fone_file->extension);
+                Yii::$app->db->createCommand()->update('news', ['in_photo' => $name . '.' . $model->fone_file->extension], [ 'id' => $model->id ])->execute();
+            }
+
             return $this->redirect(['index']);         
         } 
         else {
@@ -211,6 +223,9 @@ class NewsController extends Controller
                 case 'growing_items':
                     $translation_growing_items[$value->language_code] = $value->field_value;
                     break;
+                case 'description':
+                    $translation_description[$value->language_code] = $value->field_value;
+                    break;
                 default:
                     $translation_text[$value->language_code] = $value->field_value;
                     break;
@@ -226,6 +241,16 @@ class NewsController extends Controller
                 $name = $model->id . '-' . time();
                 $model->imageFiles->saveAs('uploads/news/' . $name.'.'.$model->imageFiles->extension);
                 Yii::$app->db->createCommand()->update('news', ['image' => $name.'.'.$model->imageFiles->extension], [ 'id' => $model->id ])->execute();
+            }
+
+            $model->fone_file = UploadedFile::getInstance($model,'fone_file');
+            if(!empty($model->fone_file)) {
+                if($model->in_photo != null && file_exists('uploads/news/' . $model->in_photo)) {
+                    unlink(('uploads/news/' . $model->in_photo));
+                }
+                $name = $model->id . '-' . time();
+                $model->fone_file->saveAs('uploads/news/' . $name.'.'.$model->fone_file->extension);
+                Yii::$app->db->createCommand()->update('news', ['in_photo' => $name . '.' . $model->fone_file->extension], [ 'id' => $model->id ])->execute();
             }
             
             $attr = News::NeedTranslation();
@@ -271,6 +296,7 @@ class NewsController extends Controller
                 'growing_title' => $translation_growing_title,
                 'growing_text' => $translation_growing_text,
                 'growing_items' => $translation_growing_items,
+                'description' => $translation_description,
             ]);
         }
     }

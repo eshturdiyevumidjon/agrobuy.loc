@@ -19,6 +19,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'productivity')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'five')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'six')->textInput(['maxlength' => true]) ?>
+
   
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">

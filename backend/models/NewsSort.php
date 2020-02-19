@@ -35,7 +35,7 @@ class NewsSort extends \yii\db\ActiveRecord
         return [
             [['news_id'], 'integer'],
             [['name', 'sort_name'], 'required'],
-            [['name', 'sort_name', 'weight', 'productivity'], 'string', 'max' => 255],
+            [['name', 'sort_name', 'weight', 'productivity', 'five', 'six'], 'string', 'max' => 255],
             [['news_id'], 'exist', 'skipOnError' => true, 'targetClass' => News::className(), 'targetAttribute' => ['news_id' => 'id']],
         ];
     }
@@ -48,10 +48,12 @@ class NewsSort extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'news_id' => 'Новости',
-            'name' => 'Название',
-            'sort_name' => 'Сорт',
-            'weight' => 'Вес плода',
-            'productivity' => 'Урожайность',
+            'name' => '0',
+            'sort_name' => '1',
+            'weight' => '2',
+            'productivity' => '3',
+            'five' => '4',
+            'six' => '5',
         ];
     }
 

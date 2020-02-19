@@ -36,6 +36,18 @@ return [
         'headerOptions'=>['class'=>'text-center'],
     ],
     [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'five',
+        'contentOptions'=>['class'=>'text-center'],
+        'headerOptions'=>['class'=>'text-center'],
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'six',
+        'contentOptions'=>['class'=>'text-center'],
+        'headerOptions'=>['class'=>'text-center'],
+    ],
+    [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'template' => '{leadUpdate} {leadDelete}',

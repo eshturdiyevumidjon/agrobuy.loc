@@ -6,7 +6,8 @@ use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
 use yii\bootstrap\Modal;
 use kartik\grid\GridView;
-use johnitvn\ajaxcrud\CrudAsset; 
+use johnitvn\ajaxcrud\CrudAsset;
+use mihaildev\ckeditor\CKEditor;
 
 $i = 0;
 $langs = backend\models\Lang::getLanguages();
@@ -29,8 +30,42 @@ CrudAsset::register($this);
             <div class="col-md-12">
                 <?= $form->field($model, 'video_title')->textInput([]); ?>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12"> 
+               <?= $form->field($model, 'data_type')->label()->widget(\kartik\select2\Select2::classname(), [
+                    'data' => $model->getType(),
+                    'hideSearch' => true,
+                    'size' =>'sm', 
+                    'options' => [
+                        'placeholder' => 'Выберите ...',
+                        'onchange'=>'
+                            var type = $(this).val();
+                            $("#one").show();
+                            $("#two").show();
+                            if(type == 1) 
+                            {
+                                $("#one").show(); 
+                                $("#two").hide();
+                            }
+                            if(type == 2) 
+                            {
+                                $("#one").hide(); 
+                                $("#two").show();
+                            }
+                            ' 
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]) ?> 
+            </div>
+            <div class="col-md-12" id="one" <?= $model->data_type == 1 ? '' : 'style="display: none"' ?> >
                 <?= $form->field($model, 'video')->textInput([]); ?>
+            </div>
+            <div class="col-md-12" id="two" <?= $model->data_type == 2 ? '' : 'style="display: none"' ?> >
+                <div id="fone_img">
+                    <?=$model->getImageFone()?>
+                </div>
+                <?= $form->field($model, 'fone_file')->fileInput(['accept' => 'image/*', 'class' => "poster23_image"])->label("Фон бекграунда") ?>
             </div>
         </div>
         <div class="col-md-9">
@@ -51,7 +86,17 @@ CrudAsset::register($this);
                                         <?= $form->field($model, 'title')->textInput()->label(Yii::t('app', 'Title')) ?>
                                     </div>
                                     <div class="col-md-12">
-                                        <?= $form->field($model, 'text')->textarea(['rows' => 6])->label(Yii::t('app', 'Text')) ?>
+                                        <?= $form->field($model, 'text')->textarea(['rows' => 6, 'maxLength' => '1500'])->label(Yii::t('app', 'Text')) ?>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <?= $form->field($model,  'description')->widget(CKEditor::className(),[
+                                            //'value' => $description[$lang->url],
+                                            'editorOptions' => [
+                                                'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+                                                'inline' => false, //по умолчанию false
+                                                'height' => 200,
+                                            ],
+                                        ])->label("Описание")?>
                                     </div>
                                     <div class="col-md-12"><hr><hr></div>
                                     <div class="col-md-6">
@@ -79,7 +124,18 @@ CrudAsset::register($this);
                                         <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value' => $titles[$lang->url]])->label(Yii::t('app', 'Title')) ?>
                                     </div>
                                     <div class="col-md-12">
-                                        <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows' => 6, 'value' => $texts[$lang->url]])->label(Yii::t('app', 'Text')) ?>
+                                        <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows' => 6, 'maxLength' => '1500', 'value' => $texts[$lang->url]])->label(Yii::t('app', 'Text')) ?>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <?php //$model->{'translation_description['.$lang->url.']'} = 'salom'; ?>
+                                        <?= $form->field($model,  'translation_description['.$lang->url.']')->widget(CKEditor::className(),[
+                                            'editorOptions' => [
+                                            'value' => "salom",
+                                                'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
+                                                'inline' => false, //по умолчанию false
+                                                'height' => 200,
+                                            ],
+                                        ])->label("Описание")?>
                                     </div>
                                     <div class="col-md-12"><hr><hr></div>
                                     <div class="col-md-6">
@@ -217,3 +273,22 @@ JS
     "footer"=>"",
 ])?>
 <?php Modal::end(); ?>
+<?php
+$this->registerJs(<<<JS
+
+    var fileCollection = new Array();
+    $(document).on('change', '.poster23_image', function(e){
+        var files = e.target.files;
+        $.each(files, function(i, file){
+            fileCollection.push(file);
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e){
+                var template = '<img style="width:100; height:80px;" src="'+e.target.result+'"> ';
+                $('#fone_img').html('').append(template);
+            };
+        });
+    });
+JS
+);
+?>

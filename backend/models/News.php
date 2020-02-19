@@ -5,6 +5,7 @@ namespace backend\models;
 use Yii;
 use backend\models\Translates;
 use frontend\models\Sessions;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "news".
@@ -31,6 +32,7 @@ use frontend\models\Sessions;
 
 class News extends \yii\db\ActiveRecord
 {
+    public $fone_file;
     public $imageFiles;
     public $translation_title;
     public $translation_text;
@@ -42,6 +44,7 @@ class News extends \yii\db\ActiveRecord
     public $translation_growing_title;
     public $translation_growing_text;
     public $translation_growing_items;
+    public $translation_description;
 
     /**
      * {@inheritdoc}
@@ -58,11 +61,12 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             [['title','text'],'required'],
-            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 10],
-            [['text', 'sort_items', 'landing_text', 'important', 'growing_text', 'growing_items'], 'string'],
+            [['imageFiles', 'fone_file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', ],
+            [['text', 'sort_items', 'landing_text', 'important', 'growing_text', 'growing_items', 'description'], 'string'],
             [['date'], 'safe'],
-            [['title', 'image', 'video', 'video_title', 'sort_title', 'landing_title', 'growing_title'], 'string', 'max' => 255],
-            [['translation_text', 'translation_title', 'translation_sort_title', 'translation_sort_items', 'translation_landing_title', 'translation_landing_text', 'translation_important', 'translation_growing_title', 'translation_growing_text', 'translation_growing_items'],'safe'],
+            [['data_type'], 'integer'],
+            [['title', 'image', 'video', 'video_title', 'sort_title', 'landing_title', 'growing_title', 'in_photo'], 'string', 'max' => 255],
+            [['translation_text', 'translation_title', 'translation_sort_title', 'translation_sort_items', 'translation_landing_title', 'translation_landing_text', 'translation_important', 'translation_growing_title', 'translation_growing_text', 'translation_growing_items', 'translation_description'],'safe'],
         ];
     }
     /**
@@ -87,6 +91,10 @@ class News extends \yii\db\ActiveRecord
             'growing_text' => 'Текст выращивании',
             'growing_items' => 'Пункты выращивании',
             'imageFiles' => 'Фото',
+            'description' => 'Описание',
+            'data_type' => 'Тип',
+            'in_photo' => 'Фото',
+            'fone_file' => 'Картинка',
         ];
     }
 
@@ -142,6 +150,14 @@ class News extends \yii\db\ActiveRecord
         return $this->hasMany(NewsSort::className(), ['news_id' => 'id']);
     }
 
+    public function getType()
+    {
+        return ArrayHelper::map([
+            ['id' => '1','type' => 'Видео',],
+            ['id' => '2','type' => 'Картинка',], 
+        ], 'id', 'type');
+    }
+
     public static function NeedTranslation()
     {
         return [
@@ -155,6 +171,7 @@ class News extends \yii\db\ActiveRecord
             'growing_title' => 'translation_growing_title',
             'growing_text' => 'translation_growing_text',
             'growing_items' => 'translation_growing_items',
+            'description' => 'translation_description',
         ];
     }
 
@@ -166,6 +183,26 @@ class News extends \yii\db\ActiveRecord
         return $this->image != null ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'uploads/news/' . $this->image .'">' : '<img style="width:100%; max-height:250px;border-radius:10%;" src="/'.$adminka.'uploads/noimg.jpg">';
         if($for=='_columns')
            return $this->image != null ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'uploads/news/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'uploads/noimg.jpg">';
+
+    }
+
+    public function getImageFone($for = '_form')
+    {
+        $adminka = Yii::$app->params['adminka'];
+        
+        if($for == '_form')
+        return $this->in_photo != null ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'uploads/news/' . $this->in_photo .'">' : '<img style="width:100%; max-height:250px;border-radius:10%;" src="/'.$adminka.'uploads/noimg.jpg">';
+        if($for == '_columns')
+           return $this->in_photo != null ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'uploads/news/' . $this->in_photo .' ">' : '<img style="width:60px;" src="/'.$adminka.'uploads/noimg.jpg">';
+        if($for == 'site') {
+            $siteName = Yii::$app->params['siteName'];
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/news/' . $this->in_photo) || $this->in_photo == '') {
+                $path = $siteName . '/backend/web/img/nouser.png';
+            } else {
+                $path = $siteName . '/backend/web/uploads/news/' . $this->in_photo;
+            }
+            return $path;
+        }
     }
 
     public static function TranslatesText($value, $lang)
@@ -283,14 +320,17 @@ class News extends \yii\db\ActiveRecord
                     'title' => $value->title,
                     'text' => $value->text,
                     'image' => $path,
-                    'sort_title' => $sort_title,
-                    'sort_items' => explode(',', $sort_items),
-                    'landing_title' => $landing_title,
-                    'landing_text' => $landing_text,
-                    'important' => $important,
-                    'growing_title' => $growing_title,
-                    'growing_text' => $growing_text,
-                    'growing_items' => explode(',', $growing_items),
+                    'sort_title' => $value->sort_title,
+                    'sort_items' => explode(',', $value->sort_items),
+                    'landing_title' => $value->landing_title,
+                    'landing_text' => $value->landing_text,
+                    'important' => $value->important,
+                    'growing_title' => $value->growing_title,
+                    'growing_text' => $value->growing_text,
+                    'growing_items' => explode(',', $value->growing_items),
+                    'description' => $value->description,
+                    'fone' => $value->getImageFone('site'),
+                    'type' => $value->data_type,
                     'date' => date('d.m.Y', strtotime($value->date))
                 ];
             }
@@ -305,6 +345,7 @@ class News extends \yii\db\ActiveRecord
                 $growing_title = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'growing_title');
                 $growing_text = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'growing_text');
                 $growing_items = explode(',', $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'growing_items'));
+                $description = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'description');
 
                 return [
                     'id' => $value->id,
@@ -321,6 +362,9 @@ class News extends \yii\db\ActiveRecord
                     'growing_title' => $growing_title,
                     'growing_text' => $growing_text,
                     'growing_items' => $growing_items,
+                    'description' => $description,
+                    'fone' => $value->getImageFone('site'),
+                    'type' => $value->data_type,
                     'date' => date('d.m.Y', strtotime($value->date))
                 ];
             }
