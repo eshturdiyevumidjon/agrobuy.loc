@@ -76,6 +76,16 @@ $config = [
                         'POST companies-list' => 'companies-list',
                     ]
                 ],
+                [
+                    'class'  => 'yii\rest\UrlRule',
+                    'controller'  => 'merchant/list',
+                    'extraPatterns' => [
+                        //'OPTIONS {id}' => 'options',
+                        'OPTIONS api' => 'api',
+                        'GET api' => 'api',
+                        'POST api' => 'api'
+                    ]
+                ],
             ],
         ],
         'request' => [
@@ -144,6 +154,10 @@ $config = [
         'v1' => [
             'basePath' => '@api/modules/v1', // base path for our module class
             'class' => 'api\modules\v1\Api', // Path to module class
+        ],
+        'merchant' => [
+            'basePath' => '@api/modules/merchant', // base path for our module class
+            'class' => 'api\modules\merchant\Api', // Path to module class
         ],
     ],
     'params'  => $params,

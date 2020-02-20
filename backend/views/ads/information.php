@@ -20,7 +20,7 @@ use common\models\PreferenceBooks;
     <div class="panel-body">
         <table class="table table-bordered">
         <tr>
-            <td rowspan="6" style="width: 350px;"><?=$model->getImage()?></td>
+            <td rowspan="6" style="width: 350px;"><?=$model->getImage('_form')?></td>
             <th><?=$model->getAttributeLabel('type')?></th>
             <td><?=$model->getType()[$model->type]?></td>
             <th><?=$model->getAttributeLabel('title')?></th>

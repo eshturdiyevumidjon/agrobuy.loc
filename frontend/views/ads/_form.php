@@ -8,17 +8,13 @@
 <section class="creating-ads">
     <div class="container">
         <h2 class="title"><?=Yii::t('app', $model->isNewRecord ? "E'lon yaratish" : "Tahrirlash" )?></h2>  
-        <?php $form = ActiveForm::begin(['options' => ['method' => 'post',]]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['method' => 'post', 'enctype' => 'multipart/form-data' ]]); ?>
             <div class="row">
               <div class="col-lg-8 col-sm-8 col-12">
                   <?= $form->field($model, 'type'/*, ['options' => ['class' => 'radio-style']]*/)
                   ->radioList(['2' => Yii::t('app', "Sotish"), '1' => Yii::t('app', "Sotib olish")],
                     ['separator' => '', ],
                   ['class' => '', 'id' => 'your_id'])->label(false); ?>
-                  <!-- <div class="form-group radio-style">
-                    <input type="radio" name="Ads[type]" required="" <?php //$model->type == 2 ? 'checked' : ''?> value="2" id="radi1">
-                    <label for="radi1"><?php //Yii::t('app', "Sotish")?></label>
-                  </div> -->
               </div>
 
 
@@ -30,7 +26,14 @@
               </div>
             </div>
             <hr>
+            <div class="row" id="imagesList">
+                <?=$model->getImages()?>
+            </div>
             <div class="row">
+                <div class="col-md-12">
+                    <?= $form->field($model, 'imageFiles[]')->fileInput(['class'=>"image_input", 'multiple' => true, 'accept' => 'image/*' ])->label(false); ?>
+                </div>
+
               <div class="col-xl-9">
                   <div class="attach">
                     <label for="rad"><?=Yii::t('app', "Foto biriktirish")?></label>
@@ -45,8 +48,8 @@
                           <div class="col-lg-7">
                             <!-- The fileinput-button span is used to style the file input field as button -->
                               <span class="btn btn-success fileinput-button dz-clickable">
-                  <i class="glyphicon glyphicon-plus"></i>
-                  <span>Add files...</span>
+                                  <i class="glyphicon glyphicon-plus"></i>
+                                  <span>Add files...</span>
                               </span>
                               <button type="submit" class="btn btn-primary start">
                                   <i class="glyphicon glyphicon-upload"></i>
@@ -115,3 +118,27 @@
         <?php ActiveForm::end(); ?>
     </div>
 </section>
+
+<?php 
+$this->registerJs(<<<JS
+    
+$(document).ready(function(){
+    var fileCollection = new Array();
+
+    $(document).on('change', '.image_input', function(e){
+        var files = e.target.files;
+        $.each(files, function(i, file){
+            fileCollection.push(file);
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e){
+                var template = '<div class="col-sm-1"><span class="preview"><img src="'+e.target.result+'"></span></div>';
+                //$('#imagesList').html('');
+                $('#imagesList').append(template);
+            };
+        });
+    });
+});
+JS
+);
+?>

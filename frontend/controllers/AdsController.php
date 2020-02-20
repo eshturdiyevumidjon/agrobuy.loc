@@ -18,6 +18,8 @@ use yii\widgets\ActiveForm;
 use backend\models\Promotions;
 use common\models\Users;
 use common\models\HistoryOperations;
+use yii\web\UploadedFile;
+use \yii\web\Response;
 
 class AdsController extends \yii\web\Controller
 {
@@ -78,6 +80,13 @@ class AdsController extends \yii\web\Controller
                 $catalog->ads_id = $model->id;
                 $catalog->save();
             }
+
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->uploads()) {
+                // file is uploaded successfully
+                //return;
+            }
+
             return $this->redirect(['/ads/view?id=' . $model->id]);
         }
 
@@ -112,6 +121,13 @@ class AdsController extends \yii\web\Controller
                     $catalog->delete();
                 }
             }
+
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->uploads()) {
+                // file is uploaded successfully
+                //return;
+            }
+
             return $this->redirect(['/ads/view?id=' . $model->id]);
         }
 

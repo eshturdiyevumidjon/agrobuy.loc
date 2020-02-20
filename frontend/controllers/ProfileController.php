@@ -26,7 +26,7 @@ use yii\filters\VerbFilter;
 use backend\models\UsersBall;
 use yii\web\UploadedFile;
 use \yii\web\Response;
-
+use common\models\Orders;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -63,16 +63,9 @@ class ProfileController extends \yii\web\Controller
         $model = $this->findModel($identity->id);
 
         if($request->post()) {
-        /*echo "<pre>";
-        print_r($request->post());
-        echo "</pre>";
-        die;*/
-            //$model->image = UploadedFile::getInstance($model, 'image');
             Yii::$app->response->format = Response::FORMAT_JSON;
             $model->image = UploadedFile::getInstanceByName('ad1');
             $model->uploadFromSite();
-
-            //return ['message'=>'success'];
             return $this->redirect(['/profile']);
         }
 
@@ -129,7 +122,7 @@ class ProfileController extends \yii\web\Controller
             ->all();
 
         $cat = null; $reg = null;
-        if($get){
+        if($get) {
             if(isset($get['category'])) $cat = $get['category'];
             if(isset($get['region'])) $reg = $get['region'];
         }
@@ -234,11 +227,15 @@ class ProfileController extends \yii\web\Controller
         $pliceList = PriceList::find()->orderBy(['number' => SORT_ASC])->all();
 
         if ($request->post()) {
-            /*shartli ravishda balans toldirish imkoniyati bor*/
-            $identity->balance = $identity->balance + $request->post()['summ'];
-            $identity->save();
-            return $this->redirect(['/profile']);
-            /**/
+            if($request->post()['puy'] == 'payme') {
+                $amount = $request->post()['summ'] * 100;
+                $model = new Orders();
+                $model->user_id = $identity->id;
+                $model->amount = $amount;
+                $model->save();
+
+                return $this->redirect('https://checkout.paycom.uz/'.base64_encode('m=5e4cdd47af9572847bcadc31;ac.order_id='.$model->id.';a='.$amount));
+            }
         }
 
         return $this->render('replenish',[
@@ -320,12 +317,11 @@ class ProfileController extends \yii\web\Controller
         }
     }
 
-    public function actionAvatar()
+    /*public function actionAvatar()
     {
         $request = Yii::$app->request;
         $identity = Yii::$app->user->identity;
         $model = $this->findModel($identity->id);
-        //Yii::$app->response->format = Response::FORMAT_JSON;
 
         if($model->load($request->post()) && $model->save()) {
         echo "<pre>";
@@ -336,42 +332,6 @@ class ProfileController extends \yii\web\Controller
             $model->upload();
 
             return ['message'=>'success'];    
-        }
-    }
-
-    /*public function actionSetImg()
-    {
-         if(isset($_POST) == true){
-            //generate unique file name
-            $fileName = time().'_'.basename($_FILES["file"]["name"]);
-            $id = $_POST['id'];
-            
-            //file upload path
-           	$path = Yii::getAlias('@backend');
-            $targetDir = $path. "/web/uploads/avatars/";
-            $targetFilePath = $targetDir . $fileName;
-            
-            //allow certain file formats
-            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-            $allowTypes = array('jpg','png','jpeg','gif');
-            
-            if(in_array($fileType, $allowTypes)){
-                //upload file to server
-                if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)){
-                    //insert file data into the database if needed
-                    $user = Users::findOne($id);
-                    $user->avatar = $fileName;
-                    $user->save();
-                    $response['status'] = 'ok';
-                }else{
-                    $response['status'] = 'err';
-                }
-            }else{
-                $response['status'] = $fileName;
-            }
-            
-            //render response data in JSON format
-            return json_encode($response);
         }
     }*/
 

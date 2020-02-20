@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-class User extends Users/*\yii\base\Object*/ implements \yii\web\IdentityInterface
+class User extends Users implements \yii\web\IdentityInterface
 {
     /**
      * @inheritdoc

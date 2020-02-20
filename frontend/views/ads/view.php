@@ -35,7 +35,7 @@ foreach ($text as $key => $value) {
           	</div>
           	<div class="col-lg-7 ads-about">
             	<h5><?=$model->title?></h5>
-            	<p><textarea style="border: 0; resize: none; outline: none"><?=$model->text?></textarea></p>
+            	<p><textarea style="border: 0; resize: none; outline: none; width:100%; overflow: hidden; padding-bottom: 20%; "><?=$model->text?></textarea></p>
           	</div>
         </div>
     </div>

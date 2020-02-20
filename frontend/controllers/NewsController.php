@@ -10,6 +10,7 @@ use backend\models\NewsSearch;
 use backend\models\AdvertisingItems;
 use backend\models\NewsSlider;
 use backend\models\NewsSort;
+use yii\web\NotFoundHttpException;
 
 class NewsController extends \yii\web\Controller
 {
@@ -42,7 +43,7 @@ class NewsController extends \yii\web\Controller
 
     public function actionView($id)
     {
-    	$news = News::findOne($id);
+    	$news = $this->findModel($id);
     	$identity = Yii::$app->user->identity;
 
         $slider = NewsSlider::find()->where(['news_id' => $id])->all();
@@ -55,5 +56,14 @@ class NewsController extends \yii\web\Controller
             'model' => $news->getOneModel(),
         	'nowLanguage' => Yii::$app->language,
         ]);
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = News::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

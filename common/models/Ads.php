@@ -53,7 +53,7 @@ class Ads extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg',],
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 50],
             [['user_id', 'type', 'category_id', 'subcategory_id', 'treaty', 'currency_id', 'region_id', 'district_id', 'status', 'is_checked', 'top', 'premium'], 'integer'],
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
@@ -276,19 +276,6 @@ class Ads extends \yii\db\ActiveRecord
         return $result;
     }
 
-    /*public function getRegionsListForSite()
-    {
-        $region = Regions::find()->all();
-        $result = [ '' => 'Выберите' ];
-        foreach ($region as $value) {
-            $result += [
-                $value->id => $value->name,
-            ];
-        }
-        return $result;
-    }*/
-
-
     public function getSubcategoryList()
     {
         $subcategories = Subcategory::find()->all();
@@ -311,21 +298,60 @@ class Ads extends \yii\db\ActiveRecord
 
     public function getImage($for = '_form')
     {
+        $explode = explode(',', $this->images);
+        $img = null;
+        foreach ($explode as $file) {
+            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file;
+            if(file_exists($img) && $file != null) {$img = $file; break;}
+        }
+
         $adminka = Yii::$app->params['adminka'];
         if($for =='_form') {
-            return $this->images ? '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .'">' : '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
+            return $img ? '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $img .'">' : '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
         }
         if($for == '_columns') {
-           return $this->images  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
+           return $img  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $img .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
         }
         if($for == 'main_page') {
             $siteName = Yii::$app->params['siteName'];
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $this->images) || $this->images == null) {
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $img) || $img == null) {
                 return $siteName . '/backend/web/img/no-images.jpg';
             } else {
-                return $siteName . '/backend/web/uploads/ads/' . $this->images;
+                return $siteName . '/backend/web/uploads/ads/' . $img;
             }
         }
+    }
+
+    public function getImages()
+    {
+        $siteName = Yii::$app->params['siteName'];
+        $explode = explode(',', $this->images);
+        $result = '';
+        foreach ($explode as $file) {
+            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file;
+            if(file_exists($img) && $file != null)
+            {
+                $img = $siteName . '/backend/web/uploads/ads/' . $file;
+                $result .= '<div class="col-sm-1"><span class="preview"><img src="' . $img . '"></span></div>';
+            }
+        }
+        return $result;
+    }
+
+    public function getImagesPath()
+    {
+        $siteName = Yii::$app->params['siteName'];
+        $explode = explode(',', $this->images);
+        $result = [];
+        foreach ($explode as $file) {
+            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file;
+            if(file_exists($img) && $file != null)
+            {
+                $img = $siteName . '/backend/web/uploads/ads/' . $file;
+                $result [] = $img;
+            }
+        }
+        return $result;
     }
 
     public function upload()
@@ -339,9 +365,43 @@ class Ads extends \yii\db\ActiveRecord
         }
     }
 
+    public function uploads()
+    {
+        if(!empty($this->imageFiles))
+        {
+            $upload = [];
+            foreach ($this->imageFiles as $file) {
+                $fileName = $this->id . '-' . time() . '.' . $file->extension;
+                $file->saveAs('@backend/web/uploads/ads/' . $fileName);
+                $upload [] = $fileName;
+            }
+            $explode = explode(',', $this->images);
+            foreach ($explode as $file) {
+                if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file) && $file != null)
+                {
+                    $upload [] = $file;
+                }
+            }
+
+            $string = ''; $i = 0;
+            foreach ($upload as $file) {
+                if($i == 0) $string = $file;
+                else $string .= ',' . $file;
+                $i = 1;
+            }
+
+            $this->images = $string;
+            $this->save(false);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function unlinkFile($file)
     {
-        if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/ads/' . $file) && $file != null)
+        if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file) && $file != null)
         {
             if( file_exists('uploads/ads/' . $file) ) unlink('uploads/ads/' . $file);
         }
