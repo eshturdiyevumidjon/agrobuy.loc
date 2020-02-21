@@ -76,6 +76,7 @@ $image_url = $identity->getAvatarForSite(); // URL изображения
             'cat' => $cat,
             'reg' => $reg,
             'get' => $get,
+            'user_id' => $user_id,
   	        'nowLanguage' => $nowLanguage,
   	        'categories' => $categories,
   	    ]) ?>

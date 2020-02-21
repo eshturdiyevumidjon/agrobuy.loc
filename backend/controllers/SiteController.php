@@ -10,7 +10,7 @@ use common\models\LoginForm;
 use backend\models\RegisterForm;
 use backend\models\ResetPassword;
 use common\models\Users;
-
+use common\models\Ads;
 
 /**
  * Site controller
@@ -68,7 +68,13 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/site/login']);
         }
-        return $this->render('index');
+        $adsCount = Ads::find()->count();
+        $userCount = Users::find()->count();
+
+        return $this->render('index', [
+            'adsCount' => $adsCount,
+            'userCount' => $userCount,
+        ]);
     }
 
     /**

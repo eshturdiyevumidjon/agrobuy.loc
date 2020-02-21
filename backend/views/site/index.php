@@ -12,11 +12,11 @@ $this->title = 'Color Admin ';
                     <div class="widget widget-stats bg-green">
                         <div class="stats-icon"><i class="fa fa-desktop"></i></div>
                         <div class="stats-info">
-                            <h4>TOTAL VISITORS</h4>
-                            <p>3,291,922</p>    
+                            <h4>Сейчас на сайте</h4>
+                            <p><?=$userCount?></p>    
                         </div>
                         <div class="stats-link">
-                            <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+                            <a href="javascript:;">Подробно <i class="fa fa-arrow-circle-o-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -26,11 +26,11 @@ $this->title = 'Color Admin ';
                     <div class="widget widget-stats bg-blue">
                         <div class="stats-icon"><i class="fa fa-chain-broken"></i></div>
                         <div class="stats-info">
-                            <h4>BOUNCE RATE</h4>
-                            <p>20.44%</p>   
+                            <h4>Количество объявлении</h4>
+                            <p><?=$adsCount?></p>   
                         </div>
                         <div class="stats-link">
-                            <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+                            <a href="javascript:;">Подробно <i class="fa fa-arrow-circle-o-right"></i></a>
                         </div>
                     </div>
                 </div>

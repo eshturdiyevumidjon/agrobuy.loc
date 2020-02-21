@@ -3,6 +3,7 @@
 ?>
 
 	<form class="form-search" action="/profile/catalog" method="get">
+        <?php if($user_id != null) { ?><input type="hidden" name="user_id" value="<?=$user_id?>"> <?php } ?>
         <div class="form-group select2-style">
             <select class="js-select2" name="category">
               	<option value="" selected><?= Yii::t('app',"Kategoriya") ?></option>

@@ -11,6 +11,7 @@ use frontend\assets\AgroAsset;
 use common\widgets\Alert;
 use backend\models\Lang;
 use frontend\models\Sessions;
+use common\models\Category;
 
 AgroAsset::register($this);
 $langs = Lang::getLanguagesForHeader();
@@ -22,6 +23,8 @@ $session = new Sessions();
 $about_company = $session->getCompany();
 $session->setTranslates();
 $session->setLastSeen();
+$regions = $session->getRegionsList();
+$categories = Category::getAllCategoryList();
 $siteName = Yii::$app->params['siteName'];
 
 if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
@@ -53,6 +56,12 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
 		'nowLanguage' => $nowLanguage,
 		'pathInfo' => $pathInfo,
 	]);?>
+
+	<?= $pathInfo != '' && $pathInfo != 'site/search' && $pathInfo != 'profile/catalog' ? $this->render('filtr.php',[
+		'regions' => $regions,
+		'categories' => $categories,
+		'session' => $session,
+	]) : '' ?>
 
 	<?= $this->render('content.php',
 	    ['content' => $content]

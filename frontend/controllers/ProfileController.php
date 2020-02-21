@@ -147,6 +147,7 @@ class ProfileController extends \yii\web\Controller
             'cat' => $cat,
             'reg' => $reg,
             'get' => $get,
+            'user_id' => $user_id,
             'path' => Yii::$app->user->identity == null ? '/profile/user?id=' . $identity->id : '/profile',
             'categories' => $categories,
             'reklama' => $reklama,
