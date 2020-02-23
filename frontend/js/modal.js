@@ -23,5 +23,9 @@
     $('.chats_class').on('click', function () {
         $('#chats-popup').find('#chatsContent').load($(this).attr('value'));
     });
+
+    $('.delete_chats').on('click', function () {
+        $('#delete-chats-popup').find('#deleteChatsContent').load($(this).attr('value'));
+    });
     
   });

@@ -117,7 +117,7 @@ else $avt = false;
                 <div class="about-main-user-right">
                     <div class="mboard">
                     <?php if(Yii::$app->user->identity != null) { ?>
-                        <a href="/chat?user_id=<?=$identity->id?>" class="writed">
+                        <a href="#" data-touch="false" data-fancybox data-src="#chats-popup" value="/<?=$nowLanguage?>/chat/message?user_id=<?=$identity->id?>" class="writed chats_class">
                     <?php } else { ?>
                         <a href="#" data-touch="false" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="writed avtorization_class">
                     <?php } ?>

@@ -332,7 +332,7 @@ class Ads extends \yii\db\ActiveRecord
             if(file_exists($img) && $file != null)
             {
                 $img = $siteName . '/backend/web/uploads/ads/' . $file;
-                $result .= '<div class="col-sm-1"><span class="preview"><img src="' . $img . '"></span></div>';
+                $result .= '<div class="image_preview_class"><a href="#">x</a><span class="preview"><img src="' . $img . '"></span></div>';
             }
         }
         return $result;

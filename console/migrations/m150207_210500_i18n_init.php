@@ -207,6 +207,10 @@ class m150207_210500_i18n_init extends Migration
             "Hosildorlik" => "Хосилдорлик",
             "Muhim" => "Мухим",
             "Amalga oshirish" => "Амалга ошириш",
+            "Xabar matni" => "Хабар матни",
+            "Orqaga" => "Орқага",
+            "O'chirish" => "ўчириш",
+            "Siz haqiqatdan ham chatni o'chirmoqchimisiz?" => "Сиз хақиқатдан хам чатни ўчирмоқчимисиз?",
         ];
 
         $translations_uz_ru = [
@@ -374,6 +378,10 @@ class m150207_210500_i18n_init extends Migration
             "Hosildorlik" => "Урожайность",
             "Muhim" => "Важно",
             "Amalga oshirish" => "Применить",
+            "Xabar matni" => "Текст сообщении",
+            "Orqaga" => "Назад",
+            "O'chirish" => "Удалить",
+            "Siz haqiqatdan ham chatni o'chirmoqchimisiz?" => "Вы уверены, что хотите удалить чата?",
         ];
 
         $keys = array_keys($translations);

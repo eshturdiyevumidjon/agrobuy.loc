@@ -50,6 +50,24 @@ class Chats extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->date_cr = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);
+    }
+
+    public function beforeDelete()
+    {
+        $users = ChatUsers::find()->where(['chat_id' => $this->id])->all();
+        foreach ($users as $user) {
+            $user->delete();
+        }
+        return parent::beforeDelete();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -70,24 +88,31 @@ class Chats extends \yii\db\ActiveRecord
     {
         $user_id = Yii::$app->user->identity->id;
         $result = [];
-        $userId = [];
-        $userId [] = $user_id;
-        $allUsers = Users::find()->all();
-
         
-       $chatUsers = ChatUsers::find()->where(['user_id' => $user_id])->all();
-       foreach ($chatUsers as $value) {
+        $chatUsers = ChatUsers::find()->where(['user_id' => $user_id])->all();
+        foreach ($chatUsers as $value) {
             $chat_user = ChatUsers::find()->where(['!=', 'user_id', $user_id])->andWhere(['chat_id' => $value->chat_id])->one();
             $last_message = ChatMessage::find()->where(['chat_id' => $chat_user->chat_id])->orderBy(['id' => SORT_DESC])->one();
-            $count = ChatMessage::find()->where(['chat_id'=>$last_message->chat_id,'is_read'=>1])->count();
+            $count = ChatMessage::find()
+                ->where(['chat_id' => $value->chat_id, 'is_read' => 0])
+                ->andWhere(['!=', 'user_id', $user_id])
+                ->count();
+            /*if($value->chat->name == 'chat_12_1') {
+                echo "vv=" . $value->chat_id;
+                echo "<pre>";
+                print_r($chat_user->user->getAvatarForSite());
+                echo "</pre>";
+                die;
+            }*/
             $result [] = [
+                'identity_id' => $user_id,
                 'id' => $chat_user->user->id,
-                'fio' => $chat_user->user->fio,
-                'role' => $chat_user->user->getTypeDescription(),
-                'image' => $chat_user->user->getAvatar(),
-                'last_message' => $last_message->message,
-                'date_cr' => $last_message->date_cr,
-                'chat_id' => $value->chat_id,
+                'user_id' => $chat_user->user_id,
+                'login' => $chat_user->user->login,
+                'image' => $chat_user->user->getAvatarForSite(),
+                'last_message' => (strlen($last_message->message) > 80) ? substr($last_message->message, 0, 80) . "..." : $last_message->message,
+                'date_cr' => date('Y-m-d', strtotime($last_message->date_cr)) == date('Y-m-d') ? date('H:i', strtotime($last_message->date_cr)) : date('H:i d.m.Y', strtotime($last_message->date_cr)),
+                'chat_id' => $value->chat->name,
                 'count' => $count,
             ];
         }

@@ -1,118 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
-?>
-<!-- <div class="pp">
-
-      <span data-fancybox data-src="#recovery-password" >Popup1</span>
-
-      <span data-fancybox data-src="#recovery-password-2">Popup2</span>
-
-      <span data-fancybox data-src="#registration-2" >Popup3</span>
-
-      <span data-fancybox data-src="#purchase-service" >Popup4</span>
-
-      <span data-fancybox data-src="#ad-promotion" >Popup5</span>
-
-      <span data-fancybox data-src="#send-complaint" >Popup6</span>
-
-      <span data-fancybox data-src="#registration" >Popup7</span>
-
-      <span data-fancybox data-src="#avtorization" >Popup8</span>
-
-    </div> -->
-    
-    <!-- <div id="ad-promotion" style="display: none;" class="popup-style">
-      <h2>Продвижение <span>объявления</span>?</h2>
-      <div class="dropdown">
-        <div class="ad-promo-button">
-            <div class="ad-1">
-              <img src="/images/desert.jpg" alt="">
-            </div>
-            <div class="ad-2">
-              Продается поле 45 Га...
-            </div>
-            <div class="ad-2">
-              837 39 20
-            </div>
-            <span id="dropdownMenuButton">
-              <img src="/images/right-arrow-green.png" alt="">
-            </span>
-        </div>
-        <div class="drops">
-          <div class="title-drops">
-            <div class="ad-promo-button">
-              <div>
-                №
-              </div>
-              <div class="ad-2 min-bord">
-                Миниатюра фото объявления
-              </div>
-              <div class="ad-2" style="font-weight: 500; text-align: center;">
-                Заголовок объявления
-              </div>
-              <div class="ad-2" style="font-weight: 500; text-align: center;">
-                Номер объявления
-              </div>
-            </div>
-          </div>
-          <a href="#">
-            <div class="ad-promo-button">
-              <div>
-                1
-              </div>
-              <div class="ad-1">
-                <img src="/images/desert.jpg" alt="">
-              </div>
-              <div class="ad-2">
-                Продается поле 45 Га...
-              </div>
-              <div class="ad-2">
-                837 39 20
-              </div>
-            </div>
-          </a>
-          <a href="#">
-            <div class="ad-promo-button">
-              <div>
-                2
-              </div>
-              <div class="ad-1">
-                <img src="/images/desert.jpg" alt="">
-              </div>
-              <div class="ad-2">
-                Продается поле 45 Га...
-              </div>
-              <div class="ad-2">
-                837 39 20
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="prem-vip">
-        <div class="prem-vip-item">
-          <div class="prem-vip-discount">- 50%</div>
-          <div class="prem-vip-img">
-              <img src="/images/vip.png" alt="">
-          </div>
-          <a class="prem-vip-date">7 дней</a>
-          <p>Приобретите сейчас VIP пакет и получите скидку в 50% с возможностью оставлять неограниченное количество объявленийй в течении 7 дней</p>
-          <span class="prem-vip-price">5 000 сумма</span>
-        </div>
-        <div class="prem-vip-item">
-          <div class="prem-vip-img">
-              <img src="/images/premium.png" alt="">
-          </div>
-          <a class="prem-vip-date">Премиум</a>
-          <p>Приобретите сейчас VIP пакет и получите скидку в 50% с возможностью оставлять неограниченное количество объявленийй в течении 7 дней</p>
-          <span class="prem-vip-price">5 000 сумма</span>
-        </div>
-      </div>
-    </div>  -->
-  
+?>  
     <div id="purchase-service" style="display: none;" class="popup-style">
       <h2>Вы <span>действительно хотите </span> <br>приобрести <span>данную услугу</span>?</h2>
       <form>
@@ -202,4 +91,12 @@ use yii\helpers\Html;
 
     <div id="ad-promotion" style="display: none;" class="popup-style">
         <div id="premiumContent"></div>
+    </div>
+
+    <div id="chats-popup" style="display: none;" class="popup-style">
+      <div id="chatsContent"></div>
+    </div>
+
+    <div id="delete-chats-popup" style="display: none;" class="popup-style">
+        <div id="deleteChatsContent"></div>
     </div>

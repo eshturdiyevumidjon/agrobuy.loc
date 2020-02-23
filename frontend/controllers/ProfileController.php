@@ -246,15 +246,21 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionComplaint($id)
+    public function actionComplaint($id = null, $user_id = null)
     {
         $this->getAccess();
         $request = Yii::$app->request;
         $identity = Yii::$app->user->identity;
         $model = new Complaints();
         $model->user_from = $identity->id;
-        $model->ads_id = $id;
-        $model->user_id = $model->ads->user_id;
+        if($id != null) {
+            $model->ads_id = $id;
+            $model->user_id = $model->ads->user_id;
+        }
+        if($user_id != null) {
+            $model->ads_id = null;
+            $model->user_id = $user_id;
+        }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -262,7 +268,9 @@ class ProfileController extends \yii\web\Controller
         }
 
         if($model->load($request->post()) && $model->validate() && $model->save()) {
-            return $this->redirect(['/ads/view?id=' . $id]);
+            if($id != null) return $this->redirect(['/ads/view?id=' . $id]);
+            if($user_id != null) return $this->redirect(['/chat']);
+            return $this->redirect(['/profile']);
         }
         else {
             return $this->renderAjax('forms/_complaint_form', [

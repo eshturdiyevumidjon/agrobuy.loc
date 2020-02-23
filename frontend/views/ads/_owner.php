@@ -64,13 +64,12 @@ $image_url = $model->user->getAvatarForSite(); // URL изображения
 				  </div>
 				</div>
             </div>
-        </div>
         <?php if($model->user_id != $identity->id) {?>
 	        <div class="bottom-block-reuters">
 	        	<?php if($identity != null) { ?>
-	            	<a href="#" class="link-template-img">
+	            	<a href="#" data-touch="false" data-fancybox data-src="#chats-popup" value="/<?=$nowLanguage?>/chat/message?user_id=<?=$model->user_id?>" class="link-template-img chats_class">
 	            <?php } else { ?>
-	            	<a href="#" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="link-template-img avtorization_class">
+	            	<a href="#" data-touch="false" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="link-template-img avtorization_class">
 	            <?php } ?>
 	                <span>
 	                    <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M467,61H45C20.218,61,0,81.196,0,106v300c0,24.72,20.128,45,45,45h422c24.72,0,45-20.128,45-45V106    C512,81.28,491.872,61,467,61z M460.786,91L256.954,294.833L51.359,91H460.786z M30,399.788V112.069l144.479,143.24L30,399.788z     M51.213,421l144.57-144.57l50.657,50.222c5.864,5.814,15.327,5.795,21.167-0.046L317,277.213L460.787,421H51.213z M482,399.787    L338.213,256L482,112.212V399.787z"></path></svg>
@@ -84,9 +83,9 @@ $image_url = $model->user->getAvatarForSite(); // URL изображения
 	                <?=$model->user->phone?>
 	            </a>
 	            <?php if($identity != null) { ?>
-	            	<a href="#" data-fancybox data-src="#send-complaint" value="/<?=$nowLanguage?>/profile/complaint?id=<?=$model->id?>" class="link-template-img complaint_class">
+	            	<a href="#" data-touch="false" data-fancybox data-src="#send-complaint" value="/<?=$nowLanguage?>/profile/complaint?id=<?=$model->id?>" class="link-template-img complaint_class">
 	            <?php } else { ?>
-	            	<a href="#" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="link-template-img avtorization_class">
+	            	<a href="#" data-touch="false" data-fancybox data-src="#avtorization" value="/<?=$nowLanguage?>/site/login" class="link-template-img avtorization_class">
 	            <?php } ?>
 	                <span>
 	                    <svg enable-background="new 0 0 469.333 469.333" version="1.1" viewBox="0 0 469.33 469.33" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="m206.88 43.544c-3.875-1.698-8.448-0.896-11.542 2.042l-109.85 103.75h-74.823c-5.896 0-10.667 4.771-10.667 10.666v149.33c0 5.896 4.771 10.667 10.667 10.667h74.823l109.85 103.75c2.021 1.917 4.656 2.917 7.323 2.917 1.427 0 2.865-0.281 4.219-0.875 3.917-1.677 6.448-5.531 6.448-9.792v-362.67c-1e-3 -4.261-2.532-8.115-6.449-9.792zm-14.885 347.71-94.948-89.667c-1.979-1.875-4.604-2.917-7.323-2.917h-68.396v-128h68.396c2.719 0 5.344-1.042 7.323-2.917l94.948-89.665v313.17z"></path><path d="m372.06 44.7c-4.813-3.469-11.469-2.385-14.896 2.375-3.458 4.771-2.396 11.438 2.375 14.896 55.396 40.125 88.458 104.69 88.458 172.7s-33.063 132.57-88.458 172.7c-4.771 3.458-5.833 10.125-2.375 14.896 2.083 2.875 5.344 4.406 8.646 4.406 2.167 0 4.354-0.656 6.25-2.031 60.906-44.125 97.271-115.15 97.271-189.97-1e-3 -74.823-36.365-145.84-97.271-189.97z"></path><path d="m314.01 108.3c-4.948-3.125-11.563-1.635-14.708 3.354-3.135 4.979-1.635 11.563 3.354 14.708 37.573 23.646 60.01 64.135 60.01 108.3s-22.438 84.656-60.01 108.3c-4.99 3.146-6.49 9.729-3.354 14.708 2.031 3.229 5.5 4.99 9.042 4.99 1.938 0 3.906-0.531 5.667-1.635 43.822-27.583 69.989-74.812 69.989-126.36s-26.167-98.781-69.99-126.36z"></path><path d="m272.75 183.45c-4.729-3.531-11.406-2.531-14.927 2.177-3.521 4.729-2.542 11.417 2.177 14.927 11.021 8.208 17.333 20.635 17.333 34.115 0 13.479-6.313 25.906-17.333 34.115-4.719 3.51-5.698 10.198-2.177 14.927 2.094 2.813 5.302 4.292 8.563 4.292 2.208 0 4.448-0.688 6.365-2.115 16.469-12.26 25.917-30.937 25.917-51.219s-9.449-38.958-25.918-51.219z"></path></svg>
@@ -95,5 +94,6 @@ $image_url = $model->user->getAvatarForSite(); // URL изображения
 	            </a>
 	        </div>
 	    <?php } ?>
+        </div>
     </div>
 </div>

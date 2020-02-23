@@ -4409,9 +4409,23 @@ div#imagesList{
 	color: #000;
 	font-weight: 700;
 }
+.user-letter p span {
+    display: block;
+    font-size: 12px;
+    color: #6176c1;
+}
+.person-right .user-letter p span{
+    text-align: right;
+}
 
-
-
+.person-left .user-letter p span{
+    text-align: left;
+}
+.last_message_date{
+	font-size: 12px;
+    text-align: left;
+    color: #6176c1;
+}
 
 
 

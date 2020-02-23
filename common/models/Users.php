@@ -546,4 +546,19 @@ class Users extends \yii\db\ActiveRecord
         if($url == 'language') return 1;
         return 0;
     }
+
+    public function getChatMessageCount()
+    {
+        $chatId = ChatUsers::find()->select('chat_id')->where(['user_id' => $this->id])->asArray()->all();
+        $res = [];
+        foreach ($chatId as $value) {
+            $res [] = $value['chat_id'];
+        }
+        $msgCount = ChatMessage::find()
+            ->where(['!=', 'user_id', $this->id])
+            ->andWhere(['chat_id' => $res])
+            ->andWhere(['is_read' => 0])
+            ->count();
+        return $msgCount;
+    }
 }

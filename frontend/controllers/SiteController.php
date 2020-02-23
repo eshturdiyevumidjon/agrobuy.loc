@@ -429,4 +429,10 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+
+    public function actionChat()
+    {
+        return $this->render('chat', [
+        ]);
+    }
 }
