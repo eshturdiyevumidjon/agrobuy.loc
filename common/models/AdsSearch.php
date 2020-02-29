@@ -250,9 +250,9 @@ class AdsSearch extends Ads
             ]);
         }
 
-        if(isset($get['region'])) {
+        if(isset($get['district'])) {
             $query->andFilterWhere([
-                'ads.region_id' => $get['region'],
+                'ads.district_id' => $get['district'],
             ]);
         }
 
@@ -279,6 +279,9 @@ class AdsSearch extends Ads
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [ 'date_cr' => SORT_DESC ],
+            ],
         ]);
 
         return $dataProvider;

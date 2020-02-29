@@ -2,30 +2,23 @@
 
 use yii\helpers\Html;
 $params = Yii::$app->getRequest()->getQueryString();
-/*echo "g=". Yii::$app->getRequest()->getQueryString();die;
-Yii::$app->getRequest()->getUrl()*/
-/*echo "f=".$params;die;*/
 ?>
 <section class="subcategory">
     <div class="container">
         <div class="swiper-container reclama">
-            <!-- Additional required wrapper -->
-                <div class="swiper-wrapper">
-                    <?php foreach ($reklamaBig as $value) { ?>
-                        <a href="<?=$value->link?>" class="swiper-slide" data-swiper-autoplay="<?=$value->advertising->time * 1000 ?>" >
-                            <img src="<?=$value->getImage('main_page')?>" alt="<?=$value->title?>">
-                        </a>
-                    <?php } ?>
-                </div>
+            <div class="swiper-wrapper">
+                <?php foreach ($reklamaBig as $value) { ?>
+                    <a href="<?=$value->link?>" class="swiper-slide" data-swiper-autoplay="<?=$value->advertising->time * 1000 ?>" >
+                        <img src="<?=$value->getImage('main_page')?>" alt="<?=$value->title?>">
+                    </a>
+                <?php } ?>
+            </div>
         </div>
-        <!-- <div class="reclama">
-	        <img src="<?php //$reklamaBig->getImage('main_page')?>" alt="<?php //$reklamaBig->title?>">
-        </div> -->
         <h2 class="title"><?=$session->getCategoryName($categories, $cat, $sub)?></h2>
         <?= $this->render('search_form', [
-	        'regions' => $regions,
+	        'districts' => $districts,
           'get' => $get,
-          'reg' => $reg,
+          'dist' => $dist,
           'cat' => $cat,
 	        'nowLanguage' => $nowLanguage,
 	        'categories' => $categories,

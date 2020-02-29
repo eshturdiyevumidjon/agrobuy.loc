@@ -55,8 +55,7 @@ use common\models\Users;
                     ['label' => 'Новости', 'icon' => 'bookmark', 'url' => ['/news'], 'active' => $this->context->id == 'news'],
                     ['label' => 'Слайдеры', 'icon' => 'bars', 'url' => ['/banners'], 'active' => $this->context->id == 'banners'],
                     ['label' => 'Рекламные баннеры', 'icon' => 'photo ', 'url' => ['/advertisings'], 'active' => $this->context->id == 'advertisings'],
-                    ['label' => 'Чат', 'icon' => 'send', 'url' => ['#']],
-                    ['label' => 'Рассылки', 'icon' => 'paper-plane-o', 'url' => ['#']],
+                    ['label' => 'Чат и рассылка', 'icon' => 'send', 'url' => ['/chats']],
                     ['label' => 'Справочники', 'icon' => 'book', 'url' => ['/nothealth'], 'active' => $model->getActiveMenu($this->context->id),
                         'items' => [
                             ['label' => 'Валюты', 'icon' => 'dollar', 'url' => ['/currency'], 'active' => $this->context->id == 'currency'],

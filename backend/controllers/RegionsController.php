@@ -97,46 +97,59 @@ class RegionsController extends Controller
     public function actionCreate()
     {
         $request = Yii::$app->request;
+        $post = $request->post();
         $model = new Regions();  
+        $langs = Lang::getLanguages();
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($request->post()) && $model->save()){
+            if($model->load($post) && $model->save()) {
+                $attr = Regions::NeedTranslation();
+                foreach ($langs as $lang) {
+                    $l = $lang->url;
+                    if($l == 'kr') {
+                        if(!$model->save()) {
+                            return [
+                                'title'=> Yii::t('app','Create'),
+                                'content'=>$this->renderAjax('create', [
+                                    'model' => $model,
+                                    'titles' => null,
+                                    'post' => $post,
+                                    'langs' => $langs,
+                                ]),
+                                'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
+                            ];
+                        }
+                        else continue;
+                    }
+                    foreach ($attr as $key => $value) {
+                        $t = new Translates();
+                        $t->table_name = $model->tableName();
+                        $t->field_id = $model->id;
+                        $t->field_name = $key;
+                        $t->field_value = $post["Regions"][$value][$l];
+                        $t->field_description = $value;
+                        $t->language_code = $l;
+                        $t->save();
+                    }
+                }
+                return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];         
+            }
+            else {           
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Создать",
-                    'content'=>'<span class="text-success">Успешно выпольнено</span>',
-                    'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Сохранить',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                    'title'=> "Создать",
+                    'title'=> Yii::t('app','Create'),
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'titles' => null,
+                        'post' => $post,
+                        'langs' => $langs,
                     ]),
                     'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
-        
                 ];         
             }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
-        }
-       
+        }       
     }
 
     /**
@@ -149,43 +162,64 @@ class RegionsController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
+        $langs = Lang::getLanguages();
+        $post = $request->post();
 
         if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($request->post()) && $model->save()){
+            $translations = Translates::find()->where(['table_name' => $model->tableName(), 'field_id' => $model->id])->all();
+            foreach ($translations as $key => $value) {
+                $translation_title[$value->language_code] = $value->field_value;
+            }
+            if($model->load($request->post()) && $model->save()) {
+                $attr = Regions::NeedTranslation();
+                foreach ($langs as $lang) {
+                    $l = $lang->url;
+                    if($l == 'kr') {
+                       continue;
+                    }
+                    foreach ($attr as $key => $value) {
+                        $t = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id, 'language_code' => $l,'field_name' => $key]);
+                        if($t->count() == 1) {
+                            $tt = $t->one();
+                            $tt->field_value = $post["Regions"][$value][$l];
+                            $tt->save();
+                        }
+                        else{
+                            $tt = new Translates();
+                            $tt->table_name = $model->tableName();
+                            $tt->field_id = $model->id;
+                            $tt->field_name = $key;
+                            $tt->field_value = $post["Regions"][$value][$l];
+                            $tt->field_description = $value;
+                            $tt->language_code = $l;
+                            $tt->save();
+                        }
+                    }
+                }
+                $translations = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id])->all();
+                foreach ($translations as $key => $value) {
+                    $translation_title[$value->language_code] = $value->field_value;
+                }
+
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Регионы",
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Изменить',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
+                    'forceReload' => '#crud-datatable-pjax',
+                    'forceClose' => true,
+                ];
+
             }else{
                  return [
                     'title'=> "Изменить",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
+                        'titles' => $translation_title,
+                        'post' => $post,
+                        'langs' => $langs,
                     ]),
                     'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
-            }
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+                        Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
+                ];
             }
         }
     }
@@ -214,8 +248,6 @@ class RegionsController extends Controller
             */
             return $this->redirect(['index']);
         }
-
-
     }
     
     public function actionDeleteSub($id)

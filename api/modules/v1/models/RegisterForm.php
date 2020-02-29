@@ -24,6 +24,8 @@ class RegisterForm extends Model
 
             [['login'], 'unique', 'targetClass' => '\api\modules\v1\models\Users', 'message' => 'Это логин уже существует.'],
 
+            ['phone', 'validatePhone'],
+
             [['phone'], 'unique', 'targetClass' => '\api\modules\v1\models\Users', 'message' => 'Это телефон номер уже существует.'],
         ];
     }
@@ -40,6 +42,18 @@ class RegisterForm extends Model
 
         ];
     }
+
+    public function  validatePhone()
+    {
+        if(!(strpos($this->phone, '+9989') == 0 && strlen($this->phone) == 13)) {$this->addError($attribute, 'Неправильный номер');return;}
+
+        for ($i=1; $i < 12; $i++) { 
+        	if($this->phone[$i] < '0' || $this->phone[$i] > '9') {$this->addError($attribute, 'Неправильный номер');break;}
+        }
+
+    }
+
+
 
     public function validateAgree($attribute)
     { 

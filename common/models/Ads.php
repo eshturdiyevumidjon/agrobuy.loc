@@ -8,6 +8,8 @@ use yii\web\UploadedFile;
 use backend\models\Currency;
 use backend\models\Reyting;
 use backend\models\UsersReyting;
+use frontend\models\Sessions;
+use backend\models\SubCategories;
 
 /**
  * This is the model class for table "ads".
@@ -230,8 +232,25 @@ class Ads extends \yii\db\ActiveRecord
 
     public function getRegionsList()
     {
+        $session = new Sessions();
         $region = Regions::find()->all();
-        return ArrayHelper::map($region, 'id', 'name');
+        $result = [ '' => Yii::t('app', "Tanlang") ];
+        $siteName = Yii::$app->params['siteName'];
+
+        foreach ($region as $value) {
+            if(Yii::$app->language == 'kr') {
+                $result += [
+                    $value->id => $value->name,
+                ];
+            }
+            else {
+                $name = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'name');
+                $result += [
+                    $value->id => $name,
+                ];
+            }
+        }
+        return $result;
     }
 
     public function getCategoryList()
@@ -252,7 +271,7 @@ class Ads extends \yii\db\ActiveRecord
         return ArrayHelper::map($cur, 'id', 'name');
     }
 
-    public function getCategoryListForSite()
+    /*public function getCategoryListForSite()
     {
         $categories = Category::find()->all();
         $result = [ '' => Yii::t('app', "Tanlang") ];
@@ -260,6 +279,37 @@ class Ads extends \yii\db\ActiveRecord
             $result += [
                 $value->id => $value->title,
             ];
+        }
+        return $result;
+    }*/
+
+    public function getCategoryListForSite()
+    {
+        $session = new Sessions();
+        $category = Category::find()->all();
+        $subCategories = SubCategories::find()->all();
+        //$result = [];
+        $result = [ '' => Yii::t('app', "Tanlang") ];
+        $siteName = Yii::$app->params['siteName'];
+
+        foreach ($category as $value) {
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/category/' . $value->image) || $value->image == null) {
+                $path = $siteName . '/backend/web/img/no-images.png';
+            } 
+            else {
+                $path = $siteName . '/backend/web/uploads/category/' . $value->image;
+            }
+            if(Yii::$app->language == 'kr') {
+                $result += [
+                    $value->id => $value->title,
+                ];
+            }
+            else {
+                $title = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'title');
+                $result += [
+                    $value->id => $title,
+                ];
+            }
         }
         return $result;
     }
@@ -274,6 +324,24 @@ class Ads extends \yii\db\ActiveRecord
             ];
         }
         return $result;
+    }
+
+    public function getDistrictsList($region_id)
+    {
+        $dist = Districts::find()->where(['region_id' => $region_id])->all();
+        $result = [ '' => Yii::t('app', "Tanlang") ];
+        foreach ($dist as $value) {
+            $result += [
+                $value->id => $value->name,
+            ];
+        }
+        return $result;
+    }
+
+    public function getDistrictsListForAdmin()
+    {
+        $dist = Districts::find()->all();
+        return ArrayHelper::map($dist, 'id', 'name');
     }
 
     public function getSubcategoryList()

@@ -91,6 +91,30 @@ class AboutCompanyController extends Controller
         }
     }
 
+    public function actionEditBanner()
+    {
+        $request = Yii::$app->request;
+        $model = $this->findModel(1);       
+
+        if($request->isAjax){
+           
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if($model->load($request->post()) && $model->save()){
+                return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];    
+            }else{
+                 return [
+                    'title'=> "Изменить",
+                    'size'=>"small",
+                    'content'=>$this->renderAjax('_banner_form', [
+                        'model' => $model,
+                    ]),
+                    'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
+                ];        
+            }
+        }
+    }
+
     protected function findModel($id)
     {
         if (($model = AboutCompany::findOne($id)) !== null) {

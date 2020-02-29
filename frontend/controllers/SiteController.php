@@ -29,6 +29,7 @@ use common\models\AdsSearch;
 use yii\web\NotFoundHttpException;
 use common\models\Users;
 use \yii\web\Response;
+use backend\models\Settings;
 
 /**
  * Site controller
@@ -97,7 +98,7 @@ class SiteController extends Controller
         $banners = Banners::getAllBannersList();
         $categories = Category::getAllCategoryList();
         $favorites = Favorites::find()->where(['type' => 1])->all();
-        $regions = $session->getRegionsList();
+        $districts = $session->getAreaList();
 
         $premiumAds = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
@@ -126,7 +127,7 @@ class SiteController extends Controller
 
         return $this->render('index', [
             'banners' => $banners,
-            'regions' => $regions,
+            'districts' => $districts,
             'about_company' => $about_company,
             'categories' => $categories,
             'news' => $news,
@@ -159,16 +160,16 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        Yii::$app->user->logout();
+       /* Yii::$app->user->logout();
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
-        }
+        }*/
 
         //if(!Yii::$app->request->isAjax) throw new NotFoundHttpException('The requested page does not exist.');
 
         $session = new Sessions();
         $request = Yii::$app->request;
-        $model = new LoginFormUser();
+        $model = new \common\models\LoginFormUser();
         $about_company = $session->getCompany();
         $siteName = Yii::$app->params['siteName'];
 
@@ -272,7 +273,7 @@ class SiteController extends Controller
         $getModels = null;
         $search_big = $session->getSearchBigAdv();
         $search_small = $session->getSearchSmallAdv();
-        $regions = $session->getRegionsList();
+        $districts = $session->getAreaList();
         $categories = Category::getAllCategoryList();
         $about_company = $session->getCompany();
         $favorites = Favorites::find()->where(['type' => 1])->all();
@@ -304,7 +305,7 @@ class SiteController extends Controller
             $value->save();
         }
 
-        $cat = null; $reg = null; $sub = null;
+        $cat = null; $dist = null; $sub = null;
         if($request->get()){
             $get = $request->get();
             $searchModel = new AdsSearch();
@@ -313,24 +314,35 @@ class SiteController extends Controller
             $getModels = $dataProvider->getModels();
             if(isset($get['category'])) $cat = $get['category'];
             if(isset($get['sub'])) $sub = $get['sub'];
-            if(isset($get['region'])) $reg = $get['region'];
+            if(isset($get['district'])) $dist = $get['district'];
         }
 
         return $this->render('search', [
             'model' => $model,
             'get' => $get,
-            'reg' => $reg,
+            'dist' => $dist,
             'cat' => $cat,
             'sub' => $sub,
             'session' => $session,
             'getModels' => $getModels,
             'path' => $path,
-            'regions' => $regions,
+            'districts' => $districts,
             'favorites' => $favorites,
             'categories' => $categories,
             'reklamaBig' => $reklamaBig,
             'dataProvider' => $dataProvider,
             'reklamaSmall' => $reklamaSmall,
+            'nowLanguage' => Yii::$app->language,
+        ]);
+    }
+
+    public function actionPrivacy($key)
+    {
+        $session = new Sessions();
+        $privacy = Settings::find()->where(['key' => $key])->one();
+
+        return $this->render('privacy', [
+            'privacy' => $privacy,
             'nowLanguage' => Yii::$app->language,
         ]);
     }

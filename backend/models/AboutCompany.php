@@ -52,7 +52,7 @@ class AboutCompany extends \yii\db\ActiveRecord
             'logo' => 'Лого',
             'mail' => 'E-mail',
             'phone' => 'Телефон',
-            'view_banners' => "Банныеры вкл/отк",
+            'view_banners' => "Баннеры вкл/отк",
             'premium_ads_count' => 'Макс. кол-во премиум объявлении',
         ];
     }

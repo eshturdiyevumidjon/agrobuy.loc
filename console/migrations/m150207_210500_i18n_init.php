@@ -211,6 +211,9 @@ class m150207_210500_i18n_init extends Migration
             "Orqaga" => "Орқага",
             "O'chirish" => "ўчириш",
             "Siz haqiqatdan ham chatni o'chirmoqchimisiz?" => "Сиз хақиқатдан хам чатни ўчирмоқчимисиз?",
+            "Kimga yozmoqchi ekanligingizni tanlang" => "Кимга ёзмоқчи эканлигингизни танланг",
+            "Tumanni tanlang" => "Туманни танланг",
+            "Bosh S." => "Бош С.",
         ];
 
         $translations_uz_ru = [
@@ -382,6 +385,9 @@ class m150207_210500_i18n_init extends Migration
             "Orqaga" => "Назад",
             "O'chirish" => "Удалить",
             "Siz haqiqatdan ham chatni o'chirmoqchimisiz?" => "Вы уверены, что хотите удалить чата?",
+            "Kimga yozmoqchi ekanligingizni tanlang" => "Выберите, кому хотели бы написать",
+            "Tumanni tanlang" => "Выберите район",
+            "Bosh S." => "Главная",
         ];
 
         $keys = array_keys($translations);

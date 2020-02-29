@@ -32,15 +32,18 @@ class ResetPassword extends Model
             // [['phone'], 'required'],
 
             // step = 1 uchun validation .. parolni tiklash uchun
-            ['phone', 'required', 'when' => function($model) {return $this->step == 1;}, 'enableClientValidation' => false],
-            ['phone', 'getNumberValidate', 'when' => function($model) {return $this->step == 1;}, 'enableClientValidation' => false],
+            ['phone', 'required', 'when' => function($model) {return $model->step == 1;}, 'enableClientValidation' => false],
+            ['phone', 'getNumberValidate', 'when' => function($model) {return $model->step == 1;}, 'enableClientValidation' => false],
 
             // step = 2 uchun validation .. parolni tiklash uchun
-            ['password','check_password','code', 'required', 'when' => function($model) {return $this->step == 2;}, 'enableClientValidation' => false],
+            ['password', 'required', 'when' => function($model) {return $model->step == 2;}, 'enableClientValidation' => false],
+            ['check_password', 'required', 'when' => function($model) {return $model->step == 2;}, 'enableClientValidation' => false],
+            ['code', 'required', 'when' => function($model) {return $model->step == 2;}, 'enableClientValidation' => false],
 
 
-            ['code', 'getCodeValidate', 'when' => function($model) {return $this->step == 2;}, 'enableClientValidation' => false],
-            ['check_password', 'getPasswordValidate', 'when' => function($model) {return $this->step == 2;}, 'enableClientValidation' => false],
+            ['code', 'getCodeValidate', 'when' => function($model) {return $model->step == 2;}, 'enableClientValidation' => false],
+            
+            ['check_password', 'getPasswordValidate', 'when' => function($model) {return $model->step == 2;}, 'enableClientValidation' => false],
         ];
     }
 
@@ -87,7 +90,7 @@ class ResetPassword extends Model
         $user->password = $this->password;
         $user->password = Yii::$app->security->generatePasswordHash($this->password);
         $user->save();
-        $arr = ['reset' => true,];
+        $arr = ['status' => true,];
         return $arr;
     }
 

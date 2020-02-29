@@ -26,6 +26,8 @@ $session->setLastSeen();
 $regions = $session->getRegionsList();
 $categories = Category::getAllCategoryList();
 $siteName = Yii::$app->params['siteName'];
+if($about_company->view_banners == 1) $class = '';
+else $class = 'not_slider';
 
 if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
     $path = $siteName . '/backend/web/img/no-logo.png';
@@ -46,7 +48,7 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body class="<?=$class?>">
 <?php $this->beginBody() ?>
 
 	<?= $this->render('header.php', [
@@ -56,7 +58,7 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
 		'nowLanguage' => $nowLanguage,
 		'pathInfo' => $pathInfo,
 	]);?>
-
+	<div class="content_class">
 	<?= $pathInfo != '' && $pathInfo != 'site/search' && $pathInfo != 'profile/catalog' ? $this->render('filtr.php',[
 		'regions' => $regions,
 		'categories' => $categories,
@@ -66,6 +68,7 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company
 	<?= $this->render('content.php',
 	    ['content' => $content]
 	)?> 
+	</div>
 
 	<?= $this->render('footer.php', [
 		'about_company' => $about_company,

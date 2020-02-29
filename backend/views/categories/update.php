@@ -8,6 +8,8 @@ use yii\helpers\Html;
 <div class="categories-update">
     <?= $this->render('_form', [
         'model' => $model,
-        'titles'=>$titles,
+        'titles' => $titles,
+        'post' => $post,
+        'langs' => $langs,
     ]) ?>
 </div>

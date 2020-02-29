@@ -1,13 +1,14 @@
 <?php
 namespace api\modules\v1\models;
 
-
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use api\modules\v1\models\Currency;
 use api\modules\v1\models\Reyting;
+use api\modules\v1\models\Subcategory;
 use api\modules\v1\models\UsersReyting;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "ads".
@@ -106,6 +107,133 @@ class Ads extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getSearchAds($page,$query,$lang,$body)
+    {
+        $array = [];
+        $defaultPageSize = \Yii::$app->params['defaultPageSize'];
+        $v1 = Yii::$app->params['v1'];
+        $cont = Yii::$app->controller->id;
+        $action = Yii::$app->controller->action->id;
+        $url = $v1 . $cont . '/' . $action;
+
+        $category = $body['category'];
+        $sub = $body['sub'];
+        $type = $body['type'];
+        $text = $body['text'];
+        $region = $body['region'];
+        $price_to = $body['price_to'];
+        $price_do = $body['price_do'];
+        $sortingAds = $body['sortingAds']; 
+
+        $sort = [ 'id' => SORT_ASC ];
+        if(isset($sortingAds)){
+             if($sortingAds == 'date') $sort = [ 'date_cr' => SORT_ASC ];
+            else $sort = [ 'price' => SORT_ASC ];
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'defaultPageSize' => $defaultPageSize,
+                'page' => $page,
+            ],
+            'sort' => [
+                'defaultOrder' => $sort,
+            ],
+        ]);
+
+        if( $category != null ){
+            $query->andFilterWhere([
+                'category_id'=>$category,
+            ]);
+        }
+        if( $sub != null ){
+            $query->andFilterWhere([
+                'subcategory_id'=>$sub,
+            ]);
+        }
+
+        if( $step == 1)
+        {
+            if( isset($type) ){
+            $query->andFilterWhere([
+                'type'=>$type,
+            ]);
+            }
+            else {
+               $query->andFilterWhere([
+                    'type'=>2,
+                ]); 
+            }
+        }
+
+        // poisk
+        if(isset($region)) {
+            $query->andFilterWhere([
+                'ads.region_id' => $region,
+            ]);
+        }
+
+        if(isset($text)) {
+            $query->andFilterWhere(['like', 'ads.title', $text]);
+        }
+
+        if(isset($price_to) and isset($price_do)) {
+            $query->andFilterWhere(['between', 'price', $price_to,$price_do]);
+        }
+
+        foreach ($dataProvider->getModels() as $value) {
+            $array [] = [
+                'id' => $value->id,
+                'title' => $value->title,
+                'type' => $value->getTypeDescription(),
+                'old_price' => ($value->old_price != null) ? $value->price." ".$value->currency->name : "",
+                'price' => $value->price." ".$value->currency->name,
+                'address' =>$value->getAddress(),
+                'region' => $value->region->name,
+                'district' => $value->district->name,
+                'category' => $value->category->getTitleTranslates($value->category, $lang, 'title'),
+                'subcategory' => $value->category->getNameTranslates($value->subcategory, Yii::$app->language,'name'),
+                'text' => $value->text,
+                'reyting' => $value->user->getReyting(),
+                'confidence' => $value->user->getStarCount()."/"."5",
+                'date_cr' => $value->date_cr,
+                'premium' => $value->premium,
+            ];
+        }
+
+        $next = null;
+        $nextDataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'defaultPageSize' => $defaultPageSize,
+                'page' => $page + 1,
+            ]
+        ]);
+        if($nextDataProvider->getCount() > 0) $next = $url . "?page=".($page + 1);
+
+        $previous = null;
+        if($page > 0) {
+            $previousDataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                    'defaultPageSize' => $defaultPageSize,
+                    'page' => $page - 1,
+                ]
+            ]);
+            if($previousDataProvider->getCount() > 0) $previous = $url . "?page=".($page - 1);
+        }
+
+        return [
+            'page' => (integer)$page,
+            'count' => $dataProvider->getCount(),
+            //'max_page' => (integer) ($dataProvider->getTotalCount() / $defaultPageSize),
+            'nextPage' => $next,
+            'previousPage' => $previous,
+            'ads' => $array,
+        ];
+    }
+
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
@@ -185,21 +313,21 @@ class Ads extends \yii\db\ActiveRecord
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getComplaints()
-    {
-        return $this->hasMany(Complaints::className(), ['ads_id' => 'id']);
-    }
+    // /**
+    //  * @return \yii\db\ActiveQuery
+    //  */
+    // public function getComplaints()
+    // {
+    //     return $this->hasMany(Complaints::className(), ['ads_id' => 'id']);
+    // }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsersCatalogs()
-    {
-        return $this->hasMany(UsersCatalog::className(), ['ads_id' => 'id']);
-    }
+    // /**
+    //  * @return \yii\db\ActiveQuery
+    //  */
+    // public function getUsersCatalogs()
+    // {
+    //     return $this->hasMany(UsersCatalog::className(), ['ads_id' => 'id']);
+    // }
 
     public function getType()
     {
@@ -207,6 +335,15 @@ class Ads extends \yii\db\ActiveRecord
             1 => "Куплю",
             2 => "Продам",
         ];
+    }
+
+    public function getTypeDescription()
+    {
+        switch ($this->type) {
+            case 1: return "Куплю";
+            case 2: return "Продам";
+            default: return "Неизвестно";
+        }
     }
 
     public function getStatusList()
@@ -261,24 +398,6 @@ class Ads extends \yii\db\ActiveRecord
         else $date;
     }
 
-    public function getImage($for = '_form')
-    {
-        $adminka = Yii::$app->params['adminka'];
-        if($for =='_form') {
-            return $this->images ? '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .'">' : '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
-        }
-        if($for == '_columns') {
-           return $this->images  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $this->images .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
-        }
-        if($for == 'main_page') {
-            $siteName = Yii::$app->params['siteName'];
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $this->images)) {
-                return $siteName . '/backend/web/img/no-logo.png';
-            } else {
-                return $siteName . '/backend/web/uploads/ads/' . $this->images;
-            }
-        }
-    }
 
     public function upload()
     {
@@ -303,7 +422,7 @@ class Ads extends \yii\db\ActiveRecord
         }
         return false;
     }
-
+    
     public function getAddress()
     {
         if($this->region_id != null) {

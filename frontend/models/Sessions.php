@@ -30,11 +30,11 @@ class Sessions extends Model
         }
         else {
             if($item == 0){
-                if(isset($session['terms'][$item])) return '<a href="/privacy?key=' . $session['terms'][$item]['key'] . '" class="privacy-policy">' . $this->getFooterLangName($session['terms'][$item]['key']) . '</a>';
+                if(isset($session['terms'][$item])) return '<a href="/site/privacy?key=' . $session['terms'][$item]['key'] . '" class="privacy-policy">' . $this->getFooterLangName($session['terms'][$item]['key']) . '</a>';
                 else return null;
             }
             else {
-                if(isset($session['terms'][$item])) return '<a href="/privacy?key=' . $session['terms'][$item]['key'] . '" >' . $this->getFooterLangName($session['terms'][$item]['key']) . '</a>';
+                if(isset($session['terms'][$item])) return '<a href="/site/privacy?key=' . $session['terms'][$item]['key'] . '" >' . $this->getFooterLangName($session['terms'][$item]['key']) . '</a>';
                 else return null;
             }
         }
@@ -192,7 +192,7 @@ class Sessions extends Model
         return $session['news_adv'];
     }
 
-    public function getRegionsList()
+    /*public function getRegionsList()
     {
         $session = Yii::$app->session;
         if($session['regions'] == null) {
@@ -201,6 +201,58 @@ class Sessions extends Model
             return $session['regions'];
         }
         return $session['regions'];
+    }*/
+
+    public function getRegionsList()
+    {
+        $session = new Sessions();
+        $result = [];
+        $region = Regions::find()->all();
+        foreach ($region as $value) {
+            if(Yii::$app->language == 'kr') {
+                $result += [
+                    $value->id => $value->name,
+                ];
+            }
+            else {
+                $name = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'name');
+                $result += [
+                    $value->id => $name,
+                ];
+            }
+        }
+        return $result;
+    }
+
+    public function getAreaList()
+    {
+        $session = new Sessions();
+        $result = [];
+        $region = Regions::find()->all();
+        foreach ($region as $value) {
+            $distsList = [];
+            foreach (\common\models\Districts::find()->where(['region_id' => $value->id])->all() as $dist) {
+                $distsList +=[
+                    $dist->id => $dist->name,
+                ];
+            }
+            if(Yii::$app->language == 'kr') {
+                $result [] = [
+                    'id' => $value->id,
+                    'name' => $value->name,
+                    'districts' => $distsList,
+                ];
+            }
+            else {
+                $name = $session->getAllTranslates($value->tableName(), $value, Yii::$app->language, 'name');
+                $result [] = [
+                    'id' => $value->id,
+                    'name' => $name,
+                    'districts' => $distsList,
+                ];
+            }
+        }
+        return $result;
     }
 
     public function getCategoryName($categories, $cat_id, $sub_id)

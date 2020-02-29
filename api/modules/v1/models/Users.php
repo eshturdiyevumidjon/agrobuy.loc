@@ -456,7 +456,6 @@ class Users extends \yii\db\ActiveRecord
             'access_token' => $this->access_token,
             'expiret_at' => $this->expiret_at,
             'login' => $this->login,
-            'code_for_phone' => $this->code_for_phone,
         ];
         return $result;
     }
@@ -479,6 +478,82 @@ class Users extends \yii\db\ActiveRecord
             'passport_date' => $this->passport_date,
             'passport_issue' => $this->passport_issue,
             'passport_file' => $this->passport_file,
+            'inn' => $this->inn,
+            'company_name' => $this->company_name,
+            'company_files' => $this->company_files,
+        ];
+        return $result;
+    }
+    public function getUsersPersonalValues()
+    {
+        $result = [
+            'userId' => $this->id,
+            'fio' => $this->fio,
+            'birthday' => $this->birthday,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'instagram' => $this->instagram,
+            'facebook' => $this->facebook,
+            'telegram' => $this->telegram,
+            'web_site' => $this->web_site,
+        ];
+        return $result;
+    }
+
+    public function getAnotherUserProfile()
+    {
+        $result = [
+            'check_image' => $this->image != null ? true : false,
+            'image' => $this->image,
+            'check_fio' => $this->fio != null ? true : false,
+            'fio' => $this->fio,
+            'check_company_name' => $this->company_name != null ? true : false,
+            'company_name' => $this->company_name,
+            'check_phone'=> $this->phone != null ? true : false,
+            'phone' => $this->phone,
+            'check_email'=> $this->email != null ? true : false,
+            'email' => $this->email,
+            'check_instagram' => $this->instagram != null ? true : false,
+            'instagram' => $this->instagram,
+            'check_facebook'=> $this->facebook != null ? true : false,
+            'facebook' => $this->facebook,
+            'check_telegram'=> $this->telegram != null ? true : false,
+            'telegram' => $this->telegram,
+            'check_web_site'=> $this->web_site != null ? true : false,
+            'web_site' => $this->web_site,
+        ];
+        return $result;
+    }
+
+    public function getAnotherUserCategory()
+    {
+        $result = [
+            'category_id' => $this->category->id,
+            'category_title' => $this->category->title,
+            'category_image' => $this->category->image,
+        ];
+    }
+    public function getUsersStatusValues()
+    {
+        $result = [
+            'legal_status' => $this->legal_status,
+        ];
+        return $result;
+    }
+    public function getUsersPassportValues()
+    {
+        $result = [
+            'passport_serial_number' => $this->passport_serial_number,
+            'passport_number' => $this->passport_number,
+            'passport_date' => $this->passport_date,
+            'passport_issue' => $this->passport_issue,
+            'passport_file' => $this->passport_file,
+        ];
+        return $result;
+    }
+    public function getUsersYurPersonalValues()
+    {
+        $result = [
             'inn' => $this->inn,
             'company_name' => $this->company_name,
             'company_files' => $this->company_files,

@@ -10,7 +10,7 @@ $this->title = 'AgroBuy';
     ?>
 
     <?= $this->render('filtr', [
-        'regions' => $regions,
+        'districts' => $districts,
         'nowLanguage' => $nowLanguage,
         'categories' => $categories,
     ]) ?>
@@ -43,7 +43,6 @@ $this->title = 'AgroBuy';
             ?>
 
             <div class="swiper-container reclama">
-            <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
                     <?php foreach ($reklama as $value) { ?>
                         <a href="<?=$value->link?>" class="swiper-slide" data-swiper-autoplay="<?=$value->advertising->time * 1000 ?>">
@@ -52,10 +51,6 @@ $this->title = 'AgroBuy';
                     <?php } ?>
                 </div>
             </div>
-            <!-- <div class="reclama">
-                <img src="<?php //$reklama->getImage('main_page')?>" alt="<?=$reklama->title?>">
-                <p><?php //$reklama->title?></p>
-            </div> -->
 
             <?= count($newAds) > 0 ? 
                 $this->render('new_ads', [

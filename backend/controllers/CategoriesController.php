@@ -16,10 +16,8 @@ use backend\models\Lang;
 use yii\web\UploadedFile;
 use backend\models\Translates;
 
-
 class CategoriesController extends Controller
 {
-   
     public function behaviors()
     {
         return [
@@ -93,208 +91,152 @@ class CategoriesController extends Controller
         if($request->isAjax){
             
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($post) && $model->save()){
+            if($model->load($post) && $model->save()) {
                 $attr = Categories::NeedTranslation();
                 foreach ($langs as $lang) {
-                        $l = $lang->url;
-                        if($l == 'kr')
-                        {
-                            if(!$model->save())
-                              return [
+                    $l = $lang->url;
+                    if($l == 'kr') {
+                        if(!$model->save()) {
+                            return [
                                 'title'=> Yii::t('app','Create'),
                                 'content'=>$this->renderAjax('create', [
                                     'model' => $model,
+                                    'titles' => null,
+                                    'post' => $post,
+                                    'langs' => $langs,
                                 ]),
                                 'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                            Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
-                    
-                            ]; 
-                           else continue;
+                                Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
+                            ];
                         }
-                        foreach ($attr as $key=>$value) {
-                           $t=new Translates();
-                           $t->table_name=$model->tableName();
-                           $t->field_id=$model->id;
-                           $t->field_name=$key;
-                           $t->field_value=$post["Categories"][$value][$l];
-                           $t->field_description=$value;
-                           $t->language_code=$l;
-                           $t->save();
-                        }
+                        else continue;
+                    }
+                    foreach ($attr as $key=>$value) {
+                        $t = new Translates();
+                        $t->table_name = $model->tableName();
+                        $t->field_id = $model->id;
+                        $t->field_name = $key;
+                        $t->field_value = $post["Categories"][$value][$l];
+                        $t->field_description = $value;
+                        $t->language_code = $l;
+                        $t->save();
+                    }
                 }
                 
                 $model->trash = UploadedFile::getInstance($model,'trash');
                 $dir = 'uploads/category/';
-                if(!empty($model->trash))
-                {   
-                    if($model->trash != null && file_exists($dir.$model->trash))
-                    {
+                if(!empty($model->trash)) {   
+                    if($model->trash != null && file_exists($dir.$model->trash)) {
                         unlink(($dir.$model->trash));
                     }
-                    $name = $model->id."-".time();
-                  
-                    $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
-                    Yii::$app->db->createCommand()->update('category', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
+                    $name = $model->id . "-" . time();
+                    $model->trash->saveAs($dir . $name . '.' . $model->trash->extension);
+                    Yii::$app->db->createCommand()->update('category', ['image' => $name . '.' . $model->trash->extension], [ 'id' => $model->id ])->execute();
                 }
-                // return [
-                //         'title'=> Yii::t('app','Create'),
-                //         'content'=>$this->renderAjax('create', [
-                //             'model' => $model,
-                //             'post' => $_POST,
-                //         ]),
-                //         'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                //                     Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
-            
-                //     ];
                 return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];         
-            }else{           
+            }
+            else {           
                 return [
                     'title'=> Yii::t('app','Create'),
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'titles' => null,
+                        'post' => $post,
+                        'langs' => $langs,
                     ]),
                     'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
-        
                 ];         
             }
-        }else{
-           
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
-        }
-       
-    }
-    /**
-     * Displays a single Banners model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {   
-        $request = Yii::$app->request;
-
-        if($request->isAjax){
-            $model = $this->findModel($id);
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            $translations = Translates::find()->where(['table_name'=>$model->tableName(),'field_id'=>$model->id])->all();
-            foreach ($translations as $key => $value) {
-                $translation_title[$value->language_code] = $value->field_value;
-            }
-            return [
-                    'title'=>Yii::t('app','Category'),
-                    'content'=>$this->renderAjax('view', [
-                        'model'=>$model,
-                        'titles'=>$translation_title,
-                    ]),
-                    'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a(Yii::t('app','Edit'),['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-        }else{
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-            ]);
-        }
+        }       
     }
    
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
         $langs = Lang::getLanguages();
-        $post=$request->post();
+        $post = $request->post();
 
         if($request->isAjax){
-            $translations = Translates::find()->where(['table_name'=>$model->tableName(),'field_id'=>$model->id])->all();
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $translations = Translates::find()->where(['table_name' => $model->tableName(), 'field_id' => $model->id])->all();
             foreach ($translations as $key => $value) {
                 $translation_title[$value->language_code] = $value->field_value;
             }
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($model->load($request->post()) && $model->save()){
-                    $model->trash = UploadedFile::getInstance($model,'trash');
-                    $dir = 'uploads/category/';
-                    if(!empty($model->trash))
-                    {   
-                        if($model->trash != null && file_exists($dir.$model->trash))
-                        {
-                            unlink(($dir.$model->trash));
-                        }
-                        $name = $model->id."-".time();
-                      
-                        $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
-                        Yii::$app->db->createCommand()->update('category', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
+            if($model->load($request->post()) && $model->save()) {
+                $model->trash = UploadedFile::getInstance($model,'trash');
+                $dir = 'uploads/category/';
+                if(!empty($model->trash)) {   
+                    if($model->trash != null && file_exists($dir.$model->trash)) {
+                        unlink(($dir.$model->trash));
                     }
+                    $name = $model->id . "-" . time();
+                    $model->trash->saveAs($dir . $name . '.' . $model->trash->extension);
+                    Yii::$app->db->createCommand()->update('category', ['image' => $name . '.' . $model->trash->extension], [ 'id' => $model->id ])->execute();
+                }
 
                 $attr = Categories::NeedTranslation();
                 foreach ($langs as $lang) {
-                        $l = $lang->url;
-                        if($l == 'kr')
-                        {
-                           continue;
+                    $l = $lang->url;
+                    if($l == 'kr') {
+                       continue;
+                    }
+                    foreach ($attr as $key => $value) {
+                        $t = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id, 'language_code' => $l,'field_name' => $key]);
+                        if($t->count() == 1) {
+                            $tt = $t->one();
+                            $tt->field_value = $post["Categories"][$value][$l];
+                            $tt->save();
                         }
-                      foreach ($attr as $key=>$value) {
-                          $t = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id,'language_code' => $l,'field_name'=>$key]);
-                          if($t->count() == 1){
-                             $tt = $t->one();
-                             $tt->field_value=$post["Categories"][$value][$l];
-                             $tt->save();
-                           }
-                           else{
-                               $tt=new Translates();
-                               $tt->table_name=$model->tableName();
-                               $tt->field_id=$model->id;
-                               $tt->field_name=$key;
-                               $tt->field_value=$post["Categories"][$value][$l];
-                               $tt->field_description=$value;
-                               $tt->language_code=$l;
-                               $tt->save();
-                           }
-                      }
+                        else{
+                            $tt=new Translates();
+                            $tt->table_name = $model->tableName();
+                            $tt->field_id = $model->id;
+                            $tt->field_name = $key;
+                            $tt->field_value = $post["Categories"][$value][$l];
+                            $tt->field_description = $value;
+                            $tt->language_code = $l;
+                            $tt->save();
+                        }
+                    }
                 }
                 $translations = Translates::find()->where(['table_name'=>$model->tableName(),'field_id'=>$model->id])->all();
                 foreach ($translations as $key => $value) {
                     $translation_title[$value->language_code] = $value->field_value;
                 }
-                if($model->save())
+                if($model->save()) {
                     return [
-                        'forceReload'=>'#crud-datatable-pjax',
-                        'forceClose'=>true,
-                    ];  
-                else
+                        'forceReload' => '#crud-datatable-pjax',
+                        'forceClose' => true,
+                    ];
+                }
+                else {
                     return [
                         'title'=> Yii::t('app','Update'),
                         'size'=>'large',
                         'content'=>$this->renderAjax('update', [
                             'model' => $model,
-                            'titles'=>$translation_title,
+                            'titles' => $translation_title,
+                            'post' => $post,
+                            'langs' => $langs,
                         ]),
                         'footer'=> Html::button(Yii::t('app','Close'),['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                    Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
+                            Html::button(Yii::t('app','Save'),['class'=>'btn btn-primary','type'=>"submit"])
                     ];
+                }
             }else{
                  return [
                     'title'=> "Изменить",
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                         'titles'=>$translation_title,
+                        'post' => $post,
+                        'langs' => $langs,
                     ]),
                     'footer'=> Html::button('Закрыть',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Сохранить',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
-            }
-        }else{
-           
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+                ];
             }
         }
     }

@@ -17,10 +17,14 @@
         <input type="text" value="<?= isset($get['text']) ? $get['text'] : '' ?>" class="form-control" name="text" placeholder="<?= Yii::t('app',"So'rovingizni kiriting") ?>">
     </div>
     <div class="form-group select2-style">
-        <select class="js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="region">
+        <select class="js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="district">
             <option value="" selected><?= Yii::t('app',"Joylashuvi") ?></option>
-            <?php foreach ($regions as $region) { ?>
-                <option value="<?=$region->id?>" <?=$reg == $region->id ? 'selected' : ''?> ><?=$region->name?></option>
+            <?php foreach ($districts as $region) { ?>
+                <optgroup label="<?=$region['name']?>">
+                    <?php foreach ($region['districts'] as $key => $value) { ?>
+                        <option value="<?=$key?>" <?=$dist == $key ? 'selected' : ''?> ><?=$value?></option>
+                    <?php } ?>
+                </optgroup>
             <?php } ?>
         </select>
     </div>

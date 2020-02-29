@@ -99,7 +99,7 @@ class AppController extends \yii\rest\ActiveController
         return Yii::$app->user->identity->getUsersAllValues();
     }
 
-    // update qilih uchun 1-qadam
+    // update qilish uchun 1-qadam
     public function actionUpdatePersonal()
     {   
         $user_id = Yii::$app->user->identity->id;
@@ -109,7 +109,7 @@ class AppController extends \yii\rest\ActiveController
             $model->save();
             $response = \Yii::$app->getResponse();
             $response->setStatusCode(202);
-            return $model->getUsersAllValues();
+            return $model->getUsersPersonalValues();
         }
         else {
             throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE));
@@ -127,7 +127,7 @@ class AppController extends \yii\rest\ActiveController
             $model->save();
             $response = \Yii::$app->getResponse();
             $response->setStatusCode(202);
-            return $model->getUsersAllValues();
+            return $model->getUsersStatusValues();
         }
         else {
             throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE));
@@ -145,7 +145,7 @@ class AppController extends \yii\rest\ActiveController
             $model->save();
             $response = \Yii::$app->getResponse();
             $response->setStatusCode(202);
-            return $model->getUsersAllValues();
+            return $model->getUsersPassportValues();
         }
         else {
             throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE));
@@ -163,11 +163,21 @@ class AppController extends \yii\rest\ActiveController
             $model->save();
             $response = \Yii::$app->getResponse();
             $response->setStatusCode(202);
-            return $model->getUsersAllValues();
+            return $model->getUsersYurPersonalValues();
         }
         else {
             throw new HttpException(422, json_encode($model->errors, JSON_UNESCAPED_UNICODE));
         }
     }
- 
+
+    public function actionAnotherUserProfile($id)
+    {
+        $model = Users::find()->where(['id'=>$id])->one();
+        return $model->getAnotherUserProfile();
+    }
+ 	public function actionAnotherUserCategory($id)
+    {
+        $model = Users::find()->where(['id'=>$id])->one();
+        return $model->getAnotherUserCategory();
+    }
 }

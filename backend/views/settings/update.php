@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Settings */
-$this->title = Yii::t('app', 'Settings');
+$this->title = 'Ссылки подвала сайта';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/settings/index']];
 $this->params['breadcrumbs'][] = Yii::t('app','Update');
 ?>

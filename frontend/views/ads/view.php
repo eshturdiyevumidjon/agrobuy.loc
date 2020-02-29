@@ -66,12 +66,14 @@ foreach ($text as $key => $value) {
               	<div class="swiper-slide">
                 	<div class="item-product">
                   		<span class="star-item">
-                    		<?= $star ?>
+                    		  <?= $star ?>
                   		</span>
-                  		<div class="sub-prime premium">
-                    		<img src="/images/crown.png" alt="">
-                    		Премиум
-                  		</div>
+                      <?php if($ads->premium == 1) { ?>
+                    		  <div class="sub-prime premium">
+                      		    <img src="/images/crown.png" alt="">
+                      		    <?= Yii::t('app',"Pullik") ?>
+                    		  </div>
+                      <?php } ?>
                   		<a href="/ads/view?id=<?=$ads->id?>">
                     		<div class="item-product-img">
                       			<img src="<?=$ads->getImage('main_page')?>" alt="">
@@ -79,7 +81,7 @@ foreach ($text as $key => $value) {
                     		<h3><?=$ads->title?></h3>
                     		<p><?= Yii::t('app',"Kategoriya") ?>: <span><?=$ads->category->title?></span></p>
                     		<div class="discount">
-                      			<?php if($ads->old_price != null) { ?>
+                      			  <?php if($ads->old_price != null) { ?>
 	                                <s><?=$ads->old_price?> <?=$ads->currency->name?></s>
 	                                <b><?=$ads->price?> <?=$ads->currency->name?></b>
 	                            <?php } else {?>

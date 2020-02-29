@@ -20,7 +20,7 @@ CrudAsset::register($this);
 
             xmlhttp.onreadystatechange = function(){
                 if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-                    document.getElementById('chatLogs').innerHTML = xmlhttp.responseText;
+                    //document.getElementById('chatLogs').innerHTML = xmlhttp.responseText;
                 }
             }
             xmlhttp.open('GET', '/admin/chats/send-message?uname=' + uname + '&msg=' + msg, true);
@@ -56,21 +56,21 @@ CrudAsset::register($this);
       <div class="col-md-4">
         <div class="panel panel-inverse" data-sortable-id="index-4">
             <div class="panel-heading">
-                <h4 class="panel-title">Пользователи <span class="pull-right label label-success">Количество : <?= count(Chats::getUsersListChat())?></span>
+                <h4 class="panel-title">Пользователи <span class="pull-right label label-success">Количество : <?= count(Chats::getActiveChatList())?></span>
                   
                 </h4>
             </div>
-            <div class="content-frame-right" style="height: 505px;overflow-y: auto;">
+            <div class="content-frame-right" style="height: 580px; overflow-y: auto;">
                 <div class="list-group list-group-contacts border-bottom push-down-10">
-                    <?php foreach (Chats::getUsersListChat() as  $value) {
-                        $style = "";
-                        if($value['id'] == $active) $style = "#419FD9";
+                    <?php foreach (Chats::getActiveChatList() as $value) {
+                        $color = "";
+                        if($value['chat_id'] == $chat_id) $color = "#00acac";
                     ?>
-                        <a href="#" onclick="window.location.href='/admin/chats/index?chat_id=<?= $value['chat_id']?>'" class="list-group-item btnSetUsername"  style="background-color: <?=$style?>;">                                 
+                        <a href="#" onclick="window.location.href='/admin/chats/index?chat_id=<?= $value['chat_id']?>'" class="list-group-item btnSetUsername"  style="background-color: <?=$color?>;">                                 
                             <div class="list-group-status status-online"></div>
                             <img src="<?=$value['image']?>" class="pull-left" style="width: 48px; height: 48px; object-fit: cover; margin-right: 5px;">
                             <span class="contacts-title">
-                              <?=$value['fio']?>
+                              <b><?=$value['login']?></b>
                             </span> 
                             <?php if($value['count'] != 0):?>
                               <span class="btn btn-danger btn-icon btn-circle btn-xs">
@@ -78,11 +78,11 @@ CrudAsset::register($this);
                               </span>
                             <?php endif; ?>
                             <p>
-                              <?php if($value['last_message']): ?>
+                              <?php if($value['last_message']){ ?>
                                 <?=mb_substr($value['last_message'],0,30)."..";?>
-                              <?php else: ?>
+                              <?php } else{ ?>
                                 <b>Новый</b>
-                              <?php endif;?>
+                              <?php }?>
                             </p>
                         </a> 
                     <?php } ?>                               
@@ -94,25 +94,25 @@ CrudAsset::register($this);
         <div class="panel panel-inverse" data-sortable-id="index-2">
           <div class="panel-heading">
             <h4 class="panel-title">Чат 
-               <a href="/admin/chats/send-multiple" role="modal-remote" class="btn btn-primary btn-xs m-r-5 pull-right">Создать новый чат</a>
+               <a href="/admin/chats/send-multiple" role="modal-remote" class="btn btn-warning btn-xs m-r-5 pull-right">Рассылка <i class="fa fa-send"></i> </a>
             </h4>
           </div>
           <div class="panel-body bg-silver" id="pastga">
             <div class="slimScrollDiv">
-                <div data-scrollbar="true" data-height="225px" data-init="true" id="List" style="overflow-y: auto; width: auto; height: 420px;">
+                <div data-scrollbar="true" data-height="225px" data-init="true" id="List" style="overflow-y: auto; width: auto; height: 500px;">
                     <ul class="chats">
-                    
-                        <?php if($chat_live != null){ ?>
-                        <?php foreach ($chat_live as $value) {  $msg = str_replace("\n", "<br>", $value->message); 
-                            $clas = '';
-                            if($value->user_id == $user_id ) $clas = 'right'; else $clas = 'left';
+                        <?php 
+                            if($chat_live != null) { 
+                                foreach ($chat_live as $value) {
+                                    $msg = str_replace("\n", "<br>", $value->message); 
+                                    if($value->user_id == $user_id ) $class = 'right'; 
+                                    else $class = 'left';
                         ?>
-                          <li class="<?=$clas?>">
+                          <li class="<?=$class?>">
                               <span class="date-time"><?=date('d.m.Y H:i', strtotime($value->date_cr));?></span>
-                              <a href="javascript:;" class="name"><?= $value->user->fio?></a>
+                              <a href="javascript:;" class="name"><?= $value->user->login?></a>
                               <a href="javascript:;" class="image"><img alt="" src="<?=$value->user->getAvatar()?>" style="width: 48px; height: 48px; object-fit: cover;"></a>
                               <div class="message">
-
                                   <?= $msg?>
                               </div>
                           </li>
@@ -128,7 +128,7 @@ CrudAsset::register($this);
                   <form data-id="message-form" name="form1" autocomplete="off" method ='post' enctype='multipart/form-data'>
                      <input type="hidden" name="uname" id="uname" value="<?=$chat_id?>">
                       <div class="input-group">
-                          <textarea type="text" class="form-control input-sm"  name="msg" id="msg"  placeholder="Enter your message here." rows="1"> </textarea>
+                          <textarea type="text" class="form-control input-sm" name="msg" id="msg" placeholder="Enter your message here." rows="1"> </textarea>
                           <span class="input-group-btn">
                               <a href="#" class="btn btn-primary btn-sm" onclick="submitChat()"  type="button"><i class="fa fa-send"></i></a>
                           </span>

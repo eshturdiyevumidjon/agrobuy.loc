@@ -54,9 +54,12 @@ class LoginFormUser extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-        } 
-        else {
-            if(!$user || !$user->validatePassword($this->password)) {
+
+            if($user && $user->type != 3) {
+             //   $this->addError($attribute, 'Доступ только для пользователа');
+            }
+
+            elseif(!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Логин или пароль введен не верно.');
             }
         }

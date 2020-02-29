@@ -1,9 +1,7 @@
 <?php
-
-namespace backend\models;
+namespace api\modules\v1\models;
 
 use Yii;
-use common\models\Ads;
 
 /**
  * This is the model class for table "users_ball".
@@ -85,7 +83,7 @@ class UsersBall extends \yii\db\ActiveRecord
     }
 
     //eng yuqori ballga ega bolgan dastlabki 4 ta userning 4ta eng yangi elonini olish им доверяют ga kerak
-    public function getTrustedAds()
+    public static function getTrustedAds()
     {
         $adsId = [];
         $usersBall = UsersBall::find()->all();
@@ -131,12 +129,6 @@ class UsersBall extends \yii\db\ActiveRecord
             }
         }
 
-        $trustedAds = Ads::find()
-            ->joinWith(['category', 'user', 'currency'])
-            ->where(['in', 'ads.id', $adsId])
-            ->orderBy(['date_cr' => SORT_DESC])
-            ->all();
-
-        return $trustedAds;
+        return $adsId;
     }
 }

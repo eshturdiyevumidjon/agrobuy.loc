@@ -21,6 +21,8 @@ class Regions extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $translation_name;
+
     public static function tableName()
     {
         return 'regions';
@@ -34,6 +36,7 @@ class Regions extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
+            [['translation_name'],'safe'],
         ];
     }
 
@@ -48,8 +51,14 @@ class Regions extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function NeedTranslation()
+    {
+        return [
+            'name'=>'translation_name',
+        ];
+    }
 
- public function beforeDelete()
+    public function beforeDelete()
     {
         $subs = SubCategories::find()->where(['category_id' => $this->id])->all();
         foreach ($subs as $sub){
@@ -70,7 +79,7 @@ class Regions extends \yii\db\ActiveRecord
 
 
 
-     public function getSubcategories()
+    public function getSubcategories()
     {
         return $this->hasMany(Subcategory::className(), ['regions_id' => 'id']);
     }

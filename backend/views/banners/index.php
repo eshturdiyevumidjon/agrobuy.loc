@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use kartik\grid\GridView;
+use backend\models\AboutCompany;
 use johnitvn\ajaxcrud\CrudAsset; 
 use johnitvn\ajaxcrud\BulkButtonWidget;
 
@@ -14,6 +15,9 @@ $this->title = "Баннеры";
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
+$aboutCompany = AboutCompany::findOne(1);
+if($aboutCompany->view_banners == 1) $title = 'Отключить слайдера';
+if($aboutCompany->view_banners == 0) $title = 'Включить слайдера';
 
 ?>
 <div class="panel panel-inverse user-index">
@@ -36,7 +40,9 @@ CrudAsset::register($this);
                     'tableOptions' => ['class' => 'table table-bordered'],
                     'columns' => require(__DIR__.'/_columns.php'),
                     'panelBeforeTemplate' =>    Html::a('Добавить <i class="fa fa-plus"></i>', ['create'],
-                    ['role'=>'modal-remote','title'=> 'Добавить пользователя','class'=>'btn btn-success']).'&nbsp;',
+                    ['role'=>'modal-remote','title'=> 'Добавить пользователя','class'=>'btn btn-success']).'&nbsp;' . 
+                     Html::a($title, ['/about-company/edit-banner'],
+                    ['role'=>'modal-remote','title'=> 'Отключить/Включить слайдера','class'=>'btn btn-warning']),
                     'striped' => true,
                     'condensed' => true,
                     'responsive' => true,          

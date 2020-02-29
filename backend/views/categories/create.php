@@ -10,7 +10,8 @@ use yii\helpers\Html;
 <div class="categories-create">
     <?= $this->render('_form', [
         'model' => $model,
-        'titles'=>$titles,
-        'post'=>$post,
+        'titles' => null,
+        'post' => $post,
+        'langs' => $langs,
     ]) ?>
 </div>

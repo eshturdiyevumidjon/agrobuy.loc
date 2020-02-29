@@ -17,7 +17,6 @@
                   ['class' => '', 'id' => 'your_id'])->label(false); ?>
               </div>
 
-
               <div class="col-lg-4 col-sm-4 col-12">
                   <div class="form-group radio-style">
                     <input type="checkbox" name="add_catalog" value="1" <?=$catalog != null ? 'checked=""' : ''?> id="radi3">
@@ -45,9 +44,10 @@
                   <div class="attach">
                     <label for="rad"><?=Yii::t('app', "Foto biriktirish")?></label>
                     <span class="multiple-photos">
-                        <?=Yii::t('app', "Bir nechta rasmlarni yuklashingiz mumkin")?> <div class="fileinput-button dz-clickable"></div>
+                        <?php //Yii::t('app', "Bir nechta rasmlarni yuklashingiz mumkin")?> 
+                        <div class="fileinput-button dz-clickable"></div>
                     </span>
-                    <a href="#" id="ads_file_a_teg"><?=Yii::t('app', "Fayl qo'shish")?></a>
+                   <!--  <a href="#" id="ads_file_a_teg"><?php //Yii::t('app', "Fayl qo'shish")?></a> -->
                   </div> 
               </div>
             </div>
@@ -58,7 +58,9 @@
 
                   <?= $form->field($model, 'subcategory_id', ['options' => ['class' => 'form-group create-select-style']])->dropDownList($model->getSubcategoryListForSite($model->category_id),['class' => 'js-select2', 'placeholder' => Yii::t('app', "Tanlang"), 'id' => 'subcategory' ])->label(Yii::t('app', "Subkategoriyani tanlang")) ?>
 
-                  <?= $form->field($model, 'region_id', ['options' => ['class' => 'form-group create-select-style']])->dropDownList($model->getRegionsList(),['class' => 'js-select2', 'placeholder' => Yii::t('app', "Tanlang") ])->label(Yii::t('app', "Shahar,viloyat qo'shish")) ?>
+                  <?= $form->field($model, 'region_id', ['options' => ['class' => 'form-group create-select-style']])->dropDownList($model->getRegionsList(),['class' => 'js-select2', 'placeholder' => Yii::t('app', "Tanlang") , 'onchange' => '$.post( "/' . $nowLanguage . '/ads/districts?id="+$(this).val(), function( data ){ $( "select#district" ).html(data); });' ])->label(Yii::t('app', "Shahar,viloyat qo'shish")) ?>
+
+                  <?= $form->field($model, 'district_id', ['options' => ['class' => 'form-group create-select-style']])->dropDownList($model->getDistrictsList($model->region_id),['class' => 'js-select2', 'placeholder' => Yii::t('app', "Tanlang"), 'id' => 'district' ])->label(Yii::t('app', "Tumanni tanlang")) ?>
 
                     <?= $form->field($model, 'title', ['options' => ['class' => 'form-group create-input-style']])->textInput(['class' => 'form-control', 'maxlength' => 70])->label(Yii::t('app', "E'lon sarlavhasi")) ?>
 

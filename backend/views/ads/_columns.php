@@ -68,7 +68,7 @@ return [
         'attribute'=>'region_id',
         'filter' => Ads::getRegionsList(),
         'content'=>function($data){
-            return $data->getRegionsList()[$data->region_id];
+            return $data->getRegionsList()[$data->region_id] . ', ' . $data->getDistrictsListForAdmin()[$data->district_id];
         },
     ],
     // [

@@ -20,6 +20,7 @@ use common\models\Users;
 use common\models\HistoryOperations;
 use yii\web\UploadedFile;
 use \yii\web\Response;
+use common\models\Districts;
 
 class AdsController extends \yii\web\Controller
 {
@@ -257,6 +258,14 @@ class AdsController extends \yii\web\Controller
     {
         $subcategory = Subcategory::find()->where(['category_id' => $id])->all();
         foreach ($subcategory as $value) { 
+            echo "<option value = '".$value->id."'>".$value->name."</option>" ;            
+        }
+    }
+
+    public function actionDistricts($id)
+    {
+        $dis = Districts::find()->where(['region_id' => $id])->all();
+        foreach ($dis as $value) { 
             echo "<option value = '".$value->id."'>".$value->name."</option>" ;            
         }
     }

@@ -11,7 +11,7 @@ use yii\bootstrap\ActiveForm;
     <img src="<?=$path?>" alt="Logo" class="logo-popup-top">
     <h2><span><?= Yii::t('app',"Avtorizatsiya") ?></span></h2>
 
-    <?php $form = ActiveForm::begin([ 'options' => [ 'id' => 'login-form' ] ]); ?>
+    <?php $form = ActiveForm::begin([ 'options' => [ 'id' => 'login-form' ], 'enableAjaxValidation' => true, ]); ?>
 
         <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => Yii::t('app',"Login") ])->label(false) ?>
 

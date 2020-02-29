@@ -3,7 +3,7 @@ namespace api\modules\v1\models;
 
 use Yii;
 use api\modules\v1\models\Translates;
-use api\modules\v1\models\SubCategory;
+use api\modules\v1\models\Subcategory;
 use api\modules\v1\models\Ads;
 
 /**
@@ -110,7 +110,7 @@ class Category extends \yii\db\ActiveRecord
                     $result [] = [
                         'id' => $value->id,
                         'name' => $value->name,
-                        'count_sub_category' =>$this->getCountSubCategory($value->id), 
+                        'adsCount' =>$this->getCountSubCategory($value->id), 
                     ];
                 }
                 else {
@@ -118,7 +118,7 @@ class Category extends \yii\db\ActiveRecord
                     $result [] = [
                         'id' => $value->id,
                         'name' => $name,
-                        'count_sub_category' =>$this->getCountSubCategory($value->id), 
+                        'adsCount' =>$this->getCountSubCategory($value->id), 
                     ];
                 }
             }

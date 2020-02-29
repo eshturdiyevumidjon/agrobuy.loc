@@ -14,24 +14,20 @@ use common\models\Chats;
 
         <div class="panel panel-inverse" data-sortable-id="index-4">
             <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <input type="checkbox" name=""  value="" id="select_all"> 
-                            <label for="select_all" style="font-size:18px; color: white;">Все</label>
-                        </div>
-                       <!--  <div class="col-md-7">
-                            <input type="" class="form-control pull-right" name="" placeholder="Поиск" id="search_users_input"/>
-                        </div> -->
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="checkbox" name=""  value="" id="select_all"> 
+                        <label for="select_all" style="font-size: 18px; color: white;">Все</label>
                     </div>
+                </div>
             </div>
-            <div class="content-frame-right" style="height: 300px;overflow-y: auto;">
-            
+            <div class="content-frame-right" style="height: 300px; overflow-y: auto;">
                 <div class="list-group list-group-contacts border-bottom push-down-10">
-                    <?php foreach (Chats::getUsersList() as  $value) {?>
+                    <?php foreach (Chats::getUsersList() as $value) {?>
                         <a href="#" class="list-group-item" >                                 
-                            <img src="<?=$value['image']?>"  alt="Dmitry Ivaniuk" style="width: 38px; height: 38px; object-fit: cover; margin-right: 5px;">
-                            <span class="contacts-title"><?=$value['fio']?></span>
-                            <input type="checkbox" name="chat-users"  class="pull-right" value="<?= $value['id']?>">
+                            <img src="<?=$value['image']?>" alt="User Avatar" style="width: 38px; height: 38px; object-fit: cover; margin-right: 5px;">
+                            <span class="contacts-title"><?=$value['login']?></span>
+                            <input type="checkbox" name="chat-users[]" class="pull-right" value="<?= $value['id']?>">
                         </a> 
                     <?php } ?>                               
                 </div>

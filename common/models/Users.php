@@ -181,9 +181,9 @@ class Users extends \yii\db\ActiveRecord
     public function getAvatar()
     {
         if (!file_exists('uploads/avatars/'.$this->avatar) || $this->avatar == '') {
-            $path = 'http://' . $_SERVER['SERVER_NAME'].'/admin/img/nouser.png';
+            $path = 'https://' . $_SERVER['SERVER_NAME'].'/admin/img/nouser.png';
         } else {
-            $path = 'http://' . $_SERVER['SERVER_NAME'].'/admin/uploads/avatars/'.$this->avatar;
+            $path = 'https://' . $_SERVER['SERVER_NAME'].'/admin/uploads/avatars/'.$this->avatar;
         }
         return $path;
     }

@@ -20,7 +20,7 @@ use common\models\PreferenceBooks;
     <div class="panel-body">
         <table class="table table-bordered">
         <tr>
-            <td rowspan="6" style="width: 350px;"><?=$model->getImage('_form')?></td>
+            <td rowspan="6" style="width: 350px;"><?=$model->getImage()?></td>
             <th><?=$model->getAttributeLabel('type')?></th>
             <td><?=$model->getType()[$model->type]?></td>
             <th><?=$model->getAttributeLabel('title')?></th>
@@ -34,8 +34,8 @@ use common\models\PreferenceBooks;
         </tr>
          
         <tr>
-            <th><?=$model->getAttributeLabel('city_name')?></th>
-            <td><?=$model->city_name?></td>
+            <th><?=$model->getAttributeLabel('region_id')?></th>
+            <td><?=$model->getRegionsList()[$model->region_id]?></td>
             <th><?=$model->getAttributeLabel('date_cr')?></th>
             <td><?=PreferenceBooks::getDateTime($model->date_cr)?></td>
         </tr>

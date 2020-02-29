@@ -1,5 +1,9 @@
 $(document).ready(function () {
- 
+
+	var minh = $(window).height() - $('header').height() - $('footer').height() - 40 +'px';
+
+	$('.content_class').css('min-height', minh);
+
 	var swiper_recl = new Swiper('.swiper-container.reclama', {
       loop: true,
       autoplay: {

@@ -52,8 +52,8 @@ class LoginController extends \yii\rest\ActiveController
     public function actionLogin()
     {
         $body = Yii::$app->getRequest()->getBodyParams();
-        if(!isset($body['username'])) return ['error' => 1005];
-        if(!isset($body['password'])) return ['error' => 1006];
+        if(!isset($body['username'])) return ['username' => "You must enter username"];
+        if(!isset($body['password'])) return ['password' => "You must enter password"];
 
         $user_login = new LoginForm();
 
@@ -81,7 +81,8 @@ class LoginController extends \yii\rest\ActiveController
             $user->access_token = null;
             $user->save(false);
             Yii::$app->user->logout(false);
-            return true;
+            $arr = ['status' => true,];
+            return $arr;
         }
         throw new HttpException(422, "The reuestsed page does not exist.");
     }
@@ -107,10 +108,9 @@ class LoginController extends \yii\rest\ActiveController
     public function actionRegConfirmation()
     {   
         $body = Yii::$app->getRequest()->getBodyParams();
+        if(!isset($body['code'])) return ['code' => "You must enter code"];
         $model =  ForRegister::find()->where(['code'=>$body['code']])->one();
-        
-        $response = \Yii::$app->getResponse();
-        
+        if( $model == null ) return ['code' => "Код введен не верно"];
         if($model != null){
             $user = new Users();
             $user->login = $model->login;
