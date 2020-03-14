@@ -55,8 +55,15 @@ class LoginFormUser extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
 
+           /* echo "<pre>";
+            print_r(!$user);
+            echo "</pre>";
+            die;*/
+            /*echo "user = " . \Yii::$app->security->validatePassword($this->password, $user->password);
+            die;*/
+
             if($user && $user->type != 3) {
-             //   $this->addError($attribute, 'Доступ только для пользователа');
+                $this->addError($attribute, 'Доступ только для пользователа');
             }
 
             elseif(!$user || !$user->validatePassword($this->password)) {
@@ -75,6 +82,15 @@ class LoginFormUser extends Model
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }
         return false;
+    }
+
+    /**
+     * Logs in a user using the provided username and password.
+     * @return bool whether the user is logged in successfully
+     */
+    public function login2()
+    {
+        return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
     }
 
     /**

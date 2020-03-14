@@ -11,6 +11,8 @@ use yii\helpers\Html;
 use api\modules\v1\models\UsersBall;
 use api\modules\v1\models\Chats;
 use api\modules\v1\models\ChatUsers;
+use api\modules\v1\models\UsersReyting;
+use yii\db\Expression;
 
 
 class Users extends \yii\db\ActiveRecord
@@ -118,18 +120,18 @@ class Users extends \yii\db\ActiveRecord
                 $chat->type = 1;
                 $chat->save();
 
-                $chat1 = new ChatUsers();
-                $chat2 = new ChatUsers();
+                $chat_1 = new ChatUsers();
+                $chat_2 = new ChatUsers();
                 
-                $chat1->chat_id = $chat->id;
-                $chat2->chat_id = $chat->id;
-                $chat1->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
-                $chat2->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
-                $chat1->user_id = 1;
-                $chat2->user_id = $this->id;
+                $chat_1->chat_id = $chat->id;
+                $chat_2->chat_id = $chat->id;
+                $chat_1->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
+                $chat_2->date_cr = Yii::$app->formatter->asDate(time(),'php: Y-m-d H:i');
+                $chat_1->user_id = 1;
+                $chat_2->user_id = $this->id;
 
-                $chat1->save();
-                $chat2->save();
+                $chat_1->save();
+                $chat_2->save();
             }
         }
         parent::afterSave($insert, $changedAttributes);
@@ -145,206 +147,13 @@ class Users extends \yii\db\ActiveRecord
         return $path;
     }
 
-    /**
-     * @return bool
-     */
+   
 
     public function beforeDelete()
     {
         return parent::beforeDelete();
     }
 
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getAds()
-    // {
-    //     return $this->hasMany(Ads::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getAssessments()
-    // {
-    //     return $this->hasMany(Assessment::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getAssessments0()
-    // {
-    //     return $this->hasMany(Assessment::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getChatMessages()
-    // {
-    //     return $this->hasMany(ChatMessage::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getChatUsers()
-    // {
-    //     return $this->hasMany(ChatUsers::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getComplaints()
-    // {
-    //     return $this->hasMany(Complaints::className(), ['user_from' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getComplaints0()
-    // {
-    //     return $this->hasMany(Complaints::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getFavorites()
-    // {
-    //     return $this->hasMany(Favorites::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getHistoryOperations()
-    // {
-    //     return $this->hasMany(HistoryOperations::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getOrders()
-    // {
-    //     return $this->hasMany(Orders::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getUsersCatalogs()
-    // {
-    //     return $this->hasMany(UsersCatalog::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getUsersPromotions()
-    // {
-    //     return $this->hasMany(UsersPromotion::className(), ['user_id' => 'id']);
-    // }
-
-    // /**
-    //  * Gets query for [[UsersBalls]].
-    //  *
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getUsersBalls()
-    // {
-    //     return $this->hasMany(UsersBall::className(), ['user_from' => 'id']);
-    // }
-
-    // /**
-    //  * Gets query for [[UsersBalls0]].
-    //  *
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getUsersBalls0()
-    // {
-    //     return $this->hasMany(UsersBall::className(), ['user_to' => 'id']);
-    // }
-
-    // /**
-    //  * Gets query for [[UsersReytings]].
-    //  *
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getUsersReytings()
-    // {
-    //     return $this->hasMany(UsersReyting::className(), ['user_id' => 'id']);
-    // }
-
-    /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
-    public function upload()
-    {
-        if(!empty($this->image))
-        {   
-            if(file_exists('uploads/avatars/'.$this->avatar) && $this->avatar != null)
-            {
-                unlink('uploads/avatars/'.$this->avatar);
-            }
-
-            $fileName = time() . '_' . $this->image->baseName . '.' . $this->image->extension;
-            $this->image->saveAs('uploads/avatars/' . $fileName);
-            Yii::$app->db->createCommand()->update('users', ['avatar' => $fileName], [ 'id' => $this->id ])->execute();
-        }
-    }
-
-    /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
-    public function uploadPassport()
-    {
-        if(!empty($this->passport_image))
-        {   
-            if(file_exists('uploads/avatars/'.$this->passport_file) && $this->passport_file != null)
-            {
-                unlink('uploads/avatars/'.$this->passport_file);
-            }
-
-            $fileName = time() . '_' . $this->passport_image->baseName . '.' . $this->passport_image->extension;
-            $this->passport_image->saveAs('uploads/avatars/' . $fileName);
-            Yii::$app->db->createCommand()->update('users', ['passport_file' => $fileName], [ 'id' => $this->id ])->execute();
-        }
-    }
-
-    /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
-    public function uploadCompanyFiles()
-    {
-        if(!empty($this->company_image))
-        {   
-            if(file_exists('uploads/avatars/'.$this->company_files) && $this->company_files != null)
-            {
-                unlink('uploads/avatars/'.$this->company_files);
-            }
-
-            $fileName = time() . '_' . $this->company_image->baseName . '.' . $this->company_image->extension;
-            $this->company_image->saveAs('uploads/avatars/' . $fileName);
-            Yii::$app->db->createCommand()->update('users', ['company_files' => $fileName], [ 'id' => $this->id ])->execute();
-        }
-    }
-
-    public function downloadPassport()
-    {
-        if($this->passport_file == '' || $this->passport_file == null) {
-            return null; 
-        } else {
-            return Html::a($this->passport_file . ' <i class="fa fa-download"></i>', ['/users/send-file', 'file' => $this->passport_file],[ 'title'=> 'Скачать', 'data-pjax' => 0]); 
-        }
-    }
-
-    public function downloadCompanyFiles()
-    {
-        if($this->company_files == '' || $this->company_files == null) {
-            return null; 
-        } else {
-            return Html::a($this->company_files . ' <i class="fa fa-download"></i>', ['/users/send-file', 'file' => $this->company_files],[ 'title'=> 'Скачать', 'data-pjax' => 0]); 
-        }
-    }
 
     public function getDate($date)
     {
@@ -400,15 +209,15 @@ class Users extends \yii\db\ActiveRecord
         ];
     }
 
-    // public function getPromotions()
-    // {
-    //     return UsersPromotion::find()->where(['user_id' => $this->id])->all();
-    // }
+    public function getPromotions()
+    {
+        return UsersPromotion::find()->where(['user_id' => $this->id])->all();
+    }
 
-    // public function getHistories()
-    // {
-    //     return HistoryOperations::find()->where(['user_id' => $this->id])->all();
-    // }
+    public function getHistories()
+    {
+        return HistoryOperations::find()->where(['user_id' => $this->id])->all();
+    }
 
     // public function getAssessmentsList()
     // {
@@ -429,14 +238,19 @@ class Users extends \yii\db\ActiveRecord
 
     public function getReyting()
     {
-        return '000';
+        $usersReyting = UsersReyting::find()->where(['user_id' => $this->id])->all();
+        $reyting = 0;
+        foreach ($usersReyting as $value) {
+            $reyting += $value->ball;
+        }
+        return $reyting;
     }
 
     public function getAvatarForSite()
     {
         $siteName = Yii::$app->params['siteName'];
 
-        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/avatars/' . $this->avatar)) {
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/avatars/' . $this->avatar ) || $this->avatar == null) {
             $path = $siteName . '/backend/web/img/no-logo.png';
         } else {
             $path = $siteName . '/backend/web/uploads/avatars/' . $this->avatar;
@@ -444,11 +258,94 @@ class Users extends \yii\db\ActiveRecord
         return $path;
     }
 
+    public function getPassportFile()
+    {   
+    	// ---------------file multi bolganda kerak bu
+        // $siteName = Yii::$app->params['siteName'];
+        // $files = explode(',',$this->passport_file);
+        // $path = [];
+        // foreach ($files as $key => $value) {
+        //     if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $value)) {
+        //         $path [] = $siteName . '/backend/web/uploads/users/' . $value;
+        //     } 
+        // }
+        // return $path;
+
+        $siteName = Yii::$app->params['siteName'];
+
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/passports/' . $this->passport_file ) || $this->passport_file == null) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/users/passports/' . $this->passport_file;
+        }
+        return $path;
+    }
+
+    public function getCompanyFiles()
+    {   
+        $siteName = Yii::$app->params['siteName'];
+
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/companies/' . $this->company_files ) || $this->company_files == null) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/users/companies/' . $this->company_files;
+        }
+        return $path;
+    }
+
+
+    /*-------------------shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin---------------------*/
+    public function upload($path)
+    {
+        $fileName = $this->id.'_'. time() .'.'.$this->image->extension;
+        $file = $path.'/backend/web/uploads/avatars/' . $fileName;
+        if($this->image->saveAs($file)) {
+            if(file_exists($path.'/backend/web/uploads/avatars/'.$this->avatar))
+            {
+                 unlink($path.'/backend/web/uploads/avatars/'.$this->avatar);
+            }
+            $this->avatar = $fileName;
+            $this->save();
+            return [$this->getAvatarForSite() ];
+        }
+    }
+
+    /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
+    public function uploadPassport($path)
+    {   
+        $fileName = $this->id.'_'. time() .'.'.$this->passport_image->extension;
+        $file = $path.'/backend/web/uploads/users/passports/' . $fileName;
+        if($this->passport_image->saveAs($file)) {
+            if(file_exists($path.'/backend/web/uploads/users/passports/'.$this->passport_file))
+            {
+                 unlink($path.'/backend/web/uploads/users/passports/'.$this->passport_file);
+            }
+            $this->passport_file = $fileName;
+            $this->save();
+        }
+    }
+
+     /*shartli ravishda saqlanish joyi fiksrlangan, keyinchalik o;zgarishi mumkin*/
+    public function uploadCompanyFiles($path)
+    {   
+        $fileName = $this->id.'_'. time() .'.'.$this->company_image->extension;
+        $file = $path.'/backend/web/uploads/users/companies/' . $fileName;
+        if($this->company_image->saveAs($file)) {
+            if(file_exists($path.'/backend/web/uploads/users/companies/'.$this->company_files))
+            {
+                 unlink($path.'/backend/web/uploads/users/companies/'.$this->company_files);
+            }
+            $this->company_files = $fileName;
+            $this->save();
+        }
+    }
+
     // registratsiyadan o'tgan userdan qaytadigan ma'lumot
     public function getUsersMinValues()
     {
          $result = [
             'userId' => $this->id,
+            'avatar' => $this->getAvatarForSite(),
             'userType' => $this->type,
             'userTypeName' => $this->getTypeDescription(),
             'userFIO' => $this->fio,
@@ -460,11 +357,24 @@ class Users extends \yii\db\ActiveRecord
         return $result;
     }
 
+     // Catalogdagi userning ma'lumotlari
+    public function getUsersCatalog()
+    {
+         $result = [
+            'userId' => $this->id,
+            'avatar' => $this->getAvatarForSite(),
+            'userFIO' => $this->fio,
+            'company_name' => $this->company_name,
+        ];
+        return $result;
+    }
+
     public function getUsersAllValues()
     {
          $result = [
             'userId' => $this->id,
             'fio' => $this->fio,
+            'avatar' => $this->getAvatarForSite(),
             'birthday' => $this->birthday,
             'phone' => $this->phone,
             'email' => $this->email,
@@ -477,10 +387,10 @@ class Users extends \yii\db\ActiveRecord
             'passport_number' => $this->passport_number,
             'passport_date' => $this->passport_date,
             'passport_issue' => $this->passport_issue,
-            'passport_file' => $this->passport_file,
+            'passport_file' => $this->passport_file != null ? $this->getPassportFile() : [],
             'inn' => $this->inn,
             'company_name' => $this->company_name,
-            'company_files' => $this->company_files,
+            'company_files' => $this->company_files != null ? $this->getCompanyFiles() : [],
         ];
         return $result;
     }
@@ -488,6 +398,7 @@ class Users extends \yii\db\ActiveRecord
     {
         $result = [
             'userId' => $this->id,
+            'avatar' => $this->getAvatarForSite(),
             'fio' => $this->fio,
             'birthday' => $this->birthday,
             'phone' => $this->phone,
@@ -500,11 +411,11 @@ class Users extends \yii\db\ActiveRecord
         return $result;
     }
 
-    public function getAnotherUserProfile()
+    public function getUserProfile()
     {
         $result = [
             'check_image' => $this->image != null ? true : false,
-            'image' => $this->image,
+            'avatar' => $this->getAvatarForSite(),
             'check_fio' => $this->fio != null ? true : false,
             'fio' => $this->fio,
             'check_company_name' => $this->company_name != null ? true : false,
@@ -513,6 +424,8 @@ class Users extends \yii\db\ActiveRecord
             'phone' => $this->phone,
             'check_email'=> $this->email != null ? true : false,
             'email' => $this->email,
+            'check_passport' => $this->check_passport != null ? true : false,
+            'check_car' => $this->check_car != null ? true : false,
             'check_instagram' => $this->instagram != null ? true : false,
             'instagram' => $this->instagram,
             'check_facebook'=> $this->facebook != null ? true : false,
@@ -521,18 +434,12 @@ class Users extends \yii\db\ActiveRecord
             'telegram' => $this->telegram,
             'check_web_site'=> $this->web_site != null ? true : false,
             'web_site' => $this->web_site,
+            'starCount' => (int)$this->getStarCount(),
+            'reyting' => (int)$this->getReyting(),
         ];
         return $result;
     }
 
-    public function getAnotherUserCategory()
-    {
-        $result = [
-            'category_id' => $this->category->id,
-            'category_title' => $this->category->title,
-            'category_image' => $this->category->image,
-        ];
-    }
     public function getUsersStatusValues()
     {
         $result = [
@@ -547,20 +454,47 @@ class Users extends \yii\db\ActiveRecord
             'passport_number' => $this->passport_number,
             'passport_date' => $this->passport_date,
             'passport_issue' => $this->passport_issue,
-            'passport_file' => $this->passport_file,
+            'passport_file' => $this->passport_file != null ? $this->getPassportFile() : [],
         ];
         return $result;
     }
+
+    //  -------------------userning yuridchiseyky malumotlari --------------------------
     public function getUsersYurPersonalValues()
     {
         $result = [
-            'inn' => $this->inn,
+            'inn' => (int)$this->inn,
             'company_name' => $this->company_name,
-            'company_files' => $this->company_files,
+            'company_files' => $this->getCompanyFiles(),
         ];
         return $result;
     }
-    //  validatsiya pasport danniylar uchun
+
+    // ---------------------userning update oynasidagi reytingi---------------------------------
+    public function UsersReyting()
+    {
+        $usersReyting = UsersReyting::find()
+            ->select([new Expression('SUM(users_reyting.ball) as ball'), 'reyting_id',])
+            ->joinWith(['reyting'])
+            ->where(['user_id' => $this->id])
+            ->groupBy('reyting_id')
+            ->all();
+        $array = []; $summ = 0;
+        foreach ($usersReyting as $value) {
+            $summ +=$value->ball;
+            $array [] = [
+                'reason_calculation' => $value->reyting->name,
+                'calculation_formula' => '+' . $value->reyting->value . ' / ' . $value->reyting->value . ' ' . $value->reyting->getUnit()[$value->reyting->unit_id],
+                'reyting' => $value->ball,
+            ];
+        }
+        return [
+            'reyting' => $array,
+            'total' => $summ,
+        ];
+    }
+
+    //  --------------------validatsiya pasport danniylar uchun----------------------------------
     public function getPassportSeriaValidate($attribute)
     {
         $passport_serial_number = $this->passport_serial_number;
@@ -574,6 +508,7 @@ class Users extends \yii\db\ActiveRecord
         if($numeric != 2) $this->addError($attribute,'Вводите полностью полю «Серия паспорта»');
     }
 
+    //  -------------------------------- passportni nomerini validatsiya qilish ---------------------
     public function getPassportNumberValidate($attribute)
     {
         $passport_number = $this->passport_number;
@@ -587,6 +522,7 @@ class Users extends \yii\db\ActiveRecord
         if($numeric != 7) $this->addError($attribute,'Вводите полностью полю «Номер паспорта»');
     }
 
+    // ---------------------- Passport date validatsiya qilish ------------------------
     public function getPassportDateValidate($attribute)
     { 
         $now = date('Y');
@@ -595,7 +531,7 @@ class Users extends \yii\db\ActiveRecord
         $this->addError($attribute, 'Дата выдачи паспорта должна быть внутри ['.($now-10).', '.($now-0). ']');
     }
 
-    // Validatsiya INN
+    // ----------------------Validatsiya INN--------------------------------------------
     public function getInnValidate()
     {
         $inn = $this->inn;

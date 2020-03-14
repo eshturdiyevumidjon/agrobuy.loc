@@ -15,10 +15,18 @@ use yii\bootstrap\ActiveForm;
 
         <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'placeholder' => Yii::t('app',"Login") ])->label(false) ?>
 
-        <?= $form->field($model, 'password')->passwordInput(['placeholder' => Yii::t('app', "Parol")])->label(false) ?>
+        <?php // $form->field($model, 'password', ['options' => ['class' => 'form-group password_hidden']])->passwordInput(['placeholder' => Yii::t('app', "Parol")])->label(false) ?>
+        <!-- <span id="password_hidden_show"></span> -->
+
+        <div class="form_group password_hidden">
+            <?= $form->field($model, 'password')->label(false)->passwordInput([ 'type' => 'password', 'placeholder' => Yii::t('app', "Parol")])->label(false) ?>
+            <span id="password_hidden_show"></span>
+        </div>
 
         <div class="text-left">
-            <a href="#" class="link-popup"><?= Yii::t('app',"Parolni unutdingizmi?") ?></a>
+            <a href="#" data-touch="false" onclick="$.fancybox.close();" data-fancybox data-src="#recovery-password" value="/<?=$nowLanguage?>/site/recovery-password" class="link-popup recovery_password_class">
+                <?= Yii::t('app',"Parolni unutdingizmi?") ?>                
+            </a>
         </div>
 
         <button type="submit" class="btn-template"><?= Yii::t('app',"Avtorizatsiyadan o'tish") ?></button>
@@ -33,12 +41,28 @@ use yii\bootstrap\ActiveForm;
     <div id="registrationContent"></div>
 </div>
 
+<div id="recovery-password" style="display: none;" class="popup-style">
+    <div id="recoveryContent"></div>
+</div>
+
 <?php 
 $this->registerJs(<<<JS
 $(function () {
     $('.registration_class').on('click', function () {
         $('#registration').find('#registrationContent').load($(this).attr('value'));
-    });    
+    });
+    $('.recovery_password_class').on('click', function () {
+        $('#recovery-password').find('#recoveryContent').load($(this).attr('value'));
+    });
+    $('span#password_hidden_show').on('click', function(){
+        $(this).toggleClass('active');
+        if($(this).hasClass('active')){
+            $(this).prev().find('input').attr('type', 'text'); 
+        }
+        else{
+            $(this).prev().find('input').attr('type', 'password'); 
+        }
+    });
 });
 JS
 )

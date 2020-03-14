@@ -115,7 +115,7 @@ if (!file_exists('uploads/avatars/' . $model->avatar) || $model->avatar == null)
                 <th><?=Yii::t('app', 'Passport Issue')?></th>
                 <td><?=$model->passport_issue?></td>
                 <th><?=Yii::t('app', 'Passport File ')?></th>
-                <td><?=$model->passport_file?></td>
+                <td><?=Html::a('Скачать', ['/users/download-passport?id='.$model->id],['data-pjax'=>'0','title'=> 'Скачать', 'class' => 'btn-sm btn-warning'])?></td>
             </tr>        
         </table>
     </div>

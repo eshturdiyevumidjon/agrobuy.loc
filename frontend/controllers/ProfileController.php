@@ -27,33 +27,22 @@ use backend\models\UsersBall;
 use yii\web\UploadedFile;
 use \yii\web\Response;
 use common\models\Orders;
+use backend\models\AboutCompany;
 
 class ProfileController extends \yii\web\Controller
 {
-    public function behaviors()
+    public function beforeAction($action)
     {
-        return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['user', 'catalog'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
+        if( $action->id == 'index' || $action->id == 'edit' || $action->id == 'chat' || 
+            $action->id == 'edit' ||  $action->id == 'replenish' || $action->id == 'buy-promotion' ||
+            $action->id == 'complaint' || $action->id == 'star') {
+            if (Yii::$app->user->isGuest) { 
+                throw new HttpException(403,'У вас нет разрешения на доступ к этому действию.');
+            }
+        }
+
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 
     public function actionIndex()
@@ -74,7 +63,7 @@ class ProfileController extends \yii\web\Controller
     	$identity = Yii::$app->user->identity;
         $adsPagination = Yii::$app->params['adsPagination'];
         $promotions = Promotions::find()->all();
-        $history = HistoryOperations::find()->where(['user_id' => $identity->id])->all();
+        $history = HistoryOperations::find()->where(['user_id' => $identity->id])->orderBy(['id' => SORT_DESC])->all();
         $favorites = Favorites::find()->select('field_id')->where(['type' => 1, 'user_id' => $identity->id])->column();
 
         $searchModel = new AdsSearch();
@@ -95,10 +84,10 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionCatalog($user_id = null)
+    public function actionCatalog($login = null)
     {
-        if($user_id != null) {
-            $identity = User::findOne($user_id);
+        if($login != null) {
+            $identity = User::find()->where(['login' => $login])->one();;
             if($identity == null) throw new NotFoundHttpException('The requested page does not exist.');
         }
         else {
@@ -113,7 +102,7 @@ class ProfileController extends \yii\web\Controller
         $dataProvider = null;
         $searchModel = new AdsSearch();
         $adv = $session->getCatalogAdv();
-        $regions = $session->getRegionsList();
+        $districts = $session->getAreaList();
         $categories = Category::getAllCategoryList();
         $adsPagination = Yii::$app->params['adsPagination'];
         $usersCatalog = UsersCatalog::find()
@@ -121,10 +110,10 @@ class ProfileController extends \yii\web\Controller
             ->where(['users_catalog.user_id' => $identity->id])
             ->all();
 
-        $cat = null; $reg = null;
+        $cat = null; $dist = null;
         if($get) {
             if(isset($get['category'])) $cat = $get['category'];
-            if(isset($get['region'])) $reg = $get['region'];
+            if(isset($get['district'])) $dist = $get['district'];
         }
         
         $dataProvider = $searchModel->usersCatalogAds($usersCatalog, $get);
@@ -143,12 +132,12 @@ class ProfileController extends \yii\web\Controller
         return $this->render('catalog',[
             'identity' => $identity,
             'session' => $session,
-            'regions' => $regions,
+            'districts' => $districts,
             'cat' => $cat,
-            'reg' => $reg,
+            'dist' => $dist,
             'get' => $get,
-            'user_id' => $user_id,
-            'path' => Yii::$app->user->identity == null ? '/profile/user?id=' . $identity->id : '/profile',
+            'user_id' => $identity->id,
+            'path' => '/profile/user?id=' . $identity->id, //Yii::$app->user->identity == null ? '/profile/user?id=' . $identity->id : '/profile',
             'categories' => $categories,
             'reklama' => $reklama,
             'dataProvider' => $dataProvider,
@@ -168,6 +157,14 @@ class ProfileController extends \yii\web\Controller
         }
 
         if($model->load($request->post()) && $model->validate() && $model->save()) {
+            $model->passport_image = UploadedFile::getInstances($model, 'passport_image');
+            // if ($model->uploadsPassport()) { }
+            $model->UploadPassportImage($_POST);
+            $model->UploadCompanyImage($_POST);
+
+            // $model->company_image = UploadedFile::getInstances($model, 'company_image');
+            // if ($model->uploadsCompanyImages()) { }
+
             return $this->redirect(['/profile']);
         }
 
@@ -181,6 +178,7 @@ class ProfileController extends \yii\web\Controller
         return $this->render('_form',[
             'usersReyting' => $usersReyting,
             'model' => $model,
+            'post' => $_POST,
             'nowLanguage' => Yii::$app->language,
         ]);
     }
@@ -298,6 +296,67 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
+    public function actionBuyPromotion($id)
+    {
+        $request = Yii::$app->request;
+        $promotion = Promotions::findOne($id);
+        if($promotion->top) {
+            $usersAds = Ads::find()
+                ->where(['user_id' => Yii::$app->user->identity->id])
+                ->andWhere(['top' => 0, 'status' => 1])
+                ->all();
+        }
+        if($promotion->premium) {
+            $usersAds = Ads::find()
+                ->where(['user_id' => Yii::$app->user->identity->id])
+                ->andWhere(['premium' => 0, 'status' => 1])
+                ->all();
+        }
+
+        if($request->post()) {
+            $model = Ads::findOne($request->post()['ads']);
+            if($model != null) {
+                if($promotion->premium == 1) {
+                    $model->premium = 1;
+                    $model->premium_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
+                }
+                if($promotion->top == 1) {
+                    $model->top = 1;
+                    $model->top_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
+                }
+                $user = Users::findOne(Yii::$app->user->identity->id);
+                $user->balance = $user->balance - $promotion->price;
+                $user->save(false);
+                $model->save();
+
+                $history = new HistoryOperations();
+                $history->type = 2;
+                $history->field_id = "" . $promotion->id;
+                $history->summa = $promotion->price;
+                $history->save();                
+            }
+
+            return $this->redirect(['/profile']);
+        }
+        else {
+            $aboutCompany = AboutCompany::findOne(1);
+            $premiumCount = Ads::find()->where(['premium' => 1])->count();
+            $topCount = Ads::find()->where(['top' => 1])->count();
+            $status = 1;
+            $session = new Sessions();
+            if($premiumCount >= $aboutCompany->premium_ads_count) $status = 2;
+            if($topCount >= $aboutCompany->top_ads_count) $status = 2;
+
+            return $this->renderAjax('forms/_promotion_form', [
+                'promotion' => $promotion,
+                'status' => $status,
+                'session' => $session,
+                'usersAds' => $usersAds,
+                'nowLanguage' => Yii::$app->language,
+            ]);
+        }
+    }
+
     public function actionStar($id)
     {
         $this->getAccess();
@@ -326,23 +385,47 @@ class ProfileController extends \yii\web\Controller
         }
     }
 
-    /*public function actionAvatar()
+    public function actionRemovePassportFile($id, $path)
     {
-        $request = Yii::$app->request;
-        $identity = Yii::$app->user->identity;
-        $model = $this->findModel($identity->id);
-
-        if($model->load($request->post()) && $model->save()) {
-        echo "<pre>";
-        print_r($request->post());
-        echo "</pre>";
-        die;
-            $model->image = UploadedFile::getInstance($model, 'image');
-            $model->upload();
-
-            return ['message'=>'success'];    
+        $model = $this->findModel($id);
+        $array = explode(',', $model->passport_file);
+        $result = "";
+        foreach ($array as $value) {
+            if($path != $value) {
+                if($result == "") $result = $value;
+                else $result .= ',' . $value;
+            } else {
+                if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $path))
+                {
+                    unlink($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $path);
+                }
+            }
         }
-    }*/
+        $model->passport_file = $result;
+        $model->save();
+        return 1;
+    }
+
+    public function actionRemoveCompanyFile($id, $path)
+    {
+        $model = $this->findModel($id);
+        $array = explode(',', $model->company_files);
+        $result = "";
+        foreach ($array as $value) {
+            if($path != $value) {
+                if($result == "") $result = $value;
+                else $result .= ',' . $value;
+            } else {
+                if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $path))
+                {
+                    unlink($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $path);
+                }
+            }
+        }
+        $model->company_files = $result;
+        $model->save();
+        return 1;
+    }
 
     protected function getAccess()
     {
@@ -361,6 +444,51 @@ class ProfileController extends \yii\web\Controller
         }
     }
 
+    
+    // rasmlarni yuklash uchun
+    public function actionSaveImg()
+    {
+        $images = [];
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads_trash/';
+
+        for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+
+        $ext = "";
+        $ext = substr(strrchr($_FILES['file']['name'][$i], "."), 1); 
+
+        $fPath = $_POST['names'][$i];
+            if($ext != ""){
+               $images []= $fPath;
+               $result = move_uploaded_file($_FILES['file']['tmp_name'][$i], $uploadDir . $fPath);
+            }
+        }
+    }
+
+    // yuklangan passport fileni xotiradan o'chirish uchun
+    public function actionDeletePassportImage($value,$id)
+    {
+        if($id)
+        {
+            $model = $this->findModel($id);
+            $model->passport_file = Users::unlinkPassportFile($value,$model->passport_file);
+            $model->save(false);
+        }else{
+            Users::unlinkPassportFile($value);
+        }
+    }
+
+    // yuklangan company fileni xotiradan o'chirish uchun
+    public function actionDeleteCompanyImage($value,$id)
+    {
+        if($id)
+        {
+            $model = $this->findModel($id);
+            $model->company_files = Users::unlinkCompanyFile($value,$model->company_files);
+            $model->save(false);
+        }else{
+            Users::unlinkCompanyFile($value);
+        }
+    }
     protected function findModel($id)
     {
         if (($model = Users::findOne($id)) !== null) {
@@ -369,4 +497,6 @@ class ProfileController extends \yii\web\Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
 }

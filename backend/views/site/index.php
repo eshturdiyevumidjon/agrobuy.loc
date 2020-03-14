@@ -40,11 +40,11 @@ $this->title = 'Color Admin ';
                     <div class="widget widget-stats bg-purple">
                         <div class="stats-icon"><i class="fa fa-users"></i></div>
                         <div class="stats-info">
-                            <h4>UNIQUE VISITORS</h4>
-                            <p>1,291,922</p>    
+                            <h4>Сейчас онлайн</h4>
+                            <p><?=$onlineUsers?></p>    
                         </div>
                         <div class="stats-link">
-                            <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+                            <a href="javascript:;">Подробно <i class="fa fa-arrow-circle-o-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@ $this->title = 'Color Admin ';
                             <p>00:12:23</p> 
                         </div>
                         <div class="stats-link">
-                            <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+                            <a href="javascript:;">Подробно <i class="fa fa-arrow-circle-o-right"></i></a>
                         </div>
                     </div>
                 </div>

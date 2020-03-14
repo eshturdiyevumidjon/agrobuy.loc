@@ -8,6 +8,8 @@ use api\modules\v1\models\Currency;
 use api\modules\v1\models\Reyting;
 use api\modules\v1\models\Subcategory;
 use api\modules\v1\models\UsersReyting;
+use api\modules\v1\models\Favorites;
+use api\modules\v1\models\UsersCatalog;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -107,7 +109,7 @@ class Ads extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getSearchAds($page,$query,$lang,$body)
+    public static function getSearchAds($page,$query,$lang,$body,$step)
     {
         $array = [];
         $defaultPageSize = \Yii::$app->params['defaultPageSize'];
@@ -115,12 +117,14 @@ class Ads extends \yii\db\ActiveRecord
         $cont = Yii::$app->controller->id;
         $action = Yii::$app->controller->action->id;
         $url = $v1 . $cont . '/' . $action;
+        $card = $v1 . $cont . '/' . 'ads-card';
+        $user_id = Yii::$app->user->identity->id;
 
         $category = $body['category'];
         $sub = $body['sub'];
         $type = $body['type'];
         $text = $body['text'];
-        $region = $body['region'];
+        $district = $body['district'];
         $price_to = $body['price_to'];
         $price_do = $body['price_do'];
         $sortingAds = $body['sortingAds']; 
@@ -143,9 +147,19 @@ class Ads extends \yii\db\ActiveRecord
         ]);
 
         if( $category != null ){
-            $query->andFilterWhere([
-                'category_id'=>$category,
+            
+        	$result = [];
+            $result = Ads::find()->where(['top' => 1, 'status' => 1, 'category_id' => $category ])
+            				  ->select('id')->asArray()->all();
+
+		    foreach ($dataProvider->getModels() as $value) {
+                $result [] = $value->id;
+            }
+           	$query->andFilterWhere([
+                'in', 'ads.id', $result
             ]);
+
+
         }
         if( $sub != null ){
             $query->andFilterWhere([
@@ -168,9 +182,9 @@ class Ads extends \yii\db\ActiveRecord
         }
 
         // poisk
-        if(isset($region)) {
+        if(isset($district)) {
             $query->andFilterWhere([
-                'ads.region_id' => $region,
+                'ads.district_id' => $district,
             ]);
         }
 
@@ -186,19 +200,30 @@ class Ads extends \yii\db\ActiveRecord
             $array [] = [
                 'id' => $value->id,
                 'title' => $value->title,
-                'type' => $value->getTypeDescription(),
-                'old_price' => ($value->old_price != null) ? $value->price." ".$value->currency->name : "",
-                'price' => $value->price." ".$value->currency->name,
-                'address' =>$value->getAddress(),
+                'image' => $value->images != null ? $value->getAdsFiles() : null,
+                'type' => $value->type,
+                'typeName' => $value->getTypeDescription(),
+                'old_price' => $value->old_price,
+                'price' => $value->price,
+                'currencyId' =>$value->currency->id,
+                'currencyName' =>$value->currency->name,
+                // 'address' =>$value->getAddress(),
+                'regionId' => $value->region->id,
                 'region' => $value->region->name,
+                'districtId' => $value->district->id,
                 'district' => $value->district->name,
-                'category' => $value->category->getTitleTranslates($value->category, $lang, 'title'),
-                'subcategory' => $value->category->getNameTranslates($value->subcategory, Yii::$app->language,'name'),
+                'categoryId' => $value->category->id,
+                'categoryName' => $value->category->getTitleTranslates($value->category, $lang, 'title'),
+                'subcategoryId' => $value->subcategory->id,
+                'subcategoryName' => $value->category->getNameTranslates($value->subcategory, Yii::$app->language,'name'),
                 'text' => $value->text,
                 'reyting' => $value->user->getReyting(),
                 'confidence' => $value->user->getStarCount()."/"."5",
-                'date_cr' => $value->date_cr,
+                'date_cr' => date('d.m.Y', strtotime($value->date_cr) ),
                 'premium' => $value->premium,
+                'top' => $value->top,
+                'favorites' => $user_id != null ? $value->getFavorites($user_id) : 0,
+                'card_url' => $card.'?id='.$value->id,
             ];
         }
 
@@ -234,6 +259,82 @@ class Ads extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getAds($lang)
+    {   
+        $user_id = Yii::$app->user->identity->id;
+        $array = [];
+        $array = [
+                'id' => $this->id,
+                'title' => $this->title,
+                'image' => $this->images != null ? $this->getAdsFiles() : null,
+                'type' => $this->type,
+                'typeName' => $this->getTypeDescription(),
+                'old_price' => $this->old_price,
+                'price' => $this->price,
+                'currencyId' =>$this->currency->id,
+                'currencyName' =>$this->currency->name,
+                // 'address' =>$value->getAddress(),
+                'regionId' => $this->region->id,
+                'region' => $this->region->name,
+                'districtId' => $this->district->id,
+                'district' => $this->district->name,
+                'categoryId' => $this->category->id,
+                'categoryName' => $this->category->getTitleTranslates($this->category, $lang, 'title'),
+                'subcategoryId' => $this->subcategory->id,
+                'subcategoryName' => $this->category->getNameTranslates($this->subcategory, Yii::$app->language,'name'),
+                'text' => $this->text,
+                'reyting' => $this->user->getReyting(),
+                'confidence' => $this->user->getStarCount()."/"."5",
+                'date_cr' => date('d.m.Y', strtotime($this->date_cr) ),
+                'premium' => $this->premium,
+                'top' => $this->top,
+                'favorites' => $user_id != null ? $this->getFavorites($user_id) : 0,
+                
+            ];
+        return $array;
+    }
+
+    public function getAdsUserInformation($id)
+    {   
+        $v1 = Yii::$app->params['v1'];
+        $cont = Yii::$app->controller->id;
+        $card = $v1.'app/' . 'profile?id=';
+
+        if($this->user_id == $id){
+            return [
+                'avatar' => $this->user->getAvatarForSite(),
+                'userFio' => $this->user->fio,
+                'compnyName' => $this->user->company_name,
+                'starCount' => (int)$this->user->getStarCount(),
+                'reyting' => (int)$this->user->getReyting(),
+                'send_message' => false,
+                'phone'=>false,
+                'complain' => false,
+            ];
+        }
+        else {
+            return [
+                'avatar' => $this->user->getAvatarForSite(),
+                'userFio' => $this->user->fio,
+                'compnyName' => $this->user->company_name,
+                'starCount' => (int)$this->user->getStarCount(),
+                'reyting' => (int)$this->user->getReyting(),
+                'send_message' => true,
+                'phone'=>true,
+                'complain' => true,
+            ];
+        }
+    }
+
+    public static function Catalog_Url($id)
+    {
+        $v1 = Yii::$app->params['v1'];
+        $cont = Yii::$app->controller->id;
+        $card = $v1 . $cont . '/' . 'catalog?id='.$id;
+        return $card;
+
+    }
+
     public function beforeSave($insert)
     {
         if ($this->isNewRecord) {
@@ -258,6 +359,15 @@ class Ads extends \yii\db\ActiveRecord
         } 
         parent::afterSave($insert, $changedAttributes);
     }
+
+    public function getFavorites($id)
+    {   
+        $favorites = Favorites::find()->where(['user_id' => $id , 'type' => 1,'field_id' => $this->id])->one();
+        if($favorites != null) return 1;
+        return 0;
+    }
+
+
 
     /**
      * Gets query for [[Currency]].
@@ -313,21 +423,49 @@ class Ads extends \yii\db\ActiveRecord
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
 
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getComplaints()
+    //  public function getAdsFiles()
     // {
-    //     return $this->hasMany(Complaints::className(), ['ads_id' => 'id']);
+    //     $siteName = Yii::$app->params['siteName'];
+
+    //     if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $this->images)) {
+    //         $path = $siteName . '/backend/web/img/no-logo.png';
+    //     } else {
+    //         $path = $siteName . '/backend/web/uploads/ads/' . $this->images;
+    //     }
+    //     return $path;
     // }
 
-    // /**
-    //  * @return \yii\db\ActiveQuery
-    //  */
-    // public function getUsersCatalogs()
-    // {
-    //     return $this->hasMany(UsersCatalog::className(), ['ads_id' => 'id']);
-    // }
+        public function getAdsFiles()
+    {
+        $siteName = Yii::$app->params['siteName'];
+        $explode = explode(',', $this->images);
+        $result = [];
+        foreach ($explode as $file) {
+            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file;
+            if(file_exists($img) && $file != null)
+            {
+                $img = $siteName . '/backend/web/uploads/ads/' . $file;
+                $result [] = $img;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComplaints()
+    {
+        return $this->hasMany(Complaints::className(), ['ads_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsersCatalogs()
+    {
+        return $this->hasMany(UsersCatalog::className(), ['ads_id' => 'id']);
+    }
 
     public function getType()
     {
@@ -398,17 +536,25 @@ class Ads extends \yii\db\ActiveRecord
         else $date;
     }
 
-
-    public function upload()
+    public function upload($path)
     {
-        $this->imageFiles = UploadedFile::getInstance($this,'imageFiles');
-        if(!empty($this->imageFiles))
-        {
-            $name = $this->id . '-' . time();
-            $this->imageFiles->saveAs('uploads/ads/' . $name.'.'.$this->imageFiles->extension);
-            Yii::$app->db->createCommand()->update('ads', ['images' => $name.'.'.$this->imageFiles->extension], [ 'id' => $this->id ])->execute();
+        $fileName = $this->id . '-' . Yii::$app->security->generateRandomString() . '.' . $this->imageFiles->extension;
+        if($this->imageFiles != null) {
+            $this->imageFiles->saveAs($path.'/backend/web/uploads/ads/' . $fileName);
+            Yii::$app->db->createCommand()->update('ads', ['images' => $fileName], [ 'id' => $this->id ])->execute();
         }
     }
+
+    // public function upload()
+    // {
+    //     $this->imageFiles = UploadedFile::getInstance($this,'imageFiles');
+    //     if(!empty($this->imageFiles))
+    //     {
+    //         $name = $this->id . '-' . time();
+    //         $this->imageFiles->saveAs('uploads/ads/' . $name.'.'.$this->imageFiles->extension);
+    //         Yii::$app->db->createCommand()->update('ads', ['images' => $name.'.'.$this->imageFiles->extension], [ 'id' => $this->id ])->execute();
+    //     }
+    // }
 
     public function unlinkFile($file)
     {
@@ -432,5 +578,14 @@ class Ads extends \yii\db\ActiveRecord
             return $this->region->name;
         }
         else return '';
+    }
+
+    // ------------------  obnavleniya sozdat qilyotgnda user catalogga tushurish   --------------
+    public function setCheckCatalog()
+    {
+       $catalog = new UsersCatalog();
+       $catalog->ads_id = $this->id;
+       $catalog->user_id = Yii::$ap->user->identity->id;
+       $catalog->save();
     }
 }

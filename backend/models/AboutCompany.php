@@ -34,9 +34,8 @@ class AboutCompany extends \yii\db\ActiveRecord
             [['name', 'logo', 'mail', 'phone'], 'string', 'max' => 255],
             [['image'],'safe'],
             [['view_banners'],'integer'],
-            [['premium_ads_count'],'integer', 'min' => 8],
+            [['premium_ads_count','top_ads_count'],'integer', 'min' => 1],
             [['address'],'string'],
-            
         ];
     }
 
@@ -54,6 +53,7 @@ class AboutCompany extends \yii\db\ActiveRecord
             'phone' => 'Телефон',
             'view_banners' => "Баннеры вкл/отк",
             'premium_ads_count' => 'Макс. кол-во премиум объявлении',
+            'top_ads_count' => 'Количество топ объявлении',
         ];
     }
 

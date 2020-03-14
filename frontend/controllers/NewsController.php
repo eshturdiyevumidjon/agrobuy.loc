@@ -14,7 +14,6 @@ use yii\web\NotFoundHttpException;
 
 class NewsController extends \yii\web\Controller
 {
-
 	public function actionIndex()
     {
         $session = new Sessions();
@@ -28,6 +27,7 @@ class NewsController extends \yii\web\Controller
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
+            
         foreach ($reklama as $value) {
             $value->view_count = $value->view_count + 1;
             $value->save();
@@ -45,7 +45,7 @@ class NewsController extends \yii\web\Controller
     {
     	$news = $this->findModel($id);
     	$identity = Yii::$app->user->identity;
-
+        
         $slider = NewsSlider::find()->where(['news_id' => $id])->all();
         $sort = NewsSort::find()->where(['news_id' => $id])->all();
 

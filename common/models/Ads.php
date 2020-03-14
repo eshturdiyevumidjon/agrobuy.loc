@@ -10,6 +10,8 @@ use backend\models\Reyting;
 use backend\models\UsersReyting;
 use frontend\models\Sessions;
 use backend\models\SubCategories;
+use backend\models\Promotions;
+use backend\models\AboutCompany;
 
 /**
  * This is the model class for table "ads".
@@ -60,7 +62,7 @@ class Ads extends \yii\db\ActiveRecord
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr','comment', 'top_date', 'premium_date'], 'safe'],
-            [['type', 'title', 'currency_id', 'category_id', 'subcategory_id'], 'required'],
+            [['type', 'title', 'currency_id', 'category_id', 'subcategory_id','region_id', 'district_id'], 'required'],
             [['title', 'unit_price'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
@@ -400,7 +402,7 @@ class Ads extends \yii\db\ActiveRecord
             if(file_exists($img) && $file != null)
             {
                 $img = $siteName . '/backend/web/uploads/ads/' . $file;
-                $result .= '<div class="image_preview_class"><a href="#">x</a><span class="preview"><img src="' . $img . '"></span></div>';
+                $result .= '<div class="image_preview_class" id="'.$file . '_' . $this->id.'"><a class="img-ads" data-id="' . $this->id . '" data-path="' . $file . '" >x</a><span class="preview"><img src="' . $img . '"></span></div>';
             }
         }
         return $result;
@@ -435,50 +437,101 @@ class Ads extends \yii\db\ActiveRecord
 
     public function uploads()
     {
-        if(!empty($this->imageFiles))
-        {
-            $upload = [];
-            foreach ($this->imageFiles as $file) {
-                $fileName = $this->id . '-' . time() . '.' . $file->extension;
-                $file->saveAs('@backend/web/uploads/ads/' . $fileName);
-                $upload [] = $fileName;
-            }
+        if(!empty($this->imageFiles)) {
+            $string = '';
             $explode = explode(',', $this->images);
             foreach ($explode as $file) {
-                if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file) && $file != null)
-                {
-                    $upload [] = $file;
+                if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file) && $file != null) {
+                    if($string == '') $string = $file;
+                    else $string .= ',' . $file;
                 }
             }
-
-            $string = ''; $i = 0;
-            foreach ($upload as $file) {
-                if($i == 0) $string = $file;
-                else $string .= ',' . $file;
-                $i = 1;
+            
+            foreach ($this->imageFiles as $file) {
+                $fileName = $this->id . '-' . Yii::$app->security->generateRandomString() . '.' . $file->extension;
+                $file->saveAs('@backend/web/uploads/ads/' . $fileName);
+                if($string == '') $string = $fileName;
+                else $string .= ',' . $fileName;
             }
 
             $this->images = $string;
             $this->save(false);
-
             return true;
         } else {
             return false;
         }
     }
 
-    public function unlinkFile($file)
+    public function UploadImage($post)
     {
-        if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file) && $file != null)
+        $uploaded_files = $post['uploaded_files'];
+        $old_uploaded_files = $post['old_uploaded_files'];
+        $source_path = Yii::getAlias('@backend/web/uploads/ads_trash/');
+        $destination_path = Yii::getAlias('@backend/web/uploads/ads/');
+
+        if($uploaded_files != "")
         {
-            if( file_exists('uploads/ads/' . $file) ) unlink('uploads/ads/' . $file);
+            $images = explode(",",$uploaded_files);
+            $names= [];
+            foreach ($images as $value) {
+                if(file_exists($source_path.$value)){
+                    $ext = substr(strrchr($value, "."), 1); 
+                    $fileName = $this->id . '-' . Yii::$app->security->generateRandomString() . '.' . $ext;
+                    $names[] = $fileName;
+                    copy($source_path.$value, $destination_path . $fileName);
+                    unlink($source_path.$value);
+                }
+            }  
+            $new_images = implode(",", $names);
+            if($old_uploaded_files != ""){
+                $this->images = $old_uploaded_files . "," . $new_images;
+            }else{
+                $this->images = $new_images;
+            }
+        }elseif($old_uploaded_files != ""){
+            $this->images = $old_uploaded_files;
         }
+        
+        $this->save(false);
+    }
+
+    public static function unlinkFile($uploaded_files)
+    {
+        //$dir1 = Yii::getAlias('@backend/web/uploads/ads_trash/');
+        $dir2 = Yii::getAlias('@backend/web/uploads/ads/');
+
+        if($uploaded_files != "")
+        {
+            $images = explode(",",$uploaded_files);
+            foreach ($images as $value) {
+                if(file_exists($dir2 . $value)){
+                    unlink($dir2 . $value);
+                }
+            }
+        }
+
+        /*if(file_exists($dir1 . $file) && $file != null)
+        {
+            unlink($dir1 . $file);
+        }
+        elseif(file_exists($dir2 . $file) && $file != null)
+        {
+            $all_files = explode(",", $images);
+            $index = array_search($file, $all_files);
+            if($index !== false){
+                unset($all_files[$index]);
+            }
+            unlink($dir2 . $file);
+            return implode(",",$all_files);;
+        }*/
     }
 
     public function getStar($favorites)
     {
+        if(Yii::$app->user->identity->id != null) return false;
+
         foreach ($favorites as $value) {
-            if($value->field_id == $this->id) return true;
+            if($value->field_id == $this->id && Yii::$app->user->identity->id == $value->user_id) return true;
         }
         return false;
     }
@@ -492,5 +545,62 @@ class Ads extends \yii\db\ActiveRecord
             return $this->region->name;
         }
         else return '';
+    }
+
+    public function getPromotionList()
+    {
+        $result = [];
+        $aboutCompany = AboutCompany::findOne(1);
+        $premiumCount = Ads::find()->where(['premium' => 1, 'category_id' => $this->category_id])->count();
+        $topCount = Ads::find()->where(['top' => 1, 'category_id' => $this->category_id])->count();
+
+        $promotions = Promotions::find()->all();
+        //$idList = [];
+        foreach ($promotions as $value) {
+
+            if($value->premium == 1 && !$this->premium) {
+                if($premiumCount >= $aboutCompany->premium_ads_count) {
+                    $text = Yii::t('app', "Pullik xizmat vaqtinchalik mavjud emas. Administratorga murojaat qiling");
+                    $status = 2;
+                }
+                else {
+                    $text = $value->text;
+                    $status = 1;
+                }
+            }
+            if($value->premium == 1 && $this->premium) {
+                $text = Yii::t('app', "Siz bu pullik xizmatni sotib olgansiz. Muddat tugashini kuting");
+                $status = 3;
+            }
+
+            if($value->top == 1 && !$this->top) {
+                if($topCount >= $aboutCompany->top_ads_count) {
+                    $text = Yii::t('app', "Pullik xizmat vaqtinchalik mavjud emas. Administratorga murojaat qiling");
+                    $status = 2;
+                }
+                else {
+                    $text = $value->text;
+                    $status = 1;
+                }
+            }
+
+            if($value->top == 1 && $this->top) {
+                $text = Yii::t('app', "Siz bu pullik xizmatni sotib olgansiz. Muddat tugashini kuting");
+                $status = 3;
+            }
+
+            $result [] = [
+                'id' => $value->id,
+                'getImage' => $value->getImage('main_page'),
+                'name' => $value->name,
+                'text' => $text,
+                'price' => $value->price,
+                'status' => $status,
+            ];
+            //if($value->premium == 1 && !$this->premium) $idList [] = $value->id;
+            //if($value->top == 1 && !$this->top) $idList [] = $value->id;
+            //return Promotions::find()->where(['in', 'id', $idList])->all();
+        }
+        return $result;
     }
 }

@@ -107,7 +107,7 @@ class Promotions extends \yii\db\ActiveRecord
         if($for == 'main_page') {
             $siteName = Yii::$app->params['siteName'];
             if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/promotions/' . $this->image)) {
-                return $siteName . '/backend/web/img/no-logo.png';
+                return $siteName . '/backend/web/img/noimg.png';
             } else {
                 return $siteName . '/backend/web/uploads/promotions/' . $this->image;
             }

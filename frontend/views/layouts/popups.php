@@ -58,17 +58,6 @@ use yii\helpers\Html;
       <div id="avtorizationContent"></div>
     </div>
 
-    <div id="recovery-password" style="display: none;" class="popup-style">
-      <img src="/images/logo.png" alt="" class="logo-popup-top">
-      <h2>Востановление <br><span>пароля</span></h2>
-      <form>
-        <div class="form-group">
-          <input type="tel" class="form-control" placeholder="+ 998 __ ___ __ __">
-        </div>
-        <button type="submit" class="btn-template">Востановить пароль</button>
-      </form>
-    </div>
-
     <div id="logout-popup" style="display: none;" class="popup-style">
       <h2><?=Yii::t('app', 'Saytdan chiqish')?></h2>
       <p><?=Yii::t('app', 'Siz haqiqatdan ham saytdan chiqmoqchimisiz?')?></p>
@@ -99,4 +88,8 @@ use yii\helpers\Html;
 
     <div id="delete-chats-popup" style="display: none;" class="popup-style">
         <div id="deleteChatsContent"></div>
+    </div>
+
+    <div id="ad-promotion-tab" style="display: none;" class="popup-style">
+        <div id="promotionContent"></div>
     </div>

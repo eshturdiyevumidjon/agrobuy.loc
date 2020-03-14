@@ -268,6 +268,29 @@ class AdsSearch extends Ads
             $query->andFilterWhere(['like', 'ads.title', $get['text']]);
         }
 
+        if(isset($get['category'])) {
+            $ads = Ads::find()->where(['top' => 1, 'status' => 1, 'category_id' => $get['category'] ])->all();
+            $result = [];
+            foreach ($ads as $value) {
+                $result [] = $value->id;
+            }
+            foreach ($dataProvider->getModels() as $value) {
+                $result [] = $value->id;
+            }
+
+            $query = Ads::find()
+                ->joinWith(['category', 'user', 'currency'])
+                ->where(['in', 'ads.id', $result])
+                ->orderBy(['top' => SORT_DESC]);
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'sort' => [
+                    'defaultOrder' => $sort,
+                ],
+            ]);
+        }
+
         return $dataProvider;
     }
 
@@ -280,7 +303,7 @@ class AdsSearch extends Ads
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => [
-                'defaultOrder' => [ 'date_cr' => SORT_DESC ],
+                'defaultOrder' => [ 'id' => SORT_DESC ],
             ],
         ]);
 
@@ -313,6 +336,9 @@ class AdsSearch extends Ads
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [ 'id' => SORT_DESC ],
+            ],
         ]);
 
         if(isset($get['category'])) {
@@ -321,9 +347,9 @@ class AdsSearch extends Ads
             ]);
         }
 
-        if(isset($get['region'])) {
+        if(isset($get['district'])) {
             $query->andFilterWhere([
-                'ads.region_id' => $get['region'],
+                'ads.district_id' => $get['district'],
             ]);
         }
 

@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+$this->title = Yii::t('app',"Hisobni to'ldirish");
 ?>
 
 <section class="replenish">

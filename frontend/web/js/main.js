@@ -1,5 +1,18 @@
 $(document).ready(function () {
 
+  // $('.form-group.password_hidden').after($('span#password_hidden_show'))
+
+  $('span#password_hidden_show').on('click', function(){
+    $(this).toggleClass('active');
+    if($(this).hasClass('active')){
+      $(this).prev().find('input').attr('type', 'text'); 
+    }
+    else{
+      $(this).prev().find('input').attr('type', 'password'); 
+    }
+  })
+
+
 	var minh = $(window).height() - $('header').height() - $('footer').height() - 40 +'px';
 
 	$('.content_class').css('min-height', minh);
@@ -17,10 +30,20 @@ $(document).ready(function () {
     $('input#ads-imagefiles').trigger('click')
   })
 
-  $('#ads_file_a_teg').on('click', function(e){
+  $('.fileinput-button.dz-clickable.passport_image').on('click', function(event){
+    event.stopPropagation()
+    $('input#users-passport_image').trigger('click')
+  })
+
+  $('.fileinput-button.dz-clickable.company_image').on('click', function(event){
+    event.stopPropagation()
+    $('input#users-company_image').trigger('click')
+  })
+
+  /*$('#ads_file_a_teg').on('click', function(e){
     e.preventDefault()
     $('button#ads_file').trigger('click')
-  })
+  })*/
 
   $('#ads_file_a_teg1').on('click', function(e){
     e.preventDefault()
@@ -120,10 +143,10 @@ $(document).ready(function () {
     $(this).toggleClass('active')
   })
 
-  $('span#dropdownMenuButton').on('click', function(){
+  /*$('span#dropdownMenuButton').on('click', function(){
     $(this).toggleClass('actived');
     $('.drops').slideToggle(100);
-  })
+  })*/
 
   // $('.pp span:nth-child(5)').trigger('click')
 

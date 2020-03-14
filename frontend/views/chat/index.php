@@ -2,7 +2,11 @@
 
 use yii\widgets\Pjax;
 
+$this->title = 'Чат';
+$lang = Yii::$app->language;
+
 ?>
+
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script>  
     $(document).keypress(function (e) {
@@ -52,10 +56,39 @@ use yii\widgets\Pjax;
             submitChat();
             event.preventDefault();
         });
+
+        $('#input-file').change(function(){ 
+           var data = new FormData() ; 
+           data.append('file', $( '#input-file' )[0].files[0]) ; 
+           data.append('chat_id', $( '#chat-id' ).val()) ; 
+           $.ajax({
+             url: '/<?=$lang?>/chat/send-file',
+             type: 'POST',
+             data: data,
+             cache: false,
+             contentType: false,
+             processData: false,
+             success : function(data){
+                var messageJSON = {
+                    chat_id: $('#chat-id').val(),
+                    chat_class: $('#chat-class').val(),
+                    chat_user_id: $('#chat-user_id').val(),
+                    chat_user_avatar: $('#chat-user_avatar').val(),
+                    chat_message: data
+                };
+                websocket.send(JSON.stringify(messageJSON));
+                $.pjax.reload({container: "#chat-main-pjax", timeout: false});
+                $.pjax.reload({container: "#profile-chat-pjax", timeout: false});
+                $.pjax.reload({container: "#mobile-chat-pjax", timeout: false});
+            },
+           });
+          return false;
+        });
+
     });
 
     function submitChat() {
-        if($('#chat-message<?=$identity->id?>').val() == '' || $('#chat-message<?=$identity->id?>').val() == '' ) {
+        if($('#chat-message<?=$identity->id?>').val() == '') {
           //alert("Пожалуйста введите текст");
         }
         else {
@@ -79,11 +112,11 @@ use yii\widgets\Pjax;
 
 <section class="chat">
     <div class="container">
-        <div class="chat-main visible-chat">
+        <div class="chat-main <?=$nowChatId != null ? 'visible-chat' : '' ?> ">
             <?php Pjax::begin(['id' => 'chat-main-pjax']); ?>
             <div class="chat-main-left">
                 <?php foreach ($chatList as $value) { ?>
-                  <div class="item-chat">
+                  <div class="item-chat <?=$value['chat_type'] == 1 ? 'admin_chat' : ''?> ">
                       <a href="/chat?chat=<?=$value['chat_id']?>" class="<?= $chat == $value['chat_id'] ? 'active' : $value['chat_id'] ?>">
                           <div class="img-chat-user">
                               <img src="<?=$value['image']?>" alt="User Avatar">
@@ -101,9 +134,9 @@ use yii\widgets\Pjax;
                                   <?=$value['last_message']?>
                                   <div class="last_message_date"><?=$value['date_cr']?></div>
                               </p>
-                              <!-- <span>Продажа малинки</span> -->
                           </div>
                       </a>
+                      <?php if($value['chat_type'] != 1) {?>
                       <div class="btn-group">
                           <button type="button" class="" data-toggle="dropdown">
                               <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><circle cx="256" cy="256" r="64"/><circle cx="256" cy="448" r="64"/><circle cx="256" cy="64" r="64"/>
@@ -115,6 +148,7 @@ use yii\widgets\Pjax;
                               <a href="#" data-touch="false" data-fancybox data-src="#send-complaint" value="/<?=$nowLanguage?>/profile/complaint?user_id=<?=$value['id']?>" class="dropdown-item complaint_class"><?= Yii::t('app',"Shikoyat qilish") ?></a>
                           </div>
                       </div>
+                      <?php }?>
                   </div>
                 <?php } ?>
             </div>
@@ -148,7 +182,7 @@ use yii\widgets\Pjax;
                         <?php } ?>
                     </div>
                     <div class="inputs-chat">
-                        <input type="file" id="input-file">
+                        <input id="input-file" type="file" name="myfile" />
                         <label for="input-file">
                             <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="m446.66 37.298c-49.731-49.731-130.64-49.731-180.37 0l-189.91 189.91c-5.861 5.861-5.861 15.356 0 21.217s15.356 5.861 21.217 0l189.91-189.91c36.865-36.836 101.07-36.836 137.94 0 38.023 38.023 38.023 99.901 0 137.92l-265.18 268.17c-22.682 22.682-62.2 22.682-84.881 0-23.4-23.4-23.4-61.467 0-84.867l254.58-257.58c8.498-8.498 23.326-8.498 31.825 0 8.776 8.776 8.776 23.063 0 31.84l-243.95 246.95c-5.06 5.06-5.06 16.156 0 21.217 5.861 5.861 15.356 5.861 21.217 0l243.95-246.95c20.485-20.485 20.485-53.789 0-74.273-19.839-19.839-54.449-19.81-74.258 0l-254.58 257.58c-34.826 34.826-34.826 92.474 0 127.3 17.012 17.012 39.62 26.175 63.664 26.175s46.654-9.163 63.651-26.174l265.18-268.17c49.731-49.731 49.731-130.63 1e-3 -180.36z"/>
                             </svg>
@@ -175,3 +209,20 @@ use yii\widgets\Pjax;
         </div>        
     </div>
 </section>
+
+<?php
+$this->registerJs(<<<JS
+
+$(document).ready(function(){
+  $('#chat-message$identity->id').keydown(function (e) {
+    if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) {
+      var text = $(this).val();
+      val = text + "\\n";
+      text = text +"\\n";
+      $(this).val(text);
+    }
+  });
+});
+JS
+);
+?>

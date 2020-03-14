@@ -6,6 +6,10 @@ use Yii;
 use api\modules\v1\models\Translates;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
+use api\modules\v1\models\NewsSlider;
+use api\modules\v1\models\NewsSort;
+
+
 
 
 /**
@@ -172,6 +176,19 @@ class News extends \yii\db\ActiveRecord
         return $title;
     }
 
+    public static function getAllTranslates($value,$lang ,$column )
+    {
+        $title = Translates::find()
+            ->where(['table_name' => $value->tableName(),'field_id' => $value->id,'field_name'=>$column, 'language_code' => $lang])
+            ->one()->field_value;
+
+            if($title == null){
+                $title = $value->$column;
+            }
+
+        return $title;
+    }
+
     public static function getAllNewsList($page,$query,$lang)
     {
         $array = [];
@@ -180,6 +197,7 @@ class News extends \yii\db\ActiveRecord
         $cont = Yii::$app->controller->id;
         $action = Yii::$app->controller->action->id;
         $url = $v1 . $cont . '/' . $action;
+        $card = $v1 . $cont;
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -209,6 +227,7 @@ class News extends \yii\db\ActiveRecord
                     'text' => $value->text,
                     'image' => $path,
                     'date' => date('d.m.Y', strtotime($value->date)),
+                    'card_url' => $card.'/news-card?id='.$value->id,
                 ];
             }
             else {
@@ -219,7 +238,8 @@ class News extends \yii\db\ActiveRecord
                     'title' => $title,
                     'text' => $text,
                     'image' => $path,
-                    'date' => date('d.m.Y', strtotime($value->date))
+                    'date' => date('d.m.Y', strtotime($value->date)),
+                    'card_url' => $card.'/news-card?id='.$value->id,
                 ];
             }
         }
@@ -254,6 +274,128 @@ class News extends \yii\db\ActiveRecord
             'previousPage' => $previous,
             'news' => $result,
         ];
+    }
+
+    // ------------------------------------News jadvalini cartichkasi uchun qilingan funksiya bu--------------------------
+    public function getNewsCard($lang)
+    {   
+        $siteName = Yii::$app->params['siteName'];
+        $result = [];
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/news/' . $this->image) || $this->image == null) {
+                $path = $siteName . '/backend/web/img/no-logo.png';
+            } 
+            else {
+                $path = $siteName . '/backend/web/uploads/news/' . $this->image;
+            }
+            if( $lang == 'kr') {
+                $result = [
+                    'id' => $this->id,
+                    'title' => $this->title,
+                    'text' => $this->text,
+                    'video' => $this->video,
+                    'video_title' => $this->video_title,
+                    'image' => $path,
+                    'sort_title' => $this->sort_title,
+                    'sort_items' => explode(',', $this->sort_items),
+                    'landing_title' => $this->landing_title,
+                    'landing_text' => $this->landing_text,
+                    'important' => $this->important,
+                    'growing_title' => $this->growing_title,
+                    'growing_text' => $this->growing_text,
+                    'growing_items' => explode(',', $this->growing_items),
+                    'description' => $this->description,
+                    'fone' => $this->getImageFone(),
+                    'type' => $this->data_type,
+                    'date' => date('d.m.Y', strtotime($this->date)),
+                    'slider'=> $this->getNewsSlider(),
+                    'news_sort'=> $this->getNewsSort(),
+                ];
+            }
+            else {
+                $news = News::findOne($this->id);
+                $title = $this->TranslatesTitle($news, $lang);
+                $text = $this->TranslatesText($news, $lang);
+                $sort_title = $this->getAllTranslates($news, $lang, 'sort_title');
+                $sort_items = explode(',',$this->getAllTranslates($news, Yii::$app->language, 'sort_items'));
+                $landing_title = $this->getAllTranslates($news, Yii::$app->language, 'landing_title');
+                $landing_text = $this->getAllTranslates($news, Yii::$app->language, 'landing_text');
+                $important = $this->getAllTranslates($news, Yii::$app->language, 'important');
+                $growing_title = $this->getAllTranslates($news, Yii::$app->language, 'growing_title');
+                $growing_text = $this->getAllTranslates($news, Yii::$app->language, 'growing_text');
+                $growing_items = explode(',', $this->getAllTranslates($news, Yii::$app->language, 'growing_items'));
+                $description = $this->getAllTranslates($news, Yii::$app->language, 'description');
+                $result = [
+                    'id' => $this->id,
+                    'title' => $title,
+                    'text' => $text,
+                    'video' => $this->video,
+                    'video_title' => $this->video_title,
+                    'image' => $path,
+                    'sort_title' => $sort_title,
+                    'sort_items' => $sort_items,
+                    'landing_title' => $landing_title,
+                    'landing_text' => $landing_text,
+                    'important' => $important,
+                    'growing_title' => $growing_title,
+                    'growing_text' => $growing_text,
+                    'growing_items' => $growing_items,
+                    'description' => $description,
+                    'fone' => $this->getImageFone(),
+                    'type' => $this->data_type,
+                    'date' => date('d.m.Y', strtotime($this->date)),
+                    'slider'=> $this->getNewsSlider(),
+                    'news_sort'=> $this->getNewsSort(),
+                ];
+            }
+        return $result;
+    }
+
+    // -----------------  yangiliklar foni image --------------
+    public function getImageFone()
+    {
+        $adminka = Yii::$app->params['adminka'];
+        
+        $siteName = Yii::$app->params['siteName'];
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/news/' . $this->in_photo) || $this->in_photo == '') {
+            $path = $siteName . '/backend/web/img/nouser.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/news/' . $this->in_photo;
+        }
+        return $path;
+    }
+
+    //  ---------------------      yangilikla jadvali Slideri ---------------------
+    public function getNewsSlider()
+    {   
+        $result = [];
+        $slider = NewsSlider::find()->where(['news_id' => $this->id])->all();
+        foreach ($slider as $key => $value) {
+           $result []= [
+                    'id' => $value->id,
+                    'name' => $value->name,
+                    'link' => $value->link,
+                    'image' => $value->getImage(),
+                ];
+        }
+        return $result;
+    }
+    //  ----------------  yangiliklar jadvali sort ------------------
+    public function getNewsSort()
+    {   
+        $result = [];
+        $slider = NewsSort::find()->where(['news_id' => $this->id])->all();
+        foreach ($slider as $key => $value) {
+           $result [] = [
+                    'id' => $value->id,
+                    'name' => $value->name,
+                    'sort_name' => $value->sort_name,
+                    'weight' => $value->weight,
+                    'productivity' => $value->productivity,
+                    'five' => $value->five,
+                    'six' => $value->six,
+                ];
+        }
+        return $result;
     }
 
 }

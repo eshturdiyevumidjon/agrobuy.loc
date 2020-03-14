@@ -3,9 +3,9 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=agrobuy.loc',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => 'mysql:host=localhost;dbname=host1804884_agro',
+            'username' => 'host1804884_umid',
+            'password' => 'q4cLBHpv',
             'charset' => 'utf8',
         ],
         'mailer' => [

@@ -33,18 +33,12 @@ class ChatController extends \yii\web\Controller
 
     	$messages = ChatMessage::getMessagesList($chat);
     	$chatList = Chats::getUsersListChat();
-    	array_multisort(array_column($chatList, 'date_cr'), SORT_DESC, $chatList);
 
     	$onlineChatUser = ChatUsers::find()
     		->joinWith(['chat', 'user'])
     		->where(['chats.name' => $chat])
     		->andWhere(['!=', 'user_id', $identity->id])
     		->one();
-
-    	/*echo "<pre>";
-    	print_r($chatList);
-    	echo "</pre>";
-    	die;*/
 
     	return $this->render('index',[
         	'identity' => $identity,
@@ -105,7 +99,6 @@ class ChatController extends \yii\web\Controller
         $model = new ChatMessage();
         $model->chat_id = $chat->id;
         $model->user_id = $identity->id;
-        //$model->message = $chat->name;
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -113,7 +106,7 @@ class ChatController extends \yii\web\Controller
         }
 
         if($model->load($request->post()) && $model->validate() && $model->save()) {
-            return $this->redirect(['/chat/index?chat=chat_12_1']);
+            return $this->redirect(['/chat?chat=' . $model->chat->name]);
         }
         else {
             return $this->renderAjax('message', [
@@ -125,6 +118,7 @@ class ChatController extends \yii\web\Controller
 
     public function actionSet($chat_id, $msg, $user_id)
     {
+        if (Yii::$app->user->isGuest) throw new ForbiddenHttpException('You are not allowed to access this page');
     	$model = new ChatMessage();
     	$model->chat_id = (integer)$chat_id;
     	$model->message = (string)$msg;
@@ -133,8 +127,40 @@ class ChatController extends \yii\web\Controller
     	else return $model->errors;
     }
 
+    public function actionSendFile()
+    {
+        $chatMessage = new ChatMessage();
+        $chatMessage->user_id = Yii::$app->user->identity->id;
+        $chatMessage->chat_id = $_POST['chat_id'];
+
+        if($_FILES['file'])
+        {
+            $uploadDir = Yii::getAlias('@backend/web/uploads/chat/');
+            $ext = "";
+            $ext = substr(strrchr($_FILES['file']['name'], "."), 1); 
+            if($ext != ""){
+            	$extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+            	$fileName = 'file_' . date('Y_m_d_H_i_s') . '.' . $extension;
+                $result = move_uploaded_file($_FILES['file']['tmp_name'], $uploadDir . $fileName);
+                $chatMessage->file = $fileName;
+                if($chatMessage->save()) {
+                	return "<a href='/chat/download-file?path=".$fileName."' ><i class='fa fa-download'></i> " . $fileName . " </a>";
+                }
+            }
+        }
+    }
+
+    public function actionDownloadFile($path)
+    {
+    	if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/chat/' . $path)){
+	    	return \Yii::$app->response->sendFile($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/chat/' . $path);
+    	}
+    }
+
     public function actionDeleteForm($id)
     {
+        if (Yii::$app->user->isGuest) throw new ForbiddenHttpException('You are not allowed to access this page');
+
         $model = Chats::find()->where(['name' => $id])->one();
 
         return $this->renderAjax('_delete_form',[
@@ -145,6 +171,8 @@ class ChatController extends \yii\web\Controller
 
     public function actionDelete($id)
     {
+        if (Yii::$app->user->isGuest) throw new ForbiddenHttpException('You are not allowed to access this page');
+
         $model = Chats::findOne($id);
         $model->delete();
         return $this->redirect(['/chat']);

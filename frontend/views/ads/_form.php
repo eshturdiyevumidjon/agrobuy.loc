@@ -4,6 +4,11 @@
   use yii\bootstrap\ActiveForm;
   use common\models\Ads;
 
+  $images =  $post['uploaded_files'];
+  $dir = '/admin/uploads/ads/';
+  $uploadDir = '/admin/uploads/ads_trash/';
+  $this->title = Yii::t('app', $model->isNewRecord ? "E'lon yaratish" : "Tahrirlash" );
+
 ?>
 <section class="creating-ads">
     <div class="container">
@@ -11,12 +16,11 @@
         <?php $form = ActiveForm::begin(['options' => ['method' => 'post', 'enctype' => 'multipart/form-data' ]]); ?>
             <div class="row">
               <div class="col-lg-8 col-sm-8 col-12">
-                  <?= $form->field($model, 'type'/*, ['options' => ['class' => 'radio-style']]*/)
+                  <?= $form->field($model, 'type')
                   ->radioList(['2' => Yii::t('app', "Sotish"), '1' => Yii::t('app', "Sotib olish")],
                     ['separator' => '', ],
                   ['class' => '', 'id' => 'your_id'])->label(false); ?>
               </div>
-
               <div class="col-lg-4 col-sm-4 col-12">
                   <div class="form-group radio-style">
                     <input type="checkbox" name="add_catalog" value="1" <?=$catalog != null ? 'checked=""' : ''?> id="radi3">
@@ -25,32 +29,29 @@
               </div>
             </div>
             <hr>
-            <div class="" id="imagesList">
-                <?=$model->getImages()?>
-            </div>
-            <div class="row">
-              <div class="col-xl-9" style="display: none;">
-                <div class="attach">
-                    <label for="rad"><?=Yii::t('app', "Foto biriktirish")?></label>
-                    <span class="multiple-photos">
-                        <?=Yii::t('app', "Bir nechta rasmlarni yuklashingiz mumkin")?>
-                    </span>
-                    <?= $form->field($model, 'imageFiles[]')->fileInput(['class'=>"image_input", 'multiple' => true, 'accept' => 'image/*' ])->label(false); ?>
-                    <button type="submit" id="ads_file" class="btn-template"><?=Yii::t('app', "Fayl qo'shish")?></button>
+                <div class="imagesList">
+                  <?php if ($model->images): ?>
+                    <?php foreach (explode(",",$model->images) as $value): ?>
+                      <div class="image_preview_class"><a class="img-ads" title="<?=$value?>">x</a><span class="preview"><img src="<?=$dir.$value?>"></span></div>
+                    <?php endforeach ?>
+                  <?php endif ?>
+                  <?php if ($images): ?>
+                    <?php foreach (explode(",",$images) as $key => $value): ?>
+                      <div class="image_preview_class"><a class="img-ads" title="<?=$value?>">x</a><span class="preview"><img src="<?=$uploadDir.$value?>"></span></div>
+                    <?php endforeach ?>
+                  <?php endif ?>
                 </div>
-              </div>
-
-              <div class="col-xl-9">
-                  <div class="attach">
-                    <label for="rad"><?=Yii::t('app', "Foto biriktirish")?></label>
+                <input type="file" name="imagesProba" accept="images/*" multiple="true" style="display: none" id="inputFile">
+                <input type="hidden" name="uploaded_files" id="uploaded_files" value="<?=$images?>">
+                <input type="hidden" name="old_uploaded_files" id="old_uploaded_files" value="<?=$model->images?>">
+                <div class="attach">
+                  <?=Yii::t('app', "Foto biriktirish")?>&nbsp;&nbsp;&nbsp;
+                  <label for="inputFile">
                     <span class="multiple-photos">
-                        <?php //Yii::t('app', "Bir nechta rasmlarni yuklashingiz mumkin")?> 
-                        <div class="fileinput-button dz-clickable"></div>
-                    </span>
-                   <!--  <a href="#" id="ads_file_a_teg"><?php //Yii::t('app', "Fayl qo'shish")?></a> -->
-                  </div> 
-              </div>
-            </div>
+                            <div class="fileinput-button dz-clickable"></div>
+                        </span>
+                  </label>
+                </div>
             <hr>
             <div class="row">
               <div class="col-xl-9">
@@ -98,9 +99,94 @@
 </section>
 
 <?php 
+$id = $model->id;
 $this->registerJs(<<<JS
-    
+
+  $("#inputFile").on('change',function(e){
+      namess = [];
+      var files = e.target.files;
+      var data = new FormData(); 
+      $.each(files, function(i,file){
+          var reader = new FileReader();
+          var d = new Date();
+          var new_name = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate() + '_' +d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds();  
+          var filename = $( '#inputFile' )[0].files[i].name;
+          name = filename.split('.').shift();
+          var ext = filename.split('.').pop();
+          new_name = name + '(' + new_name + ")." + ext;
+          reader.readAsDataURL(file);
+          data.append('file[]', $( '#inputFile' )[0].files[i]) ; 
+          data.append('names[]', new_name) ; 
+          namess.push(new_name);
+          template = '<div class="image_preview_class" data-id="'+ new_name +'"><a class="img-ads" title="'+new_name+'">x</a><span class="preview"><img src="/admin/uploads/zz.gif"></span></div>';
+          $(".imagesList").append(template);
+      });
+      $.ajax({
+        url: '/$nowLanguage/ads/save-img',
+        type: 'POST',
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function(success){
+          new_names = "";
+          for(var i=0; i < namess.length;i++){
+            if(i != namess.length-1){
+              new_names += namess[i] + ",";
+            }else{
+              new_names += namess[i];
+            }
+
+            template = '<a class="img-ads" title="'+namess[i] +'">x</a><span class="preview"><img src="$uploadDir' + namess[i]+'"></span>';
+            $('[data-id="' + namess[i] + '"]').html(template);
+          }
+          old_files = $("#uploaded_files").val();
+          if(old_files)
+            new_files = old_files + "," + new_names;
+          else
+            new_files = new_names;
+            $("#uploaded_files").val(new_files);
+        },
+        cache: false,
+        xhr: function() {  // custom xhr
+            myXhr = $.ajaxSettings.xhr();
+            if (myXhr.upload) {
+                return myXhr;
+            }
+        }
+      });
+
+    });
+    $(document).on('click', ".img-ads", function(e){
+       element = $(this).attr('title');
+       files = ($("#uploaded_files").val()).split(",");
+       old_files = ($("#old_uploaded_files").val()).split(",");
+       var index = files.indexOf(element);
+       if (index !== -1) {
+        files.splice(index, 1);
+        $("#uploaded_files").val(files.join(","));
+       }
+
+       index = old_files.indexOf(element);
+       if (index !== -1) {
+        old_files.splice(index, 1);
+        $("#old_uploaded_files").val(old_files.join(","));
+       }
+      
+
+        $.post('/$nowLanguage/ads/delete-image?value='+element+'&id=$id',function(success){});
+        e.preventDefault();
+        e.target.parentElement.remove();
+    });
+JS
+)
+?>
+
+<?php 
+$this->registerJs(<<<JS
 $(document).ready(function(){
+    
+
+
     var fileCollection = new Array();
 
     $(document).on('change', '.image_input', function(e){
@@ -110,9 +196,9 @@ $(document).ready(function(){
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function(e){
-                var template = '<div class="image_preview_class"><span class="preview"><a href="#">x</a><img src="'+e.target.result+'"></span></div>';
+                var template = '<div class="image_preview_class"><span class="preview"><img src="'+e.target.result+'"></span></div>';
                 //$('#imagesList').html('');
-                $('#imagesList').append(template);
+                $('.imagesList').append(template);
             };
         });
     });
@@ -120,3 +206,22 @@ $(document).ready(function(){
 JS
 );
 ?>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<!-- <script type="text/javascript">
+$(document).ready(function(){
+    $('.img-ads').on('click',function() {
+        var id = encodeURIComponent($(this).attr('data-id'));
+        var path = encodeURIComponent($(this).attr('data-path'));
+        var xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function(){
+            if(xmlhttp.readyState == 4 && xmlhttp.status == 200){}
+        }
+        xmlhttp.open('GET', '/ads/remove-img?id=' + id + '&path=' + path, true);
+        xmlhttp.send();
+        document.getElementById(path + "_" + id).remove();
+    });
+  });
+</script> -->
+
+

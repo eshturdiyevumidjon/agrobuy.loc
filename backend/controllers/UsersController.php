@@ -350,4 +350,25 @@ class UsersController extends Controller
     {
         return \Yii::$app->response->sendFile('uploads/avatars/' . $file);
     }
+
+    public function actionDownloadPassport($id)
+    {
+        $model = $this->findModel($id);
+        $dir2 = Yii::getAlias('uploads/users/passports/');
+        $zip = new \ZipArchive;
+        if(file_exists('download.zip')) unlink(Yii::getAlias('download.zip'));
+        $download = 'download.zip';
+        $zip->open($download, \ZipArchive::CREATE);
+        $images = explode(",", $model->passport_file);
+        foreach ($images as $file) {
+             if(file_exists($dir2 . $file)) $zip->addFile($dir2 . $file, $file);
+        }
+        $zip->close();
+        header('Content-Type: application/zip');
+        header("Content-Disposition: attachment; filename = $download");
+        header('Content-Length: ' . filesize($download));
+        header("Location: $download");
+
+        \Yii::$app->response->sendFile('download.zip');  
+    }
 }

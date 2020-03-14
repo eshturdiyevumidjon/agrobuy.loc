@@ -30,12 +30,15 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
         <div class="row">
+            <?php if($model->id == 2) { ?>
             <div class="col-md-6">
                 <?= $form->field($model, 'premium')->checkBox() ?>
             </div>
+        <?php } if($model->id == 1) { ?>
             <div class="col-md-6">
                 <?= $form->field($model, 'top')->checkBox() ?>
             </div>
+        <?php } ?>
         </div>
         <div class="row">
             <div class="col-md-4">

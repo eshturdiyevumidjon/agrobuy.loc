@@ -21,7 +21,7 @@ use yii\helpers\Html;
         ],
         [
             'class'    => 'kartik\grid\ActionColumn',
-            'template' => '{leadUpdate} {leadDelete}',
+            'template' => '{leadUpdate}',
             'buttons'  => [
                 'leadUpdate' => function ($url, $model) {
                     $url = Url::to(['/regions/update-sub', 'id' => $model->id]);

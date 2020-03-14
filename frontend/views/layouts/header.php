@@ -38,7 +38,7 @@
                   </a>
               <?php } else { ?>
                   <?php if(Yii::$app->controller->id == 'profile') { ?>
-                    <a class="btn btn_exit" data-touch="false" data-fancybox data-src="#logout-popup" ><?=Yii::t('app', "Chiqish")?></a>
+                    <a class="btn btn_exit d-sm-block d-none" data-touch="false" data-fancybox data-src="#logout-popup" ><?=Yii::t('app', "Chiqish")?></a>
                   <?php } ?>
                     <a href="/profile" class="entor-to-site">
                         <span style="background-image: url(/images/icon-user.png);"></span><?= Yii::t('app',"Profil") ?>
@@ -94,14 +94,6 @@
               </li>
           <?php } else { ?>
             <li>
-              <a href="/profile" class="<?=Yii::$app->controller->id == 'profile' ? 'active' : ''?>">
-                  <!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-                  <svg enable-background="new 0 0 350 350" version="1.1" viewBox="0 0 350 350" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="m175 171.17c38.914 0 70.463-38.318 70.463-85.586 0-47.269-10.358-85.587-70.463-85.587s-70.465 38.318-70.465 85.587c0 47.268 31.549 85.586 70.465 85.586z"/><path d="m41.909 301.85c-0.012-2.882-0.024-0.812 0 0z"/><path d="m308.08 304.1c0.038-0.789 0.013-5.474 0 0z"/><path d="m307.94 298.4c-1.305-82.342-12.059-105.8-94.352-120.66 0 0-11.584 14.761-38.584 14.761s-38.586-14.761-38.586-14.761c-81.395 14.69-92.803 37.805-94.303 117.98-0.123 6.547-0.18 6.891-0.202 6.131 5e-3 1.424 0.011 4.058 0.011 8.651 0 0 19.592 39.496 133.08 39.496 113.49 0 133.08-39.496 133.08-39.496 0-2.951 2e-3 -5.003 5e-3 -6.399-0.022 0.47-0.066-0.441-0.149-5.708z"/>
-                  </svg>
-                  <span><?= Yii::t('app',"Profil") ?></span>
-              </a>
-            </li>
-            <li>
               <a href="/chat" class="<?=Yii::$app->controller->id == 'chat' ? 'active' : ''?>">
                   <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M467,61H45C20.218,61,0,81.196,0,106v300c0,24.72,20.128,45,45,45h422c24.72,0,45-20.128,45-45V106    C512,81.28,491.872,61,467,61z M460.786,91L256.954,294.833L51.359,91H460.786z M30,399.788V112.069l144.479,143.24L30,399.788z     M51.213,421l144.57-144.57l50.657,50.222c5.864,5.814,15.327,5.795,21.167-0.046L317,277.213L460.787,421H51.213z M482,399.787    L338.213,256L482,112.212V399.787z"/>
                   </svg>
@@ -109,6 +101,14 @@
                   <?php Pjax::begin(['id' => 'mobile-chat-pjax']); ?>
                       <div class="chat_message_count"><?=Yii::$app->user->identity->getChatMessageCount()?></div>
                   <?php Pjax::end(); ?>
+              </a>
+            </li>
+            <li>
+              <a href="/profile" class="<?=Yii::$app->controller->id == 'profile' ? 'active' : ''?>">
+                  <!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+                  <svg enable-background="new 0 0 350 350" version="1.1" viewBox="0 0 350 350" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="m175 171.17c38.914 0 70.463-38.318 70.463-85.586 0-47.269-10.358-85.587-70.463-85.587s-70.465 38.318-70.465 85.587c0 47.268 31.549 85.586 70.465 85.586z"/><path d="m41.909 301.85c-0.012-2.882-0.024-0.812 0 0z"/><path d="m308.08 304.1c0.038-0.789 0.013-5.474 0 0z"/><path d="m307.94 298.4c-1.305-82.342-12.059-105.8-94.352-120.66 0 0-11.584 14.761-38.584 14.761s-38.586-14.761-38.586-14.761c-81.395 14.69-92.803 37.805-94.303 117.98-0.123 6.547-0.18 6.891-0.202 6.131 5e-3 1.424 0.011 4.058 0.011 8.651 0 0 19.592 39.496 133.08 39.496 113.49 0 133.08-39.496 133.08-39.496 0-2.951 2e-3 -5.003 5e-3 -6.399-0.022 0.47-0.066-0.441-0.149-5.708z"/>
+                  </svg>
+                  <span><?= Yii::t('app',"Profil") ?></span>
               </a>
             </li>
             <li class="user-li no-user">

@@ -103,13 +103,29 @@ class Chats extends \yii\db\ActiveRecord
                 'user_id' => $chat_user->user_id,
                 'login' => $chat_user->user->login,
                 'image' => $chat_user->user->getAvatarForSite(),
-                'last_message' => (strlen($last_message->message) > 80) ? substr($last_message->message, 0, 80) . "..." : $last_message->message,
+                'last_message' => (strlen($last_message->message) > 20) ? substr($last_message->message, 0, 20) . "..." : $last_message->message,
                 'date_cr' => date('Y-m-d', strtotime($last_message->date_cr)) == date('Y-m-d') ? date('H:i', strtotime($last_message->date_cr)) : date('H:i d.m.Y', strtotime($last_message->date_cr)),
                 'chat_id' => $value->chat->name,
+                'chat_type' => $value->chat->type,
                 'count' => $count,
             ];
         }
-        return $result;
+
+        array_multisort(array_column($result, 'date_cr'), SORT_DESC, $result);
+        $sendingResult = [];
+        foreach ($result as $value) {
+            if($value['chat_type'] == 1) {
+                $sendingResult [] = $value;
+                break;
+            }
+        }
+        foreach ($result as $value) {
+            if($value['chat_type'] != 1) {
+                $sendingResult [] = $value;
+            }
+        }
+
+        return $sendingResult;
     }
 
     public static  function getUsersList()
@@ -160,6 +176,7 @@ class Chats extends \yii\db\ActiveRecord
                 'count' => $count,
             ];
         }
+        array_multisort(array_column($result, 'date_cr'), SORT_DESC, $result);
         return $result;
     }
 }

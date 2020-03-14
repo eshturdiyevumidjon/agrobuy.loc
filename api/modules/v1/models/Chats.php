@@ -32,7 +32,7 @@ class Chats extends \yii\db\ActiveRecord
     {
         return [
             [['date_cr'], 'safe'],
-            [['type'], 'integer'],
+            [['type'], 'integer'], //(1=> admin, 2 => oddiy_chat) (Тип чата)
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -48,6 +48,24 @@ class Chats extends \yii\db\ActiveRecord
             'date_cr' =>'Дата создание',
             'type' => 'Тип чата',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->date_cr = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);
+    }
+
+    public function beforeDelete()
+    {
+        $users = ChatUsers::find()->where(['chat_id' => $this->id])->all();
+        foreach ($users as $user) {
+            $user->delete();
+        }
+        return parent::beforeDelete();
     }
 
     /**
@@ -70,50 +88,95 @@ class Chats extends \yii\db\ActiveRecord
     {
         $user_id = Yii::$app->user->identity->id;
         $result = [];
-        $userId = [];
-        $userId [] = $user_id;
-        $allUsers = Users::find()->all();
-
         
-       $chatUsers = ChatUsers::find()->where(['user_id' => $user_id])->all();
-       foreach ($chatUsers as $value) {
+        $chatUsers = ChatUsers::find()->where(['user_id' => $user_id])->all();
+        foreach ($chatUsers as $value) {
             $chat_user = ChatUsers::find()->where(['!=', 'user_id', $user_id])->andWhere(['chat_id' => $value->chat_id])->one();
             $last_message = ChatMessage::find()->where(['chat_id' => $chat_user->chat_id])->orderBy(['id' => SORT_DESC])->one();
-            $count = ChatMessage::find()->where(['chat_id'=>$last_message->chat_id,'is_read'=>1])->count();
+            $count = ChatMessage::find()
+                ->where(['chat_id' => $value->chat_id, 'is_read' => 0])
+                ->andWhere(['!=', 'user_id', $user_id])
+                ->count();
             $result [] = [
+                'identity_id' => $user_id,
                 'id' => $chat_user->user->id,
-                'fio' => $chat_user->user->fio,
-                'role' => $chat_user->user->getTypeDescription(),
-                'image' => $chat_user->user->getAvatar(),
-                'last_message' => $last_message->message,
-                'date_cr' => $last_message->date_cr,
-                'chat_id' => $value->chat_id,
+                'user_id' => $chat_user->user_id,
+                'login' => $chat_user->user->login,
+                'image' => $chat_user->user->getAvatarForSite(),
+                'last_message' => (strlen($last_message->message) > 20) ? substr($last_message->message, 0, 20) . "..." : $last_message->message,
+                'date_cr' => date('Y-m-d', strtotime($last_message->date_cr)) == date('Y-m-d') ? date('H:i', strtotime($last_message->date_cr)) : date('H:i d.m.Y', strtotime($last_message->date_cr)),
+                'chat_id' => $value->chat->name,
+                'chat_type' => $value->chat->type,
                 'count' => $count,
+            ];
+        }
+
+        array_multisort(array_column($result, 'date_cr'), SORT_DESC, $result);
+        $sendingResult = [];
+        foreach ($result as $value) {
+            if($value['chat_type'] == 1) {
+                $sendingResult [] = $value;
+                break;
+            }
+        }
+        foreach ($result as $value) {
+            if($value['chat_type'] != 1) {
+                $sendingResult [] = $value;
+            }
+        }
+
+        return $sendingResult;
+    }
+
+    public static  function getUsersList()
+    {
+        $result = [];
+        $allUsers = Users::find()->where(['type'=>3])->all();
+        foreach ($allUsers as $user) {
+            $chat = Chats::find()->where(['name' => 'chat_' . $user->id])->one();
+            if($chat == null) {
+                $chat = new Chats();
+                $chat->name = 'chat_' . $user->id;
+                $chat->type = 1;
+                $chat->save();
+            }
+            $result [] = [
+                'id' => $user->id,
+                'login' => $user->login,
+                'role' => $user->getTypeDescription(),
+                'image' => $user->getAvatar(),
             ];
         }
         return $result;
     }
 
-    public static  function getUsersList()
+    public static  function getActiveChatList()
     {
         $user_id = Yii::$app->user->identity->id;
         $result = [];
-
-        $allUsers = Users::find()->where(['type'=>3])->all();
-        foreach ($allUsers as  $value) {
-            $name = ""; $name2 = "";
-            $name = "chat_".$user_id."_".$value->id;  $name2 = "chat_".$value->id."_".$user_id;
-            $chat = Chats::find()->where(['or',['name'=>$name],['name'=>$name2]])->all();
-                if($value->id != $user_id && $chat == null)
-                {
-                        $result [] = [
-                            'id' => $value->id,
-                            'fio' => $value->fio,
-                            'role' => $value->getTypeDescription(),
-                            'image' => $value->getAvatar(),
-                        ];
-                }
-    }
+        
+        $chatUsers = ChatUsers::find()->joinWith('chat')->where(['user_id' => $user_id, 'chats.type' => 1])->all();
+        $chatId = [];
+        foreach ($chatUsers as $value) {
+            $chatId [] = $value->chat_id;
+        }
+        $chatId = array_unique($chatId);
+        foreach ($chatId as $chat_id) {
+            $chat_user = ChatUsers::find()->where(['!=', 'user_id', $user_id])->andWhere(['chat_id' => $chat_id])->one();
+            $last_message = ChatMessage::find()->where(['chat_id' => $chat_id])->orderBy(['id' => SORT_DESC])->one();
+            $count = ChatMessage::find()->where(['!=', 'user_id', $user_id])->andWhere(['chat_id' => $chat_id, 'is_read' => 0,])->count();
+            $result [] = [
+                'chat_id' => $chat_id,
+                'user_id' => $chat_user->user_id,
+                'login' => $chat_user->user->login,
+                'role' => $chat_user->user->getTypeDescription(),
+                'image' => $chat_user->user->getAvatarForSite(),
+                'last_message' => $last_message->message,
+                'date_cr' => $last_message->date_cr,
+                'count' => $count,
+            ];
+        }
+        array_multisort(array_column($result, 'date_cr'), SORT_DESC, $result);
         return $result;
     }
 }

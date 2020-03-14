@@ -1,5 +1,9 @@
 AddDefaultCharset UTF-8
 
+#RewriteCond %{HTTPS} off [OR]
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule (.*) https://www.agrobuy.uz%{REQUEST_URI} [R=301,L]
+
 Options FollowSymLinks
 DirectoryIndex index.php index.html
 RewriteEngine on

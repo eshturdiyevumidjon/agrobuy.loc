@@ -15,6 +15,12 @@ use api\modules\v1\models\Regions;
 use api\modules\v1\models\Districts;
 use api\modules\v1\models\UsersBall;
 use api\modules\v1\models\News;
+use api\modules\v1\models\Lang;
+use api\modules\v1\models\User;
+use api\modules\v1\models\Advertisings;
+use api\modules\v1\models\AdvertisingItems;
+use api\modules\v1\models\Currency;
+use yii\web\NotFoundHttpException;
 
 
 class AdditionalController extends ActiveController
@@ -47,15 +53,33 @@ class AdditionalController extends ActiveController
         return $behaviors;
     }
 
-    // Categoriyalar va SubCategorilar ro'yxati , parametr kelmaydi
+    // -------------------------- tillar listi -----------------------------------------
+    public function actionLanguageList()
+    {
+        $response = \Yii::$app->getResponse();
+        $languages = Lang::getLanguages();
+
+        $array = [];
+        foreach ($languages as $key => $value) {
+            $array [] = [
+                'url' => $value->url,
+                'local' => $value->local,
+                'name' => $value->name,
+                'image' => $value->image != null ? Yii::$app->params['adminSiteName'].'backend/web/flags/'.$value->image : "",
+            ];
+        }
+        $response->setStatusCode(202);
+        return $array;
+    }
+
+    // -----------Categoriyalar va SubCategorilar ro'yxati , parametr kelmaydi----------------
      public function actionCategorySubList()
     {
         $category = Category::find()->all();
         $subCategories = Subcategory::find()->all();
-        $result = []; $lang = "kr";
-        if(Yii::$app->getRequest()->getBodyParams()['lang'] != null) {
-            $lang = Yii::$app->getRequest()->getBodyParams()['lang'];
-        }
+        $result = [];
+        $body = Yii::$app->getRequest()->getBodyParams();
+        $lang = $this->findLang($body['lang']);
 
         $siteName = Yii::$app->params['siteName'];
         foreach ($category as $value) {
@@ -69,7 +93,7 @@ class AdditionalController extends ActiveController
                 $result [] = [
                     'id' => $value->id,
                     'title' => $value->title,
-                    'adsCount'=>$value->getCountCategory(),
+                    'adsCount'=> (int)$value->getCountCategory(),
                     'image' => $path,
                     'subCategory' => $value->getSubCategoryList($value, $subCategories),
                 ];
@@ -79,7 +103,7 @@ class AdditionalController extends ActiveController
                 $result [] = [
                     'id' => $value->id,
                     'title' => $title,
-                    'adsCount'=>$value->getCountCategory(),
+                    'adsCount'=>(int)$value->getCountCategory(),
                     'image' => $path,
                     'subCategory' => $value->getSubCategoryList($value, $subCategories),
                 ];
@@ -87,6 +111,8 @@ class AdditionalController extends ActiveController
         }
             return $result;
     }
+
+    // --------------------------- Regin list ---------------------------
     public function actionRegion()
     {
         $region = Regions::find()->all();
@@ -102,29 +128,24 @@ class AdditionalController extends ActiveController
         return $result;
     }
 
-    //  Ads categoriya, sub, price, region.. jadvalidan qidirish sortirovka qilish
+    //  -----------Ads categoriya, sub, price, region.. jadvalidan qidirish sortirovka qilish------
     public function actionSearchCategory($page = 0)
     {
         $body = Yii::$app->getRequest()->getBodyParams();
         $step = 1;
-        $lang = "kr";
-        if($body['lang'] != null) {
-            $lang = $body['lang'];
-        }
+        $lang = $this->findLang($body['lang']);
 
         $query = Ads::find();
         $result = Ads::getSearchAds($page, $query, $lang, $body, $step);
         return $result;
     }
 
+    // --------------------------------Premium kataloglar-------------------------------
     public function  actionAdsPremium($page = 0 )
     {
         $body = Yii::$app->getRequest()->getBodyParams();
         $step = 2;
-        $lang = "kr";
-        if($body['lang'] != null) {
-            $lang = $body['lang'];
-        }
+        $lang = $this->findLang($body['lang']);
 
         $query = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
@@ -134,14 +155,13 @@ class AdditionalController extends ActiveController
         $result = Ads::getSearchAds($page, $query, $lang, $body, $step);
         return $result;
     }
+
+    //  ---------------------------yangi kataloglar ro'yxati------------------------------
     public function  actionAdsNew($page = 0 )
     {
         $body = Yii::$app->getRequest()->getBodyParams();
         $step = 2;
-        $lang = "kr";
-        if($body['lang'] != null) {
-            $lang = $body['lang'];
-        }
+        $lang = $this->findLang($body['lang']);
 
         $query = Ads::find()
             ->joinWith(['category', 'user', 'currency'])
@@ -153,14 +173,12 @@ class AdditionalController extends ActiveController
         return $result;
     }
 
+    // ----------------------------------ads, im daveryayut------------------------------------
     public function actionAdsTrusted($page = 0)
     {
         $body = Yii::$app->getRequest()->getBodyParams();
         $step = 2;
-        $lang = "kr";
-        if($body['lang'] != null) {
-            $lang = $body['lang'];
-        }
+        $lang = $this->findLang($body['lang']);
         $adsId = [];
         $adsId = UsersBall::getTrustedAds();
 
@@ -172,18 +190,94 @@ class AdditionalController extends ActiveController
         return $result;
     }
 
+    // --------------------------------Yangiliklar--------------------------------
     public function actionNews( $page = 0 )
     {
         $body = Yii::$app->getRequest()->getBodyParams();
-        $lang = "kr";
-        if($body['lang'] != null) {
-            $lang = $body['lang'];
-        }
+        $lang = $this->findLang($body['lang']);
 
         $query = News::find()->orderBy(['id' => SORT_DESC]);
         $result = News::getAllNewsList($page, $query, $lang);
         return $result;
+    }
 
+    // -------------------------------Cataloglarni kartichkasi----------------------------------
+    public function actionAdsCard($id, $page = 0)
+    {   
+        
+        $body = Yii::$app->getRequest()->getBodyParams();
+        $lang = $this->findLang($body['lang']);
+        $step = 2;
+        $model = Ads::findOne($id);
+        $user = $this->findAccess();
+        if($model != null) {
+
+            $query = Ads::find()
+            ->joinWith(['category', 'user', 'currency', 'subcategory'])
+            ->where(['like', 'subcategory.name', $model->subcategory->name])
+            ->orderBy(['rand()' => SORT_DESC]);
+
+            return [
+                'user' =>$model->getAdsUserInformation($user),
+                'card' => $model->getAds($lang),
+                'similar_ads' => Ads::getSearchAds($page, $query, $lang, $body, $step),
+            ];
+        }
+        else {
+             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    // -----------------------------Yangiliklar kartichkasi----------------------------
+    public function actionNewsCard($id)
+    {   
+        $body = Yii::$app->getRequest()->getBodyParams();
+        $lang = $this->findLang($body['lang']);
+        Yii::$app->language = $lang;
+
+        $model = News::findOne($id);
+        if($model != null) {
+            return $model->getNewsCard($lang);
+        }
+        else {
+             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    // -------------------------- reklama -----------------------------
+    public function actionAdvertising($key = null)
+    {   
+        $body = Yii::$app->getRequest()->getBodyParams();
+        $adv = Advertisings::find()->where(['key' => $body['key'] ])->one();
+        return AdvertisingItems::getAdvertisingItems($adv->id);
+    }
+
+     // --------------------------CurrencyList -----------------------------
+    public function actionCurrencyList($key = null)
+    {   
+        $currency = Currency::find()->asArray()->all();
+        return $currency;
+    }
+    
+    // -----------------------find lang-------------------------------
+     protected function findLang($url)
+    {   
+        $model = Lang::find()->where(['url' => $url])->one();
+
+        if ($model != null) {
+            return $model->url;
+        } else {
+            return "kr";
+        }
+    }
+
+    //-------------------  avtorizatsiayadan o'tgan usersni aniqlash  -------------------
+    public function findAccess()
+    {
+        $array = explode(' ',\Yii::$app->getRequest()->getHeaders()['Authorization']);
+        $nowUser = User::findIdentityByAccessToken($array[1]);
+        if($nowUser != null) return $nowUser['id'];
+        else return null;
     }
 
 }

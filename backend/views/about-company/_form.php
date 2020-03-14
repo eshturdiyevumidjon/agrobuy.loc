@@ -39,11 +39,14 @@ if (!file_exists('uploads/about-company/' . $model->logo) || $model->logo == nul
                 <div class="col-md-6">
                     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                      <?= $form->field($model, 'mail')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-md-6">
-                     <?= $form->field($model, 'premium_ads_count')->textInput(['type' => 'number']) ?>
+                     <?= $form->field($model, 'premium_ads_count')->textInput(['type' => 'number','min' => 1]) ?>
+                </div>
+                <div class="col-md-6">
+                     <?= $form->field($model, 'top_ads_count')->textInput(['type' => 'number','min' => 1]) ?>
                 </div>
                 <div class="col-md-12">
                      <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>

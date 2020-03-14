@@ -49,6 +49,7 @@ class LoginController extends \yii\rest\ActiveController
         return $actions;
     }
 
+    // -----------------------------Avtorizatsiya --------------------------
     public function actionLogin()
     {
         $body = Yii::$app->getRequest()->getBodyParams();
@@ -71,20 +72,6 @@ class LoginController extends \yii\rest\ActiveController
         else{
             throw new HttpException(422, json_encode($user_login->errors, JSON_UNESCAPED_UNICODE ));
         }
-    }
-
-    //log out
-    public function actionLogout()
-    {
-        $user = User::findOne(Yii::$app->user->identity->id);
-        if (!empty($user)) {
-            $user->access_token = null;
-            $user->save(false);
-            Yii::$app->user->logout(false);
-            $arr = ['status' => true,];
-            return $arr;
-        }
-        throw new HttpException(422, "The reuestsed page does not exist.");
     }
 
     //  Register 1-qadam uchun

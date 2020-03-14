@@ -156,7 +156,7 @@ $_csrf = \Yii::$app->request->getCsrfToken();
               </span><?= Yii::t('app',"Profilni tahrirlash") ?>
             </a>
             <div class="my-catalog-block">
-              <a href="/profile/catalog" class="btn-template link-btn"><?= Yii::t('app',"Mening katalogim") ?></a>
+              <a href="/profile/catalog?login=<?=$identity->login?>" class="btn-template link-btn"><?= Yii::t('app',"Mening katalogim") ?></a>
               <a href="/chat" class="btn-template link-btn"><?= Yii::t('app',"Mening chatim") ?>
                 <div class="chat_message_count"><?=$identity->getChatMessageCount()?></div>
               </a>

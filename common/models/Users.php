@@ -18,8 +18,12 @@ class Users extends \yii\db\ActiveRecord
     public $new_password;
     public $image;
     public $passport_image;
+    public $imageFiles;
     public $company_image;
     const EXPIRE_TIME = 3600 * 24 * 7;
+    const DIR_NAME_FOR_UPLOADING_PASSPORT_FILES = '/admin/uploads/users/passports/';
+    const DIR_NAME_FOR_UPLOADING_COMPANIES_FILES = '/admin/uploads/users/companies/';
+    const TEMP_DIR_NAME = '/admin/uploads/ads_trash/';
 
     public static function tableName()
     {
@@ -31,16 +35,17 @@ class Users extends \yii\db\ActiveRecord
         return [
             [['type', 'expiret_at', 'legal_status', 'check_phone', 'check_mail', 'check_passport', 'check_car', 'access'], 'integer'],
             [['balance'], 'number'],
-            [['birthday'], 'safe'],
+            [['birthday', 'last_seen'], 'safe'],
             [['email'], 'email'],
             [['login', 'phone'], 'unique'],
             [['login', 'type', 'phone'], 'required'],
             [['inn'], 'string', 'min' => 9],
             ['password', 'required', 'when' => function($model) {return $this->isNewRecord;}, 'enableClientValidation' => false],
-            [['image','new_password', 'passport_image', 'company_image'], 'safe'],
+            [['image'], 'safe'],
             [['company_files', 'passport_issue', 'access_comment'], 'string'],
-            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site'], 'string', 'max' => 255],
+            [['login', 'password', 'fio', 'avatar', 'phone', 'email', 'access_token', 'user_number', 'instagram', 'facebook', 'telegram', 'company_name', 'passport_serial_number', 'passport_number', 'passport_date', 'passport_file', 'code_for_phone', 'web_site', 'new_password'], 'string', 'max' => 255],
             [['access_comment'], 'required', 'when' => function($model) {return $this->access == 2;}, 'enableClientValidation' => false],
+            // [['passport_image', 'company_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 50],
         ];
     }
 
@@ -53,6 +58,7 @@ class Users extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'login' => 'Логин',
             'fio' => 'Ф.И.О',
+            'last_seen' => 'last_seen',
             'password' => 'Пароль',
             'avatar' => 'Аватар',
             'phone' => 'Телефон',
@@ -406,6 +412,92 @@ class Users extends \yii\db\ActiveRecord
         }
     }
 
+    public function getPassportImages()
+    {
+        $siteName = Yii::$app->params['siteName'];
+        $explode = explode(',', $this->passport_file);
+        $result = '';
+        foreach ($explode as $file) {
+            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $file;
+            if(file_exists($img) && $file != null)
+            {
+                $img = $siteName . '/backend/web/uploads/users/' . $file;
+                $result .= '<div class="image_preview_class" id="'.$file . '_' . $this->id.'"><a class="img-ads" data-id="' . $this->id . '" data-path="' . $file . '" >x</a><span class="preview"><img src="' . $img . '"></span></div>';
+            }
+        }
+        return $result;
+    }
+
+    public function getCompanyImages()
+    {
+        $siteName = Yii::$app->params['siteName'];
+        $explode = explode(',', $this->company_files);
+        $result = '';
+        foreach ($explode as $file) {
+            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $file;
+            if(file_exists($img) && $file != null)
+            {
+                $img = $siteName . '/backend/web/uploads/users/' . $file;
+                $result .= '<div class="image_preview_class" id="'.$file . '_' . $this->id.'"><a class="img-ads" data-id="' . $this->id . '" data-path="' . $file . '" >x</a><span class="preview"><img src="' . $img . '"></span></div>';
+            }
+        }
+        return $result;
+    }
+
+    public function uploadsPassport()
+    {
+        if(!empty($this->passport_image)) {
+            $string = '';
+            $explode = explode(',', $this->passport_file);
+            foreach ($explode as $file) {
+                if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $file) && $file != null) {
+                    if($string == '') $string = $file;
+                    else $string .= ',' . $file;
+                }
+            }
+            
+            foreach ($this->passport_image as $file) {
+                $fileName = $this->id . '-' . Yii::$app->security->generateRandomString() . '.' . $file->extension;
+                $file->saveAs('@backend/web/uploads/users/' . $fileName);
+                if($string == '') $string = $fileName;
+                else $string .= ',' . $fileName;
+            }
+
+            $this->passport_file = $string;
+            $this->save(false);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function uploadsCompanyImages()
+    {
+        if(!empty($this->company_image)) {
+            $string = '';
+            $explode = explode(',', $this->company_files);
+            foreach ($explode as $file) {
+                if(file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/users/' . $file) && $file != null) {
+                    if($string == '') $string = $file;
+                    else $string .= ',' . $file;
+                }
+            }
+            
+            foreach ($this->company_image as $file) {
+                $fileName = $this->id . '-comp-' . Yii::$app->security->generateRandomString() . '.' . $file->extension;
+                $file->saveAs('@backend/web/uploads/users/' . $fileName);
+                if($string == '') $string = $fileName;
+                else $string .= ',' . $fileName;
+            }
+
+            $this->company_files = $string;
+            $this->save(false);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function downloadPassport()
     {
         if($this->passport_file == '' || $this->passport_file == null) {
@@ -560,5 +652,175 @@ class Users extends \yii\db\ActiveRecord
             ->andWhere(['is_read' => 0])
             ->count();
         return $msgCount;
+    }
+
+    //passport fayllarini saqlash uchun
+    public function UploadPassportImage($post)
+    {
+        $uploaded_files = $post['uploaded_passport_files'];
+        $old_uploaded_files = $post['old_uploaded_passport_files'];
+        $source_path = Yii::getAlias('@backend/web/uploads/ads_trash/');
+        $destination_path = Yii::getAlias('@backend/web/uploads/users/passports/');
+        if($uploaded_files != "")
+        {
+            $images = explode(",",$uploaded_files);
+            $names= [];
+            foreach ($images as $value) {
+                if(file_exists($source_path.$value)){
+                    $ext = substr(strrchr($value, "."), 1); 
+                    $fileName = $this->id . '-' . Yii::$app->security->generateRandomString() . '.' . $ext;
+                    $names[] = $fileName;
+                    copy($source_path.$value, $destination_path . $fileName);
+                    unlink($source_path.$value);
+                }
+            }  
+            $new_images = implode(",", $names);
+            if($old_uploaded_files != ""){
+                $this->passport_file = $old_uploaded_files . "," . $new_images;
+            }else{
+                $this->passport_file = $new_images;
+            }
+        }elseif($old_uploaded_files != ""){
+            $this->passport_file = $old_uploaded_files;
+        }
+        
+        $this->save(false);
+    }
+
+    public function isImage($image)
+    {
+        $allowedExts = array("gif", "jpeg", "jpg", "png"); 
+        $ext = array_pop(explode('.', $image));
+        if(in_array($ext, $allowedExts)){
+            return "";
+        }
+        return $ext;
+    }
+
+    //pssport file ni ochirish uchun
+    public static function unlinkPassportFile($file,$images)
+    {
+        $dir1 = Yii::getAlias('@backend/web/uploads/ads_trash/');
+        $dir2 = Yii::getAlias('@backend/web/uploads/users/passports/');
+
+        if(file_exists($dir1 . $file) && $file != null)
+        {
+            unlink($dir1 . $file);
+        }
+        elseif(file_exists($dir2 . $file) && $file != null)
+        {
+            $all_files = explode(",", $images);
+            $index = array_search($file, $all_files);
+            if($index !== false){
+                unset($all_files[$index]);
+            }
+            unlink($dir2 . $file);
+            return implode(",",$all_files);;
+        }
+    }
+
+    //company fayllarini saqlash uchun
+    public function UploadCompanyImage($post)
+    {
+        $uploaded_files = $post['uploaded_company_files'];
+        $old_uploaded_files = $post['old_uploaded_company_files'];
+        $source_path = Yii::getAlias('@backend/web/uploads/ads_trash/');
+        $destination_path = Yii::getAlias('@backend/web/uploads/users/companies/');
+
+        if($uploaded_files != "")
+        {
+            $images = explode(",",$uploaded_files);
+            $names= [];
+            foreach ($images as $value) {
+                if(file_exists($source_path.$value)){
+                    $ext = substr(strrchr($value, "."), 1); 
+                    $fileName = $this->id . '-' . Yii::$app->security->generateRandomString() . '.' . $ext;
+                    $names[] = $fileName;
+                    copy($source_path.$value, $destination_path . $fileName);
+                    unlink($source_path.$value);
+                }
+            }  
+            
+            $new_images = implode(",", $names);
+            if($old_uploaded_files != ""){
+                $this->company_files = $old_uploaded_files . "," . $new_images;
+            }else{
+                $this->company_files = $new_images;
+            }
+        }elseif($old_uploaded_files != ""){
+            $this->company_files = $old_uploaded_files;
+        }
+        $this->save(false);
+    }
+
+    //company file ni ochirish uchun
+    public static function unlinkCompanyFile($file,$images)
+    {
+        $dir1 = self::DIR_NAME_FOR_UPLOADING_PASSPORT_FILES;
+        $dir2 = self::TEMP_DIR_NAME;
+
+        if(file_exists($dir1 . $file) && $file != null)
+        {
+            unlink($dir1 . $file);
+        }
+        elseif(file_exists($dir2 . $file) && $file != null)
+        {
+            $all_files = explode(",", $images);
+            $index = array_search($file, $all_files);
+            if($index !== false){
+                unset($all_files[$index]);
+            }
+            unlink($dir2 . $file);
+            return implode(",",$all_files);;
+        }
+    }
+
+    public function getSmsAccessToken()
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "notify.eskiz.uz/api/auth/login",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => array('email' => 'i.sharifov@bpm-group.uz', 'password' => '5u38pgdN5IFaxHiybdtEdrm0HLkhSCXglZnhpZ0S'),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return json_decode($response)->data->token;
+    }
+
+    public function sendSms($phone, $text, $token)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "notify.eskiz.uz/api/message/sms/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => array('mobile_phone' => $phone, 'message' => $text),
+            CURLOPT_HTTPHEADER => array(
+            "Authorization: Bearer " . $token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        /*echo "phone = ". $phone;
+        echo "text = ". $text;
+
+        echo "<pre>";
+        print_r($response);
+        echo "</pre>";*/
+        return $response;
     }
 }

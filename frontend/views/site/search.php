@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 $params = Yii::$app->getRequest()->getQueryString();
+
+if($cat != null) $this->title = $session->getCategoryName($categories, $cat, $sub);
+else $this->title = 'Поиск';
+
 ?>
 <section class="subcategory">
     <div class="container">
@@ -17,9 +21,9 @@ $params = Yii::$app->getRequest()->getQueryString();
         <h2 class="title"><?=$session->getCategoryName($categories, $cat, $sub)?></h2>
         <?= $this->render('search_form', [
 	        'districts' => $districts,
-          'get' => $get,
-          'dist' => $dist,
-          'cat' => $cat,
+	        'get' => $get,
+	        'dist' => $dist,
+	        'cat' => $cat,
 	        'nowLanguage' => $nowLanguage,
 	        'categories' => $categories,
 	    ]) ?>

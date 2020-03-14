@@ -23,7 +23,7 @@
 		        <div class="history-body-item">
 		          	<div class="greens">
 		            	<div class="prem-vip-discount"><?=$prom->name?></div>
-		            	<img src="<?=$prom->getImage('main_page')?>" alt="">
+		            	<img src="<?= $prom->getImage('main_page')?>" alt="">
 		          	</div>
 		          	<div><?= date('d.m.Y', strtotime($hist->date_cr) ) ?> <span class="ascii-dot"></span> <?= date('H:i', strtotime($hist->date_cr) ) ?></div>
 		          	<div>№ <?=$hist->field_id?></div>
