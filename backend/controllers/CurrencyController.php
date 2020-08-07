@@ -113,8 +113,8 @@ class CurrencyController extends Controller
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new Currency",
                     'content'=>'<span class="text-success">Create Currency success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Ок',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                            Html::a('Создать ещё',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
