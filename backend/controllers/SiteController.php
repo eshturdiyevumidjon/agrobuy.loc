@@ -68,12 +68,17 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/site/login']);
         }
+
+        $lastTime = date('Y-m-d H:i:s', strtotime('-2 minutes', strtotime(date('Y-m-d H:i:s'))));
+
         $adsCount = Ads::find()->count();
         $userCount = Users::find()->count();
+        $onlineUsers = Users::find()->where(['between', 'last_seen', $lastTime, date('Y-m-d H:i:s')])->count();
 
         return $this->render('index', [
             'adsCount' => $adsCount,
             'userCount' => $userCount,
+            'onlineUsers' => $onlineUsers,
         ]);
     }
 

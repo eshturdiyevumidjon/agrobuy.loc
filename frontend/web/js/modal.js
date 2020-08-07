@@ -16,7 +16,7 @@
         $('#star-popup').find('#starContent').load($(this).attr('value'));
     });
 
-    $('.premium_ads').on('click', function () {
+    $('.promotion_tab').on('click', function () {
         $('#ad-promotion').find('#premiumContent').load($(this).attr('value'));
     });
 
@@ -26,6 +26,10 @@
 
     $('.delete_chats').on('click', function () {
         $('#delete-chats-popup').find('#deleteChatsContent').load($(this).attr('value'));
+    });
+
+    $('.premium_ads').on('click', function () {
+        $('#ad-promotion-tab').find('#promotionContent').load($(this).attr('value'));
     });
     
   });

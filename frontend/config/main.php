@@ -63,6 +63,17 @@ return [
             'showScriptName' => false,
             'enableLanguageDetection' => false,
             'enableDefaultLanguageUrlCode' => true,
+            'rules' => [
+                '/' => 'site/index',
+                'profile/catalog/<login:[\w-]+>' => 'profile/catalog',
+                'courses/view/<slug:[\w-]+>' => 'courses/view',
+                'podcasts/view/<slug:[\w-]+>' => 'podcasts/view',
+                'videos/view/<slug:[\w-]+>' => 'video/view',
+                'webinars/view/<slug:[\w-]+>' => 'webinars/view',
+                'news/view/<slug:[\w-]+>' => 'news/view',
+                'wentrepreneur/view/<slug:[\w-]+>' => 'wentrepreneur/view',
+
+            ],
             'class' => 'codemix\localeurls\UrlManager',
             'languages' => ['af','en', 'ar', 'az', 'be', 'bg', 'bs', 'cs', 'da', 'de', 'el', 'es', 'et', 'fa', 'fi', 'fr', 'he', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'ka', 'kk', 'ko', 'kz',  'lv', 'ms', 'nb-NO', 'nl', 'pl', 'pt', 'pt-BR', 'ro', 'ru', 'sk', 'sl', 'sr', 'sr-Latn', 'sv', 'tg', 'th', 'tr', 'uk', 'uz', 'vi', 'zh-CN', 'zh-TW','kr'],
             'on languageChanged' => '\common\models\PreferenceBooks::onLanguageChanged',

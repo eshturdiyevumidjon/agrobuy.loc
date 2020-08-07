@@ -27,20 +27,6 @@ class AdsController extends \yii\web\Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['view'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -50,16 +36,18 @@ class AdsController extends \yii\web\Controller
         ];
     }
 
-	public function actionIndex()
+    public function beforeAction($action)
     {
-    	$session = new Sessions();
-    	$identity = Yii::$app->user->identity;
+        if( $action->id == 'create' || $action->id == 'edit' || $action->id == 'status' || 
+            $action->id == 'premium' ||  $action->id == 'delete-form' || 
+            $action->id == 'delete' || $action->id == 'catalog' || $action->id == 'remove-img') {
+            if (Yii::$app->user->isGuest) { 
+                throw new HttpException(403,'У вас нет разрешения на доступ к этому действию.');
+            }
+        }
 
-        return $this->render('index',[
-        	'identity' => $identity,
-            'history' => $history,
-        	'nowLanguage' => Yii::$app->language,
-        ]);
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
     }
 
     public function actionCreate()
@@ -68,6 +56,7 @@ class AdsController extends \yii\web\Controller
         $identity = Yii::$app->user->identity;
         $model = new Ads();
         $model->user_id = $identity->id;
+
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -81,12 +70,12 @@ class AdsController extends \yii\web\Controller
                 $catalog->ads_id = $model->id;
                 $catalog->save();
             }
-
-            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if ($model->uploads()) {
-                // file is uploaded successfully
-                //return;
-            }
+            // $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            // if ($model->uploads()) {
+            //     // file is uploaded successfully
+            //     //return;
+            // }
+            $model->UploadImage($_POST);
 
             return $this->redirect(['/ads/view?id=' . $model->id]);
         }
@@ -94,6 +83,7 @@ class AdsController extends \yii\web\Controller
         return $this->render('_form',[
             'catalog' => null,
             'model' => $model,
+            'post' => $_POST,
             'nowLanguage' => Yii::$app->language,
         ]);
     }
@@ -110,6 +100,8 @@ class AdsController extends \yii\web\Controller
         }
 
         if($model->load($request->post()) && $model->validate() && $model->save()) {
+            
+            $model->UploadImage($_POST);
             if(isset($request->post()['add_catalog'])) {
                 if($catalog == null) {
                     $catalog = new UsersCatalog();
@@ -121,12 +113,6 @@ class AdsController extends \yii\web\Controller
                 if($catalog != null) {
                     $catalog->delete();
                 }
-            }
-
-            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if ($model->uploads()) {
-                // file is uploaded successfully
-                //return;
             }
 
             return $this->redirect(['/ads/view?id=' . $model->id]);
@@ -153,7 +139,7 @@ class AdsController extends \yii\web\Controller
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);
-        $promotions = Promotions::find()->all();
+        $promotions = $model->getPromotionList();
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -161,35 +147,90 @@ class AdsController extends \yii\web\Controller
         }
 
         if($request->post()) {
-            $promotion = Promotions::findOne($request->post()['promotion']);
-            if($promotion->premium == 1) {
-                $model->premium = 1;
-                $model->premium_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
-            }
-            if($promotion->top == 1) {
-                $model->top = 1;
-                $model->top_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
-            }
-            $user = Users::findOne(Yii::$app->user->identity->id);
-            $user->balance = $user->balance - $promotion->price;
-            $user->save(false);
-            $model->save();
+            if(isset($request->post()['promotion'])) {
+                $promotion = Promotions::findOne($request->post()['promotion']);
+                if($promotion->premium == 1) {
+                    $model->premium = 1;
+                    $model->premium_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
+                }
+                if($promotion->top == 1) {
+                    $model->top = 1;
+                    $model->top_date = date('Y-m-d', strtotime(date('Y-m-d'). ' + ' . $promotion->days . ' days') );
+                }
+                $user = Users::findOne(Yii::$app->user->identity->id);
+                $user->balance = $user->balance - $promotion->price;
+                $user->save(false);
+                $model->save(false);
 
-            $history = new HistoryOperations();
-            $history->user_id = $user->id;
-            $history->type = 2;
-            $history->field_id = "" . $promotion->id;
-            $history->summa = $promotion->price;
-            $history->save();
+                $history = new HistoryOperations();
+                $history->type = 2;
+                $history->field_id = "" . $promotion->id;
+                $history->summa = $promotion->price;
+                $history->save();
+            }
 
             return $this->redirect(['/profile']);
         }
         else {
+            $status = 0;
+            foreach ($promotions as $value) {
+                if($value['status'] == 3) $status++;
+            }
             return $this->renderAjax('_premium_form', [
                 'model' => $model,
+                'status' => $status,
                 'promotions' => $promotions,
                 'nowLanguage' => Yii::$app->language,
             ]);
+        }
+    }
+
+    // rasmlarni yuklash uchun
+    public function actionSaveImg()
+    {
+        $images = [];
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads_trash/';
+
+        for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+
+        $ext = "";
+        $ext = substr(strrchr($_FILES['file']['name'][$i], "."), 1); 
+
+        $fPath = $_POST['names'][$i];
+            if($ext != ""){
+               $images []= $fPath;
+               $result = move_uploaded_file($_FILES['file']['tmp_name'][$i], $uploadDir . $fPath);
+            }
+        }
+    }
+
+    public function actionRemoveImg($id, $path)
+    {
+        $model = $this->findModel($id);
+        $array = explode(',', $model->images);
+        $result = "";
+        foreach ($array as $value) {
+            if($path != $value) {
+                if($result == "") $result = $value;
+                else $result .= ',' . $value;
+            }
+        }
+        $model->images = $result;
+        $model->save();
+        return 1;
+    }
+
+    // yuklangan rasmni xotiradan o'chirish uchun
+    public function actionDeleteImage($value,$id)
+    {
+        if($id)
+        {
+            $model = $this->findModel($id);
+            $model->images = Ads::unlinkFile($value,$model->images);
+            $model->save(false);
+        }else{
+            echo "kemadi id";
+            Ads::unlinkFile($value);
         }
     }
 
@@ -272,7 +313,7 @@ class AdsController extends \yii\web\Controller
 
     protected function findModel($id)
     {
-        if (($model = Ads::find()/*->joinWith(['region', 'district', 'user', 'currency', 'subcategory'])*/->where(['ads.id' => $id])->one()) !== null) {
+        if (($model = Ads::find()->where(['ads.id' => $id])->one()) !== null) {
             $identity = Yii::$app->user->identity;
             if($model->user_id != $identity->id) {
                 throw new HttpException(403, 'У вас нет разрешения на доступ к этому действию.');

@@ -1,6 +1,7 @@
 <?php
 namespace api\modules\v1\models;
 
+
 use Yii;
 
 /**
@@ -50,6 +51,15 @@ class ChatUsers extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord)
+        {
+            $this->date_cr = date("Y-m-d H:i:s");
+        }
+        return parent::beforeSave($insert);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -64,5 +74,14 @@ class ChatUsers extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
+    }
+
+    public function sendMessageAboutDeletingAds($text)
+    {
+        $chatMessage = new ChatMessage();
+        $chatMessage->chat_id = $this->chat_id;
+        $chatMessage->user_id = $this->user_id;
+        $chatMessage->message = $text;
+        $chatMessage->save(false);
     }
 }

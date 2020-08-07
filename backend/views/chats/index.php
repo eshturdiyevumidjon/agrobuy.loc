@@ -124,6 +124,7 @@ CrudAsset::register($this);
                     </ul>
                 </div>
               </div>
+              <?php if(isset($chat_id)) { ?>
               <div class="panel-footer">
                   <form data-id="message-form" name="form1" autocomplete="off" method ='post' enctype='multipart/form-data'>
                      <input type="hidden" name="uname" id="uname" value="<?=$chat_id?>">
@@ -135,6 +136,7 @@ CrudAsset::register($this);
                       </div>
                   </form>
               </div>
+            <?php } ?>
           </div>
         </div>
       </div>

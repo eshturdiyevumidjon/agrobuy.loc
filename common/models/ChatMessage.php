@@ -23,6 +23,7 @@ class ChatMessage extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $imageFiles;
     public static function tableName()
     {
         return 'chat_message';
@@ -34,9 +35,10 @@ class ChatMessage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 50],
             [['chat_id', 'user_id', 'is_read'], 'integer'],
             [['message'], 'string'],
-            [['message'], 'required'],
+            //[['message'], 'required'],
             [['date_cr'], 'safe'],
             [['file'], 'string', 'max' => 255],
             [['chat_id'], 'exist', 'skipOnError' => true, 'targetClass' => Chats::className(), 'targetAttribute' => ['chat_id' => 'id']],
@@ -120,13 +122,15 @@ class ChatMessage extends \yii\db\ActiveRecord
                 $link = '/profile/user?id=' . $message->user_id;
             }
 
+            if($message->file != null) $msg = "<a href='/chat/download-file?path=".$message->file."' ><i class='fa fa-download'></i>".$message->file." </a>";
+            else $msg = $message->message;
             $result [] = [
                 'date' => $date,
                 'showValue' => $show ? '<div class="date-letter">' . $date . '</div>' : '',
                 'class' => $class,
                 'date_cr' => date('Y-m-d', strtotime($message->date_cr)) == date('Y-m-d') ? date('H:i', strtotime($message->date_cr)) : date('H:i d.m.Y', strtotime($message->date_cr)),
                 'userAvatar' => $message->user->getAvatarForSite(),
-                'message' => $message->message,
+                'message' => $msg,
                 'link' => $link,
             ];
             if($message->is_read === 0 && $message->user_id != $identity->id) {

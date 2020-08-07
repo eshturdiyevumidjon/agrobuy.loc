@@ -92,6 +92,7 @@ CrudAsset::register($this);
                                         <?= $form->field($model,  'description')->widget(CKEditor::className(),[
                                             //'value' => $description[$lang->url],
                                             'editorOptions' => [
+                                                'filebrowserUploadUrl' => '/admin/news/ckeditor_image_upload',
                                                 'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
                                                 'inline' => false, //по умолчанию false
                                                 'height' => 200,
@@ -130,7 +131,7 @@ CrudAsset::register($this);
                                         <?php //$model->{'translation_description['.$lang->url.']'} = 'salom'; ?>
                                         <?= $form->field($model,  'translation_description['.$lang->url.']')->widget(CKEditor::className(),[
                                             'editorOptions' => [
-                                            'value' => "salom",
+                                                'filebrowserUploadUrl' => '/admin/news/ckeditor_image_upload',
                                                 'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
                                                 'inline' => false, //по умолчанию false
                                                 'height' => 200,

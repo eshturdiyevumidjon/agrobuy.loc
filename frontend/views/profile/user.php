@@ -3,6 +3,8 @@
 use yii\widgets\LinkPager;
 if(!Yii::$app->user->isGuest) $avt = true; 
 else $avt = false;
+
+$this->title = $identity->login;
 ?>
 
 <section class="personal-area persen-second">
@@ -149,7 +151,7 @@ else $avt = false;
                         </div>
                     </div>
                     <div class="m-soad">
-                        <a href="/profile/catalog?user_id=<?=$identity->id?>" class="btn-template link-btn"><?= Yii::t('app',"Katalog") ?></a>
+                        <a href="/profile/catalog/<?=$identity->login?>" class="btn-template link-btn"><?= Yii::t('app',"Katalog") ?></a>
                     </div>
                 </div>
             </div>

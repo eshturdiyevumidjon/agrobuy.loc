@@ -28,7 +28,7 @@
           	</div>
           	<div class="col-3 step-item">
             	<span><?= Yii::t('app',"Qadam") ?> 2</span>
-            	<div> <img src="/images/icon-car.png" alt=""> </div>
+            	<div> <img src="/images/car2.png" alt=""> </div>
             	<p><?= Yii::t('app',"E'loningizni qo'shing") ?></p>
           	</div>
           	<div class="col-3 step-item">

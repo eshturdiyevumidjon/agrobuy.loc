@@ -1,6 +1,7 @@
 <?php
 
 	use yii\halpers\Html;
+  $this->title = $identity->login;
 ?>  
 
 <nav aria-label="breadcrumb" class="breadcrumb-top">

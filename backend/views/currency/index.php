@@ -31,7 +31,7 @@ CrudAsset::register($this);
                 <?=GridView::widget([
                     'id'=>'crud-datatable',
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
+                    //'filterModel' => $searchModel,
                     'pjax'=>true,
                     'tableOptions' => ['class' => 'table table-bordered'],
                     'columns' => require(__DIR__.'/_columns.php'),
@@ -44,19 +44,7 @@ CrudAsset::register($this);
                         'type' => 'primary', 
                         
                         'headingOptions' => ['style' => 'display: none;'],
-                        'after'=>BulkButtonWidget::widget([
-                                    'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp;'.Yii::t('app','Delete All'),
-                                        ["bulk-delete"] ,
-                                        [
-                                            "class"=>"btn btn-danger btn-xs",
-                                            'role'=>'modal-remote-bulk',
-                                            'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                                            'data-request-method'=>'post',
-                                            'data-confirm-title'=>Yii::t('app','Are you sure?'),
-                                            'data-confirm-message'=>Yii::t('app','Are you sure want to delete this item')
-                                        ]),
-                                ]).                        
-                                '<div class="clearfix"></div>',
+                        'after'=>'<div class="clearfix"></div>',
                     ]
                 ])?>
         </div>

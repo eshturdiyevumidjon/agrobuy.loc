@@ -22,6 +22,17 @@ $config = [
                 'encryption'    => 'tls',
         ],
     ],
+    'i18n' => [
+            'translations' => [
+                 'app' => [
+                    'class' => 'yii\i18n\DbMessageSource',
+                    'sourceMessageTable'=>'{{%source_message}}',
+                    'messageTable'=>'{{%message}}',
+                    'sourceLanguage' => 'kr',
+                    'forceTranslation' => true,
+                ],
+            ],
+        ],
         // URL Configuration for our API
         'urlManager'  => [
             'enablePrettyUrl'  => true,

@@ -2,10 +2,10 @@
 use yii\helpers\Url;
 
 return [
-    [
+    /*[
         'class' => 'kartik\grid\CheckboxColumn',
         'width' => '20px',
-    ],
+    ],*/
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -22,7 +22,7 @@ return [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign'=>'middle',
-        'template' => '{update}  {delete}',
+        'template' => '{update}',
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },

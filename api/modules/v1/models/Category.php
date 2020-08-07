@@ -110,7 +110,7 @@ class Category extends \yii\db\ActiveRecord
                     $result [] = [
                         'id' => $value->id,
                         'name' => $value->name,
-                        'adsCount' =>$this->getCountSubCategory($value->id), 
+                        'adsCount' =>(int) $this->getCountSubCategory($value->id), 
                     ];
                 }
                 else {
@@ -118,7 +118,7 @@ class Category extends \yii\db\ActiveRecord
                     $result [] = [
                         'id' => $value->id,
                         'name' => $name,
-                        'adsCount' =>$this->getCountSubCategory($value->id), 
+                        'adsCount' =>(int) $this->getCountSubCategory($value->id), 
                     ];
                 }
             }

@@ -13,7 +13,12 @@ $url = Url::to([ '/' .$pathInfo . '?' . $urlParams]); // ссылка на по�
 $image_url = $model->user->getAvatarForSite(); // URL изображения
 
 ?>
-
+<script type="text/javascript">
+	function outFunc() {
+	  var tooltip = document.getElementById("myTooltip");
+	  tooltip.innerHTML = "Copy to clipboard";
+	}
+</script>
 <div class="ads-right obe">
     <h4><?=$model->price . ' ' . $model->currency->name?></h4>
     <div class="d-flex align-items-center justify-content-between my-ton">
@@ -35,7 +40,7 @@ $image_url = $model->user->getAvatarForSite(); // URL изображения
        		<div class="top-link-reuters">
         		<p><a href="<?=$path?>"><?=$model->user->login?></a></p>
 				<div class="dropdown share_button">
-				    <button class="link-template-img" type="button" id="dropdownMenuButtonnn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				    <button class="link-template-img" type="button" id="dropdownMenuButtonnn" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
 				      	<span>
 					        <svg width="453pt" height="453pt" viewBox="0 -28 454 453" xmlns="http://www.w3.org/2000/svg"><path d="m345.38 3.4102c-2.8633-2.8477-7.1602-3.6953-10.891-2.1445s-6.1641 5.1953-6.1641 9.2344v53.359c-54.012 2.1484-81.059 24.539-85.191 28.262-27.25 22.363-45.855 53.527-52.613 88.121-3.3789 16.715-3.9844 33.871-1.7852 50.781l0.007812 0.058593c0.019531 0.14844 0.042969 0.30078 0.066407 0.44922l2.125 12.215c0.71484 4.1133 3.9141 7.3516 8.0195 8.1172 4.1094 0.76562 8.2578-1.1055 10.406-4.6875l6.3672-10.613c19.562-32.527 43.941-54.09 72.469-64.086 12.867-4.5508 26.5-6.5469 40.129-5.8828v55.266c0 4.0469 2.4414 7.6992 6.1836 9.2422 3.7461 1.5469 8.0508 0.67969 10.906-2.1914l105.68-106.21c3.8945-3.9141 3.8789-10.246-0.035157-14.141zm2.9492 194.21v-40.027c0-4.9062-3.5625-9.0898-8.4102-9.8711-8.5547-1.3789-31.371-3.5703-58.336 5.8789-28.766 10.078-53.652 29.91-74.148 59.051-0.058594-9.5742 0.84766-19.133 2.707-28.527 6.0781-30.73 21.516-56.543 45.879-76.711 0.21484-0.17578 0.41797-0.35938 0.61719-0.55469 0.69922-0.64844 26.098-23.578 81.609-23.164h0.074218c5.5234 0 10.004-4.4805 10.008-10.004v-39.137l81.535 81.125z"></path><path d="m417.35 294.95c-5.5195 0-10 4.4766-10 10v42.262c-0.015624 16.562-13.438 29.98-30 30h-327.35c-16.562-0.019532-29.98-13.438-30-30v-238.24c0.019531-16.562 13.438-29.98 30-30h69.16c5.5234 0 10-4.4766 10-10 0-5.5234-4.4766-10-10-10h-69.16c-27.602 0.03125-49.969 22.398-50 50v238.24c0.03125 27.602 22.398 49.969 50 50h327.35c27.602-0.03125 49.969-22.398 50-50v-42.262c0-5.5234-4.4766-10-10-10z"></path></svg>
 					    </span>
@@ -54,12 +59,25 @@ $image_url = $model->user->getAvatarForSite(); // URL изображения
 				                </svg>
 				          Instagram
 				      </a> -->
-				      <a href="http://www.facebook.com/sharer.php?s=100&p[url]=<?php echo urlencode( $url ); ?>&p[title]=<?php echo $title ?>&p[summary]=<?php echo $summary ?>" onclick="window.open(this.href, this.title, 'toolbar=0, status=0, width=548, height=325'); return false" title="Поделиться ссылкой на Фейсбук" target="_parent" class="dropdown-item">
-				          <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
-				                    <path d="M288,176v-64c0-17.664,14.336-32,32-32h32V0h-64c-53.024,0-96,42.976-96,96v80h-64v80h64v256h96V256h64l32-80H288z"></path>
-				                </svg>
-				          Facebook
-				      </a>
+					        <a href="http://www.facebook.com/sharer.php?s=100&p[url]=<?php echo urlencode( $url ); ?>&p[title]=<?php echo $title ?>&p[summary]=<?php echo $summary ?>" onclick="window.open(this.href, this.title, 'toolbar=0, status=0, width=548, height=325'); return false" title="Поделиться ссылкой на Фейсбук" target="_parent" class="dropdown-item">
+					          <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+					                    <path d="M288,176v-64c0-17.664,14.336-32,32-32h32V0h-64c-53.024,0-96,42.976-96,96v80h-64v80h64v256h96V256h64l32-80H288z"></path>
+					                </svg>
+					          Facebook
+					       </a>
+					       <a href="/" onclick=" return false;" class="dropdown-item">
+					       	<div id="bosss">
+				       			<svg class="svg-icon" viewBox="0 0 20 20" id="copy_current_address">
+								<path fill="gray" d="M18.378,1.062H3.855c-0.309,0-0.559,0.25-0.559,0.559c0,0.309,0.25,0.559,0.559,0.559h13.964v13.964
+									c0,0.309,0.25,0.559,0.559,0.559c0.31,0,0.56-0.25,0.56-0.559V1.621C18.938,1.312,18.688,1.062,18.378,1.062z M16.144,3.296H1.621
+									c-0.309,0-0.559,0.25-0.559,0.559v14.523c0,0.31,0.25,0.56,0.559,0.56h14.523c0.309,0,0.559-0.25,0.559-0.56V3.855
+									C16.702,3.546,16.452,3.296,16.144,3.296z M15.586,17.262c0,0.31-0.25,0.558-0.56,0.558H2.738c-0.309,0-0.559-0.248-0.559-0.558
+									V4.972c0-0.309,0.25-0.559,0.559-0.559h12.289c0.31,0,0.56,0.25,0.56,0.559V17.262z"></path>
+							</svg>
+					        Копировать ссылку
+					       	</div>
+					       
+					       </a>
 				    </div>
 				  </div>
 				</div>
@@ -97,3 +115,28 @@ $image_url = $model->user->getAvatarForSite(); // URL изображения
         </div>
     </div>
 </div>
+
+<?php
+$this->registerJs(<<<JS
+	$(document).on('click', '#bosss', function(e){ 
+		  const el = document.createElement('input');  // Create a <textarea> element
+		  el.value = window.location.href;                                 // Set its value to the string that you want copied
+		  el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
+		  el.style.position = 'absolute';                 
+		  el.style.left = '-9999px';                      // Move outside the screen to make it invisible
+		  document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
+		  const selected =            
+		    document.getSelection().rangeCount > 0        // Check if there is any content selected previously
+		      ? document.getSelection().getRangeAt(0)     // Store selection if found
+		      : false;                                    // Mark as false to know no selection existed before
+		  el.select();                                    // Select the <textarea> content
+		  document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
+		  document.body.removeChild(el);                  // Remove the <textarea> element
+		  if (selected) {                                 // If a selection existed before copying
+		    document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
+		    document.getSelection().addRange(selected);   // Restore the original selection
+		  }
+	});
+JS
+);
+?>

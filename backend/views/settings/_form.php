@@ -33,6 +33,7 @@ $langs=backend\models\Lang::getLanguages();
                                         'value'=> $values[$lang->url],
                                      ],
                                     'editorOptions' => [
+                                        'filebrowserUploadUrl' => '/admin/settings/ckeditor_image_upload',
                                         'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную     возможность не обязательно использовать
                                         'inline' => false, //по умолчанию false
                                     ],
@@ -53,6 +54,7 @@ $langs=backend\models\Lang::getLanguages();
                             <div class="col-md-12">
                                 <?= $form->field($model, 'value')->widget(CKEditor::className(),[
                                     'editorOptions' => [
+                                        'filebrowserUploadUrl' => '/admin/settings/ckeditor_image_upload',
                                         'preset' => 'full', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
                                         'inline' => false, //по умолчанию false
                                     ],

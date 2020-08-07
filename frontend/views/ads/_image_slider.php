@@ -17,7 +17,7 @@
             </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/ads/edit?id=<?=$model->id?>"><?= Yii::t('app',"E'lonni tahrirlash") ?></a>
-                <a class="dropdown-item premium_ads" href="#" data-touch="false" value="/<?=$nowLanguage?>/ads/premium?id=<?=$model->id?>" data-fancybox data-src="#ad-promotion" ><?=Yii::t('app', "Targ'ib qilish")?></a>
+                <a class="dropdown-item premium_ads" href="#" data-touch="false" value="/<?=$nowLanguage?>/ads/premium?id=<?=$model->id?>" data-fancybox data-src="#ad-promotion-tab" ><?=Yii::t('app', "Targ'ib qilish")?></a>
                 <a class="dropdown-item" href="/ads/status?id=<?=$model->id?>"><?= Yii::t('app',"Faollashtirish/O'chirish") ?></a>
                 <a class="dropdown-item delete_ads" href="#" data-touch="false" value="/<?=$nowLanguage?>/ads/delete-form?id=<?=$model->id?>" data-fancybox data-src="#delete-ads-popup" ><?=Yii::t('app', "E'lonni o'chirish")?></a>
                 <a class="dropdown-item" href="/ads/catalog?id=<?=$model->id?>"><?= $catalogTitle ?></a>

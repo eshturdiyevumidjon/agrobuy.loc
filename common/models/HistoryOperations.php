@@ -60,6 +60,7 @@ class HistoryOperations extends \yii\db\ActiveRecord
     {
         if ($this->isNewRecord) {
             $this->date_cr = date("Y-m-d H:i:s");
+            $this->user_id = Yii::$app->user->identity->id;
         }
         
         return parent::beforeSave($insert);
@@ -111,5 +112,24 @@ class HistoryOperations extends \yii\db\ActiveRecord
     {
         $promotion = Promotions::findOne($this->field_id);
         if($promotion != null) return $promotion;
+    }
+
+    public function getImage($for = '_form')
+    {
+        $adminka = Yii::$app->params['adminka'];
+        if($for =='_form') {
+            return $this->image ? '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/promotions/' . $this->image .'">' : '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
+        }
+        if($for == '_columns') {
+           return $this->image  ? '<img style="width:90px; border-radius:10%;" src="/'.$adminka.'/uploads/promotions/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
+        }
+        if($for == 'main_page') {
+            $siteName = Yii::$app->params['siteName'];
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/promotions/' . $this->image)) {
+                return $siteName . '/backend/web/img/no-logo.png';
+            } else {
+                return $siteName . '/backend/web/uploads/promotions/' . $this->image;
+            }
+        }
     }
 }

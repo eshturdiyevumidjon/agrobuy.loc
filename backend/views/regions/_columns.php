@@ -5,10 +5,10 @@ use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 return [
-    [
+    /*[
         'class' => 'kartik\grid\CheckboxColumn',
         'width' => '20px',
-    ],
+    ],*/
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -45,7 +45,7 @@ return [
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
-         'template' => '{view} {update} {delete}',
+         'template' => '{update} ',
         'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);

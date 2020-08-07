@@ -38,243 +38,248 @@ class m191222_114611_create_subcategory_table extends Migration
             'id',
             'CASCADE'
         );
+        
+        $subcategories1 = [
+            '1' =>   'Яблоко',    
+            '2' =>   'Груши',   
+            '3' =>   'Абрикос', 
+            '4' =>   'Слива',   
+            '5' =>   'Персик',  
+            '6' =>   'Нектарин',    
+            '7' =>   'Нектарин',    
+            '8' =>   'Нектарин',    
+            '9' =>   'Виноград',    
+            '10' =>  'Хурма',   
+            '11' =>  'Гранат',  
+            '12' =>  'Грушы',   
+            '13' =>  'Инжир',   
+            '14' =>  'Айва',    
+            '15' =>  'Вишня',   
+            '16' =>  'Лимон',   
+            '17' =>  'Мандарины',   
+            '18' =>  'Манго',   
+            '19' =>  'Лайм',    
+            '20' =>  'Кокос',
+            '21' =>  'Грейпфрут',   
+            '22' =>  'Банан',   
+            '23' =>  'Апельсин',    
+            '24' =>  'Ананас',  
+            '25' =>  'Киви',    
+            '26' =>  'Авокадо',
+        ];
+        //category 1
+        foreach ($subcategories1 as $key => $value) {
+            $this->insert('subcategory',array(
+                'category_id' => 1,
+                'name' => $value,
+            ));
+        }
 
+        //category 2
         $this->insert('subcategory',array(
-            'id' => 1,
-            'category_id' => 1,
-            'name' => 'Яблоко',
-        ));
-
-        $this->insert('subcategory',array(
-            'id' => 2,
-            'category_id' => 1,
-            'name' => 'Груши',
-        ));
-
-        $this->insert('subcategory',array(
-            'id' => 3,
             'category_id' => 2,
             'name' => 'Лук',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 4,
             'category_id' => 2,
             'name' => 'Картошка',
         ));
 
+        //catgeory 3
         $this->insert('subcategory',array(
-            'id' => 5,
             'category_id' => 3,
             'name' => 'Деревья',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 6,
             'category_id' => 3,
             'name' => 'Газоны',
         ));
 
+        //category 4
         $this->insert('subcategory',array(
-            'id' => 7,
             'category_id' => 4,
-            'name' => 'Арахис',
+            'name' => 'Изюм',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 8,
             'category_id' => 4,
-            'name' => 'Фундук',
+            'name' => 'Курага',
         ));
 
+        //category 5
         $this->insert('subcategory',array(
-            'id' => 9,
             'category_id' => 5,
             'name' => 'Маш',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 10,
             'category_id' => 5,
             'name' => 'Нут',
         ));
 
+        //catgeory 6
         $this->insert('subcategory',array(
-            'id' => 11,
             'category_id' => 6,
-            'name' => 'Изюм',
+            'name' => 'Арахис',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 12,
             'category_id' => 6,
-            'name' => 'Курага',
+            'name' => 'Фундук',
         ));
 
+        //catgeory 6
         $this->insert('subcategory',array(
-            'id' => 13,
-            'category_id' => 7,
+            'category_id' => 6,
             'name' => 'Вариант 1',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 14,
-            'category_id' => 7,
+            'category_id' => 6,
             'name' => 'Вариант 2',
         ));
 
+        //category 8
         $this->insert('subcategory',array(
-            'id' => 15,
             'category_id' => 8,
             'name' => 'Пшеница',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 16,
             'category_id' => 8,
             'name' => 'Кукуруза',
         ));
 
+        //category 9
         $this->insert('subcategory',array(
-            'id' => 17,
             'category_id' => 9,
             'name' => 'Вариант 3',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 18,
             'category_id' => 9,
             'name' => 'Вариант 4',
         ));
 
+        //category 10
         $this->insert('subcategory',array(
-            'id' => 19,
             'category_id' => 10,
             'name' => 'Баранина',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 20,
             'category_id' => 10,
             'name' => 'Говядина',
         ));
 
+        //category 11
         $this->insert('subcategory',array(
-            'id' => 21,
             'category_id' => 11,
-            'name' => 'Молоко',
-        ));
-
-        $this->insert('subcategory',array(
-            'id' => 22,
-            'category_id' => 11,
-            'name' => 'Сыр',
-        ));
-
-        $this->insert('subcategory',array(
-            'id' => 23,
-            'category_id' => 12,
             'name' => 'Корова',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 24,
-            'category_id' => 12,
+            'category_id' => 11,
             'name' => 'Курица',
         ));
 
+        //category 12
         $this->insert('subcategory',array(
-            'id' => 25,
-            'category_id' => 13,
+            'category_id' => 12,
             'name' => 'Семена 1',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 26,
-            'category_id' => 13,
+            'category_id' => 12,
             'name' => 'Семена 2',
         ));
 
+        //category 13
         $this->insert('subcategory',array(
-            'id' => 27,
-            'category_id' => 14,
+            'category_id' => 13,
             'name' => 'Средства защиты растений',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 28,
-            'category_id' => 14,
+            'category_id' => 13,
             'name' => 'Минеральные удобрения',
         ));
 
+        //category 14
         $this->insert('subcategory',array(
-            'id' => 29,
+            'category_id' => 14,
+            'name' => 'Холодильник1',
+        ));
+
+        $this->insert('subcategory',array(
+            'category_id' => 14,
+            'name' => 'Холодильник2',
+        ));
+
+        //category 15
+        $this->insert('subcategory',array(
             'category_id' => 15,
             'name' => 'Древесина1',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 30,
             'category_id' => 15,
             'name' => 'Древесина2',
         ));
 
+        //category 16
         $this->insert('subcategory',array(
-            'id' => 31,
             'category_id' => 16,
             'name' => 'Трактор1',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 32,
             'category_id' => 16,
             'name' => 'Трактор2',
         ));
 
+        //category 17
         $this->insert('subcategory',array(
-            'id' => 33,
             'category_id' => 17,
             'name' => 'Оборудование 1',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 34,
             'category_id' => 17,
             'name' => 'Оборудование 2',
         ));
 
+        //category 18
         $this->insert('subcategory',array(
-            'id' => 35,
             'category_id' => 18,
-            'name' => 'Холодильник1',
+            'name' => 'Молоко',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 36,
             'category_id' => 18,
-            'name' => 'Холодильник2',
+            'name' => 'Сыр',
         ));
 
+        //category 19
         $this->insert('subcategory',array(
-            'id' => 37,
             'category_id' => 19,
             'name' => 'Капельные1',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 38,
             'category_id' => 19,
             'name' => 'Капельные2',
         ));
 
+        //category 20
         $this->insert('subcategory',array(
-            'id' => 39,
             'category_id' => 20,
-            'name' => 'логистика',
+            'name' => 'Логистика',
         ));
 
         $this->insert('subcategory',array(
-            'id' => 40,
             'category_id' => 20,
             'name' => 'Документация',
         ));

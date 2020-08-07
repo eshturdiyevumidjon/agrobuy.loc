@@ -2,34 +2,33 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\ResendVerificationEmailForm;
-use frontend\models\VerifyEmailForm;
 use yii\web\HttpException;
-use yii\base\InvalidArgumentException;
+use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\Response;
+use yii\base\InvalidArgumentException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginFormUser;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
+use yii\widgets\ActiveForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use backend\models\Banners;
-use common\models\Category;
 use frontend\models\Sessions;
+use frontend\models\RecoveryForm;
+use frontend\models\PasswordForm;
+use frontend\models\CodeForm;
+use backend\models\Banners;
+use backend\models\Settings;
 use backend\models\News;
 use backend\models\AdvertisingItems;
+use backend\models\UsersBall;
+use common\models\Category;
 use common\models\Ads;
 use common\models\UsersPromotion;
-use backend\models\UsersBall;
-use yii\widgets\ActiveForm;
 use common\models\Favorites;
 use common\models\AdsSearch;
-use yii\web\NotFoundHttpException;
 use common\models\Users;
-use \yii\web\Response;
-use backend\models\Settings;
+use common\models\LoginFormUser;
 
 /**
  * Site controller
@@ -113,6 +112,7 @@ class SiteController extends Controller
             ->where(['advertising_id' => $adv->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
+
         foreach ($reklama as $value) {
             $value->view_count = $value->view_count + 1;
             $value->save();
@@ -160,16 +160,9 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-       /* Yii::$app->user->logout();
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }*/
-
-        //if(!Yii::$app->request->isAjax) throw new NotFoundHttpException('The requested page does not exist.');
-
         $session = new Sessions();
         $request = Yii::$app->request;
-        $model = new \common\models\LoginFormUser();
+        $model = new LoginFormUser();
         $about_company = $session->getCompany();
         $siteName = Yii::$app->params['siteName'];
 
@@ -178,6 +171,7 @@ class SiteController extends Controller
         } else {
             $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
         }
+
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -188,11 +182,9 @@ class SiteController extends Controller
             if($user != null && $user->access == 1) {
                 $model->login();
                 return $this->goBack();
-            }
-            else {
+            } else {
                 throw new HttpException(403, $user->access_comment);
             }
-            
         }
         else {
             return $this->renderAjax('login', [
@@ -239,27 +231,84 @@ class SiteController extends Controller
         }
 
         if($model->load($request->post()) && $model->validate() && $model->signup()){
+
+            $user = Users::find()->where(['phone' => $model->phone])->one();
+            $code = rand(100000,999999);
+            $user->access = 3;
+            $user->code_for_phone = '' . $code;
+            if($user->save(false)) {
+                $phone = str_replace('+', '', $user->phone);
+                $phone = str_replace('-', '', $phone);
+                $phone = str_replace(' ', '', $phone);
+                $result = $user->sendSms($phone, $user->code_for_phone, $user->getSmsAccessToken());
+            }
+
+            return $this->redirect(['/site/code']);
+
             $loginForm = new LoginFormUser();
             $loginForm->username = $model->login;
             $loginForm->password = $model->password;
             $loginForm->validate();
             $loginForm->login();
+
             if($loginForm->validate() && $loginForm->login() ) {
                 return $this->redirect(['/profile']);
-            }
-            else{
+            } else {
                 return $this->renderAjax('signup', [
                     'model' => $model,
                     'path' => $path,
                     'nowLanguage' => Yii::$app->language,
                 ]);
             }
-        }
-        else {
+        } else {
             return $this->renderAjax('signup', [
                 'model' => $model,
                 'path' => $path,
                 'nowLanguage' => Yii::$app->language,
+            ]);
+        }
+    }
+
+    public function actionCode()
+    {
+        $request = Yii::$app->request;
+        $model = new CodeForm();
+        $session = new Sessions();
+        $about_company = $session->getCompany();
+        $siteName = Yii::$app->params['siteName'];
+
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+        }
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if($model->load($request->post()) && $model->validate()) {
+
+            $user = Users::find()->where(['code_for_phone' => $model->code])->one();
+            $user->code_for_phone = null;
+            $user->access = 1;
+            $user->save(false);
+
+            $loginForm = new LoginFormUser();
+            $loginForm->username = $user->login;
+
+            if($loginForm->login2() ) {
+                return $this->redirect(['/profile']);
+            } else {
+                return $this->render('code', [
+                    'model' => $model,
+                ]);
+            }
+
+        } else {
+            return $this->render('code', [
+                'model' => $model,
             ]);
         }
     }
@@ -279,6 +328,7 @@ class SiteController extends Controller
         $favorites = Favorites::find()->where(['type' => 1])->all();
         $siteName = Yii::$app->params['siteName'];
         $adsPagination = Yii::$app->params['adsPagination'];
+
         if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
             $path = $siteName . '/backend/web/img/no-logo.png';
         } else {
@@ -290,6 +340,7 @@ class SiteController extends Controller
             ->where(['advertising_id' => $search_big->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
+
         foreach ($reklamaBig as $value) {
             $value->view_count = $value->view_count + 1;
             $value->save();
@@ -300,6 +351,7 @@ class SiteController extends Controller
             ->where(['advertising_id' => $search_small->id])
             ->orderBy(['rand()' => SORT_DESC])
             ->all();
+
         foreach ($reklamaSmall as $value) {
             $value->view_count = $value->view_count + 1;
             $value->save();
@@ -336,6 +388,91 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Signs user up.
+     *
+     * @return mixed
+     */
+    public function actionRecoveryPassword()
+    {
+        $request = Yii::$app->request;
+        $model = new RecoveryForm();
+        $session = new Sessions();
+        $about_company = $session->getCompany();
+        $siteName = Yii::$app->params['siteName'];
+
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+        }
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if($model->load($request->post()) && $model->validate()){
+            $user = Users::find()->where(['phone' => $model->phone])->one();
+            $code = rand(100000,999999);
+            $user->code_for_phone = '' . $code;
+            if($user->save(false)) {
+                $phone = str_replace('+','', $user->phone);
+                $phone = str_replace('-','', $phone);
+                $phone = str_replace(' ','', $phone);
+                $result = $user->sendSms($phone, $user->code_for_phone, $user->getSmsAccessToken());
+            }
+
+            return $this->redirect(['/site/password']);
+        } else {
+            return $this->renderAjax('recovery-password', [
+                'model' => $model,
+                'path' => $path,
+                'nowLanguage' => Yii::$app->language,
+            ]);
+        }
+    }
+
+    public function actionPassword()
+    {
+        $request = Yii::$app->request;
+        $model = new PasswordForm();
+        $session = new Sessions();
+        $about_company = $session->getCompany();
+        $siteName = Yii::$app->params['siteName'];
+
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/about-company/' . $about_company->logo)) {
+            $path = $siteName . '/backend/web/img/no-logo.png';
+        } else {
+            $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
+        }
+
+        if($model->load($request->post()) && $model->validate()){
+
+            $user = Users::find()->where(['code_for_phone' => $model->code])->one();
+            $user->new_password = $model->password;
+            $user->code_for_phone = null;
+            $user->save();
+            
+            $loginForm = new LoginFormUser();
+            $loginForm->username = $user->login;
+            $loginForm->password = $model->password;
+
+            if($loginForm->validate() && $loginForm->login() ) {
+                return $this->redirect(['/profile']);
+            } else {
+                return $this->render('password', [
+                    'model' => $model,
+                ]);
+            }
+
+        } else {
+            return $this->render('password', [
+                'model' => $model,
+            ]);
+        }
+    }
+
     public function actionPrivacy($key)
     {
         $session = new Sessions();
@@ -344,107 +481,6 @@ class SiteController extends Controller
         return $this->render('privacy', [
             'privacy' => $privacy,
             'nowLanguage' => Yii::$app->language,
-        ]);
-    }
-
-    /**
-     * Requests password reset.
-     *
-     * @return mixed
-     */
-    public function actionRequestPasswordReset()
-    {
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
-                return $this->goHome();
-            } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
-            }
-        }
-
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Resets password.
-     *
-     * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
-     */
-    public function actionResetPassword($token)
-    {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
-
-            return $this->goHome();
-        }
-
-        return $this->render('resetPassword', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Verify email address
-     *
-     * @param string $token
-     * @throws BadRequestHttpException
-     * @return yii\web\Response
-     */
-    public function actionVerifyEmail($token)
-    {
-        try {
-            $model = new VerifyEmailForm($token);
-        } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-        if ($user = $model->verifyEmail()) {
-            if (Yii::$app->user->login($user)) {
-                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
-                return $this->goHome();
-            }
-        }
-
-        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
-        return $this->goHome();
-    }
-
-    /**
-     * Resend verification email
-     *
-     * @return mixed
-     */
-    public function actionResendVerificationEmail()
-    {
-        $model = new ResendVerificationEmailForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-                return $this->goHome();
-            }
-            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
-        }
-
-        return $this->render('resendVerificationEmail', [
-            'model' => $model
-        ]);
-    }
-
-    public function actionChat()
-    {
-        return $this->render('chat', [
         ]);
     }
 }

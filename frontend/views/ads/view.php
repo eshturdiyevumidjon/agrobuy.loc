@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 
+$this->title = $model->title;
+
 if(!Yii::$app->user->isGuest) $avt = true; 
 else $avt = false;
 
@@ -35,7 +37,7 @@ foreach ($text as $key => $value) {
           	</div>
           	<div class="col-lg-7 ads-about">
             	<h5><?=$model->title?></h5>
-            	<p><textarea style="border: 0; resize: none; outline: none; width:100%; overflow: hidden; padding-bottom: 20%; "><?=$model->text?></textarea></p>
+            	<p><pre class="ads_text_description"><?=$model->text?></pre></p>
           	</div>
         </div>
     </div>

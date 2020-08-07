@@ -58,13 +58,13 @@ class m150207_210500_i18n_init extends Migration
             "Kategoriya" => "Категория",
             "Qidirish" => "Қидириш",
             "Joylashuvi" => "Жойлашуви",
-            "So'rovingizni kiriting" => "Сўровингизни киритинг",
+            "So'rovingizni kiriting" => "Сўровингизни киритинг", //Qidiruv
             "Kategoriyani tanlang" => "Категорияни танланг",
             "Xabarlar" => "Хабарлар",
             "Barcha huquqlar himoyalangan" => "Барча ҳуқуқлар ҳимояланган",
             "Yangi e'lonlar" => "Янги эълонлар",
             "Ularga ishonishadi" => "Уларга ишонишади",
-            "Pullik e'lonlar" => "Пуллик эълонлар",
+            "Pullik e'lonlar" => "Пуллик эълонлар", //Premium e’lonlar
             "Maxfiylik siyosati" => "Махфийлик сиёсати",
             "Tez sotish" => "Тез сотиш",
             "Foydalanuvchi shartnomasi" => "Фойдаланувчи шартномаси",
@@ -97,7 +97,7 @@ class m150207_210500_i18n_init extends Migration
             "Ro'yxatdan o'tish" => "Рўйхатдан ўтиш",
             "Bu sahifa mavjud emas" => "Бу сахифа мавжуд эмас",
             "Siz notog'ri yoki o'chib ketgan havoladan foydalangan bo'lishingiz mumkin" => "Сиз нотўғри ёки ўчиб кетган хаволадан фойдаланган бўлишингиз мумкин",
-            "E'lon qo'shish" => "Эълон қўшиш",
+            "E'lon qo'shish" => "Эълон қўшиш", // E’lon berish
             "ga" => "га",
             "So'm" => "Сўм",
             "Chiqish" => "Чиқиш",
@@ -158,7 +158,7 @@ class m150207_210500_i18n_init extends Migration
             "Profil rasmini o'zgartirish" => "Профиль расмини ўзгартириш",
             "Ishonch" => "Ишонч",
             "Mening katalogim" => "Менинг каталогим",
-            "Mening chatim" => "Менинг чатим",
+            "Mening chatim" => "Менинг чатим", //Chatlar
             "Mening e'lonlarim" => "Менинг эълонларим",
             "Sevimlilarim" => "Севимлиларим",
             "Pullik xizmatlar" => "Пуллик хизматлар",
@@ -214,6 +214,14 @@ class m150207_210500_i18n_init extends Migration
             "Kimga yozmoqchi ekanligingizni tanlang" => "Кимга ёзмоқчи эканлигингизни танланг",
             "Tumanni tanlang" => "Туманни танланг",
             "Bosh S." => "Бош С.",
+            "Pullik xizmat vaqtinchalik mavjud emas. Administratorga murojaat qiling" => "Платное объявление временно не доступно. Обратитесь к администратору",
+            "Siz bu pullik xizmatni sotib olgansiz. Muddat tugashini kuting" => "Сиз бу пуллик хизматни сотиб олгансиз. Муддат тугашини кутинг",
+            "Parolni tiklash" => "Парольни тиклаш",
+            "Kodni kiriting" => "Кодни киритинг",
+            "Yangi parol" => "Янги пароль",
+            "Takroriy parol" => "Такрорий пароль",
+            "Parolni tiklash" => "Парольни тиклаш",
+            "Telefon raqamingizga kodli xabar yuborildi" => "Телефон рақамингизга кодли хабар юборилди",
         ];
 
         $translations_uz_ru = [
@@ -232,13 +240,13 @@ class m150207_210500_i18n_init extends Migration
             "Kategoriya" => "Категория",
             "Qidirish" => "Найти",
             "Joylashuvi" => "Местоположение",
-            "So'rovingizni kiriting" => "Введите запрос",
+            "So'rovingizni kiriting" => "Введите запрос", //Qidiruv
             "Kategoriyani tanlang" => "Выберите категорию",
             "Xabarlar" => "Новости",
             "Barcha huquqlar himoyalangan" => "Все права защищены",
             "Yangi e'lonlar" => "Новые объявления",
             "Ularga ishonishadi" => "Им доверяют",
-            "Pullik e'lonlar" => "Премиум объявления",
+            "Pullik e'lonlar" => "Премиум объявления", // Premium e’lonlar
             "Maxfiylik siyosati" => "Политика конфиденциальности",
             "Tez sotish" => "Быстрая продажа",
             "Foydalanuvchi shartnomasi" => "Пользовательское соглашение",
@@ -271,7 +279,7 @@ class m150207_210500_i18n_init extends Migration
             "Ro'yxatdan o'tish" => "Регистрация",
             "Bu sahifa mavjud emas" => "Эта страница недоступна",
             "Siz notog'ri yoki o'chib ketgan havoladan foydalangan bo'lishingiz mumkin" => "Возможно вы воспользовались недействительной ссылкой или страница была удалена",
-            "E'lon qo'shish" => "Подать объявления",
+            "E'lon qo'shish" => "Подать объявления", //E’lon berish
             "ga" => "За",
             "So'm" => "Сум",
             "Chiqish" => "Выход",
@@ -332,7 +340,7 @@ class m150207_210500_i18n_init extends Migration
             "Profil rasmini o'zgartirish" => "Сменить фото профиля",
             "Ishonch" => "Доверие",
             "Mening katalogim" => "Мой каталог",
-            "Mening chatim" => "Мои чаты",
+            "Mening chatim" => "Мои чаты", //Chatlar
             "Mening e'lonlarim" => "Мои объявление",
             "Sevimlilarim" => "Избранное",
             "Pullik xizmatlar" => "Платные услуги ",
@@ -342,7 +350,7 @@ class m150207_210500_i18n_init extends Migration
             "Foydalanuvchini baholash" => "Оценить пользователя",
             "Statistika" => "Статистика",
             "Sotish" => "Продать",
-            "Saralash" => "Сортировать по",
+            "Saralash" => "Сортировать",
             "Narxi bo'yicha" => "Цене",
             "Sanasi bo'yicha" => "Дате",
             "Afsuski sizning so'rovingiz bo'yicha hech narsa topilmadi" => "К сожалению, по Вашему запросу ничего не найденно",
@@ -388,6 +396,16 @@ class m150207_210500_i18n_init extends Migration
             "Kimga yozmoqchi ekanligingizni tanlang" => "Выберите, кому хотели бы написать",
             "Tumanni tanlang" => "Выберите район",
             "Bosh S." => "Главная",
+            /*"Sizning e'loningiz rivojlanmoqda. Muddat tugashini kuting" => "Ваше объявление продвигается. Дождитесь окончания срока продвижения",
+            "Siz bu pullik xizmatni sotib olgansiz. Muddat tugashini kuting" => "Вы приобрели платную услугу. Дождитесь окончания срока",*/
+            "Pullik xizmat vaqtinchalik mavjud emas. Administratorga murojaat qiling" => "Платное объявление временно не доступно",
+            "Siz bu pullik xizmatni sotib olgansiz. Muddat tugashini kuting" => "Вы приобрели платную услугу. Дождитесь окончания срока",
+            "Parolni tiklash" => "Восстановление пароля",
+            "Kodni kiriting" => "Введите Код",
+            "Yangi parol" => "Новый пароль",
+            "Takroriy parol" => "Повторный ввод паролья",
+            "Parolni tiklash" => "Востановление пароля",
+            "Telefon raqamingizga kodli xabar yuborildi" => "На указанный Вами номер телефона было выслано сообщение с кодом",
         ];
 
         $keys = array_keys($translations);

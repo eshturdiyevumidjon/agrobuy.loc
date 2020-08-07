@@ -524,7 +524,7 @@ section.select-category:after{
 	-ms-flex-wrap: wrap;
 	-o-flex-wrap: wrap;
 	flex-wrap: wrap;
-	height: 260px;
+	height: 370px;
 	padding: 20px 0;
 	-ms-align-items: flex-start;
 	align-items: flex-start;
@@ -2134,6 +2134,7 @@ section.catalog .reclama{
 	display: -ms-flex;
 	display: -o-flex;
 	display: flex;
+	z-index: 15;
 }
 .img-avatar{
 	border-radius: 10px;
@@ -2414,6 +2415,10 @@ section.chat{
 	box-shadow: 0px 0px 15px 0px rgba( 55, 169, 48, .61 );
 	border-color: #badeb8;
 }
+.item-chat.admin_chat>a{
+    box-shadow: 0 0 3px 2px rgb(255, 193, 7);
+}
+
 .img-chat-user{
 	border-radius: 50%;
 	overflow: hidden;
@@ -2432,11 +2437,13 @@ section.chat{
 	font-size: 16px;
 	font-weight: 500;
 	margin-bottom: 15px;
+    word-break: break-word;
 }
 .text-chat-user p{
 	font-size: 14px;
 	font-weight: 300;
 	margin-bottom: 15px;
+    word-break: break-word;
 }
 .text-chat-user span{
 	font-weight: 500;
@@ -2520,6 +2527,7 @@ section.chat{
 	border-radius: 10px;
 	position: relative;
 	z-index: 2;
+	word-break: break-all;
 }
 
 .person-left.user-letter p:after{
@@ -4382,7 +4390,19 @@ button#user_avatar {
 .premium_form .form-group input:checked+label .prem-vip-item{
     box-shadow: 0px 0px 30px 0px rgb(9, 152, 0);
 }
-div#imagesList{
+div#imagesListCompany{
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	-moz-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	-o-flex-wrap: wrap;
+	flex-wrap: wrap;
+}
+div .imagesList{
 	display: -webkit-flex;
 	display: -moz-flex;
 	display: -ms-flex;
@@ -4397,6 +4417,7 @@ div#imagesList{
 .image_preview_class{
 	position: relative;
 	margin-right: 25px;
+	margin-bottom: 20px;
 }
 .image_preview_class a{
 	position: absolute;
@@ -4469,10 +4490,46 @@ span.chat_none_text{
 }
 .ads-container{
 	position: relative;
+	z-index: 20
 }
 .ads-container .dropdown-person.three_point{
 	z-index: 5;
 }
+div#premiumContent span.ads_text_error{
+	width: 100%;
+	font-size: 34px;
+	font-weight: 700;
+	margin-bottom: 20px;
+}
+span.vip_text, span.top_text{
+    color: #37a930;
+    font-weight: 700;
+    width: 100%;
+    font-size: 18px;
+}
+.no_active_ads .sub-prime.status{
+	top: 50px;
+}
+.item-product.top_ads_class{
+	border: 3px solid #ffc107;
+}
+.ads_text_description{
+    color: #383838;
+    font-family: 'Montserrat';
+    font-size:16px;
+	font-weight:400;
+}
+.footer_text img{
+	max-width: 100%;
+	height: auto !important;
+}
+
+
+
+
+
+
+
 
 /*Umid yozgan kodlar*/
 .my-nav-bottom ul li.active a{
@@ -4493,10 +4550,60 @@ body.not_slider section.form-section {
 }
 span.multiple-photos {
     width: auto !important;
-    border: 0;
+    border: 1px solid;
     /* box-shadow: none; */
     /* margin-left: 30px; */
     box-sizing: border-box;
     min-width: 50px;
 }
+a.img-main-user.avatar_user_img {
+    max-height: 185px;
+}
+
+.form-group.create-select-style.field-ads-region_id.required.has-error{
+    position: relative;
+    padding-bottom: 30px;
+}
+.form-group.create-select-style.field-ads-region_id.required.has-error p.help-block.help-block-error {
+    position: absolute;
+    left: 175px;
+    bottom: -20px;
+}
+
+div#ad-promotion {
+    min-height: 560px;
+}
+
+div#ad-promotion-tab {
+    max-width: 1050px;
+}
+
+p.error_promotion {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 700;
+    margin-top: 10vh;
+    color: red;
+}
+.form_group.password_hidden{
+	position: relative;
+}
+span#password_hidden_show{
+	display: inline-block;
+	height: 50px;
+	width: 50px;
+	right: 0;
+	top: 0;
+	position: absolute;
+	cursor: pointer;
+	background: url(../images/eye.png) no-repeat;
+    background-position: center;
+	background-size: 35px;
+}
+span#password_hidden_show.active{
+	background: url(../images/hide.png) no-repeat;
+	background-size: 35px;
+    background-position: center;
+}
+
 /**/
