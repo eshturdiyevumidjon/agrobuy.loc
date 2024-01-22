@@ -262,7 +262,7 @@ class News extends \yii\db\ActiveRecord
         return $news;
    }
 
-    public function getAllNewsList()
+    public static function getAllNewsList()
     {
         $session = new Sessions();
         $news = News::find()->orderBy(['id' => SORT_DESC])->all();

@@ -87,7 +87,7 @@ class UsersBall extends \yii\db\ActiveRecord
     }
 
     //eng yuqori ballga ega bolgan dastlabki 4 ta userning 4ta eng yangi elonini olish им доверяют ga kerak
-    public function getTrustedAds()
+    public static function getTrustedAds()
     {
         $adsId = [];
         $usersBall = UsersBall::find()->all();

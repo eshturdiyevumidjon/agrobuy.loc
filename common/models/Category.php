@@ -100,7 +100,7 @@ class Category extends \yii\db\ActiveRecord
         return $result;
     }
 
-    public function getAllCategoryList()
+    public static function getAllCategoryList()
     {
         $session = new Sessions();
         $category = Category::find()->all();

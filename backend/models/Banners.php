@@ -105,7 +105,7 @@ class Banners extends \yii\db\ActiveRecord
         return $news;
     }
 
-    public function getAllBannersList()
+    public static function getAllBannersList()
     {
         $session = new Sessions();
         $banners = Banners::find()->all();
