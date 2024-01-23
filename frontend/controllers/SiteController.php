@@ -370,7 +370,7 @@ class SiteController extends Controller
         }
 
         return $this->render('search', [
-            'model' => $model,
+            // 'model' => $model,
             'get' => $get,
             'dist' => $dist,
             'cat' => $cat,

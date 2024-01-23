@@ -76,7 +76,7 @@ class AdvertisingItems extends \yii\db\ActiveRecord
 
     public function getImage($for = '_form')
     {
-        $adminka = Yii::$app->params['adminka'];
+        $adminka = Yii::$app->params['adminka'] ?? 'admin';
         if($for =='_form') {
             return $this->file ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'/uploads/reclama-advert/' . $this->file .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
         }

@@ -33,7 +33,7 @@ class PreferenceBooks
         else $date;
     }
 
-    public function getDateTime($date)
+    public static function getDateTime($date)
     {
         if($date != null) return date('H:i d.m.Y', strtotime($date) );
         else $date;
