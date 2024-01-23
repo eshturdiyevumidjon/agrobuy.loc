@@ -108,7 +108,7 @@ class Complaints extends \yii\db\ActiveRecord
             'query' => $query,
         ]);
 
-        $this->load($params);
+        $this->load($param);
 
         if (!$this->validate()) {
             return $dataProvider;
