@@ -4,8 +4,8 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=agrobuy',
-            'username' => 'root',
-            'password' => '',
+            'username' => 'agrobuy',
+            'password' => 'agrobuy_23',
             'charset' => 'utf8',
         ],
         'mailer' => [

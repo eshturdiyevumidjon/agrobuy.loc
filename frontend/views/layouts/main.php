@@ -30,7 +30,7 @@ $siteName = Yii::$app->params['siteName'];
 if($about_company->view_banners == 1) $class = '';
 else $class = 'not_slider';
 
-if(Yii::$app->user->identity->id) {
+if(isset(Yii::$app->user->identity->id) && Yii::$app->user->identity->id) {
 	$user = Users::findOne(Yii::$app->user->identity->id);
 	$user->last_seen = date('Y-m-d H:i:s');
 	$user->save();

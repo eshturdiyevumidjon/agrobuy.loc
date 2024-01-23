@@ -237,7 +237,7 @@ class Ads extends \yii\db\ActiveRecord
         $session = new Sessions();
         $region = Regions::find()->all();
         $result = [ '' => Yii::t('app', "Tanlang") ];
-        $siteName = Yii::$app->params['siteName'];
+        $siteName = 'https://' . $_SERVER['SERVER_NAME'];
 
         foreach ($region as $value) {
             if(Yii::$app->language == 'kr') {
@@ -371,7 +371,7 @@ class Ads extends \yii\db\ActiveRecord
         $explode = explode(',', $this->images);
         $img = null;
         foreach ($explode as $file) {
-            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file;
+            $img = '/backend/web/uploads/ads/' . $file;
             if(file_exists($img) && $file != null) {$img = $file; break;}
         }
 
@@ -384,7 +384,7 @@ class Ads extends \yii\db\ActiveRecord
         }
         if($for == 'main_page') {
             $siteName = Yii::$app->params['siteName'];
-            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $img) || $img == null) {
+            if (!file_exists('/backend/web/uploads/ads/' . $img) || $img == null) {
                 return $siteName . '/backend/web/img/no-images.jpg';
             } else {
                 return $siteName . '/backend/web/uploads/ads/' . $img;
