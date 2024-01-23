@@ -62,7 +62,7 @@ class Ads extends \yii\db\ActiveRecord
             [['images', 'city_name', 'text'], 'string'],
             [['price', 'old_price'], 'number'],
             [['date_cr','comment', 'top_date', 'premium_date'], 'safe'],
-            [['type', 'title', 'currency_id', 'category_id', 'subcategory_id','region_id', 'district_id'], 'required'],
+            [['type', 'title', 'currency_id', 'category_id', 'subcategory_id','region_id'], 'required'],
             [['title', 'unit_price'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
@@ -371,11 +371,11 @@ class Ads extends \yii\db\ActiveRecord
         $explode = explode(',', $this->images);
         $img = null;
         foreach ($explode as $file) {
-            $img = '/backend/web/uploads/ads/' . $file;
+            $img = $_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $file;
             if(file_exists($img) && $file != null) {$img = $file; break;}
         }
 
-        $adminka = Yii::$app->params['adminka'];
+        $adminka = 'admin';
         if($for =='_form') {
             return $img ? '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/ads/' . $img .'">' : '<img style="width:100%; height:200px; border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
         }
@@ -384,7 +384,7 @@ class Ads extends \yii\db\ActiveRecord
         }
         if($for == 'main_page') {
             $siteName = Yii::$app->params['siteName'];
-            if (!file_exists('/backend/web/uploads/ads/' . $img) || $img == null) {
+            if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/backend/web/uploads/ads/' . $img) || $img == null) {
                 return $siteName . '/backend/web/img/no-images.jpg';
             } else {
                 return $siteName . '/backend/web/uploads/ads/' . $img;
