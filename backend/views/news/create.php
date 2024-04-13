@@ -15,8 +15,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel-body">
 	    <?= $this->render('_form', [
 	        'model' => $model,
-	        /*'translation_text' => $translation_text,
-            'translation_title' => $translation_title,*/
+            'sliderProvider' => [],
+            'sortProvider' => [],
+            'titles' => [],
+            'texts' => [],
+            'sort_title' => [],
+            'sort_items' => [],
+            'landing_title' => [],
+            'landing_text' => [],
+            'important' => [],
+            'growing_title' => [],
+            'growing_text' => [],
+            'growing_items' => [],
+            'description' => [],
 	    ]) ?>
 	</div>
 </div>

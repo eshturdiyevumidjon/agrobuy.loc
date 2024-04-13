@@ -167,8 +167,6 @@ class NewsController extends Controller
         else {
             return $this->render('create', [
                 'model' => $model,
-                'sliderProvider' => null,
-                'sortProvider' => null,
             ]);
         }       
     }

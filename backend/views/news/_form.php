@@ -122,10 +122,10 @@ CrudAsset::register($this);
                             <?php else: ?>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value' => $titles[$lang->url]])->label(Yii::t('app', 'Title')) ?>
+                                        <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value' => $titles[$lang->url] ?? ''])->label(Yii::t('app', 'Title')) ?>
                                     </div>
                                     <div class="col-md-12">
-                                        <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows' => 6, 'maxLength' => '1500', 'value' => $texts[$lang->url]])->label(Yii::t('app', 'Text')) ?>
+                                        <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows' => 6, 'maxLength' => '1500', 'value' => $texts[$lang->url] ?? ''])->label(Yii::t('app', 'Text')) ?>
                                     </div>
                                     <div class="col-md-12">
                                         <?php //$model->{'translation_description['.$lang->url.']'} = 'salom'; ?>
@@ -140,21 +140,21 @@ CrudAsset::register($this);
                                     </div>
                                     <div class="col-md-12"><hr><hr></div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'translation_sort_title['.$lang->url.']')->textInput([ 'placeholder' => 'Выбираем сорт', 'value' => $sort_title[$lang->url]])->label('Выбираем сорт') ?>
-                                        <?= $form->field($model, 'translation_sort_items['.$lang->url.']')->textarea(['rows' => 12, 'value' => $sort_items[$lang->url]])->label('Пункты сорта (разделите с ",")') ?>
+                                        <?= $form->field($model, 'translation_sort_title['.$lang->url.']')->textInput([ 'placeholder' => 'Выбираем сорт', 'value' => $sort_title[$lang->url] ?? ''])->label('Выбираем сорт') ?>
+                                        <?= $form->field($model, 'translation_sort_items['.$lang->url.']')->textarea(['rows' => 12, 'value' => $sort_items[$lang->url] ?? ''])->label('Пункты сорта (разделите с ",")') ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'translation_landing_title['.$lang->url.']')->textInput([ 'placeholder' => 'Посадка малины', 'value' => $landing_title[$lang->url]])->label('Заголовок посадки') ?>
-                                        <?= $form->field($model, 'translation_landing_text['.$lang->url.']')->textarea(['rows' => 5, 'value' => $landing_text[$lang->url]])->label('Текст посадки') ?>
-                                        <?= $form->field($model, 'translation_important['.$lang->url.']')->textarea(['rows' => 4, 'value' => $important[$lang->url]])->label('Важно') ?>
+                                        <?= $form->field($model, 'translation_landing_title['.$lang->url.']')->textInput([ 'placeholder' => 'Посадка малины', 'value' => $landing_title[$lang->url] ?? ''])->label('Заголовок посадки') ?>
+                                        <?= $form->field($model, 'translation_landing_text['.$lang->url.']')->textarea(['rows' => 5, 'value' => $landing_text[$lang->url] ?? ''])->label('Текст посадки') ?>
+                                        <?= $form->field($model, 'translation_important['.$lang->url.']')->textarea(['rows' => 4, 'value' => $important[$lang->url] ?? ''])->label('Важно') ?>
                                     </div>
                                     <div class="col-md-12"><hr><hr></div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'translation_growing_title['.$lang->url.']')->textInput([ 'placeholder' => 'Выращивание', 'value' => $growing_title[$lang->url]])->label('Выращивание') ?>
-                                        <?= $form->field($model, 'translation_growing_text['.$lang->url.']')->textarea(['rows' => 4, 'value' => $growing_text[$lang->url]])->label('Текст выращивании') ?>
+                                        <?= $form->field($model, 'translation_growing_title['.$lang->url.']')->textInput([ 'placeholder' => 'Выращивание', 'value' => $growing_title[$lang->url] ?? ''])->label('Выращивание') ?>
+                                        <?= $form->field($model, 'translation_growing_text['.$lang->url.']')->textarea(['rows' => 4, 'value' => $growing_text[$lang->url] ?? ''])->label('Текст выращивании') ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <?= $form->field($model, 'translation_growing_items['.$lang->url.']')->textarea(['rows' => 8, 'value' => $growing_items[$lang->url]])->label('Пункты выращивании (разделите с ",")') ?>
+                                        <?= $form->field($model, 'translation_growing_items['.$lang->url.']')->textarea(['rows' => 8, 'value' => $growing_items[$lang->url] ?? ''])->label('Пункты выращивании (разделите с ",")') ?>
                                     </div>
                                 </div>
                             <?php endif;?>
