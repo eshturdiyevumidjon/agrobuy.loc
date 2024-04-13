@@ -335,6 +335,7 @@ class SiteController extends Controller
             $path = $siteName . '/backend/web/uploads/about-company/' . $about_company->logo;
         }
 
+
         $reklamaBig = AdvertisingItems::find()
             ->joinWith('advertising')
             ->where(['advertising_id' => $search_big->id])

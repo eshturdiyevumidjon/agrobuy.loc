@@ -86,6 +86,7 @@ else $this->title = 'Поиск';
     			        'nowLanguage' => $nowLanguage,
     		            'dataProvider' => $dataProvider,
     		            'favorites' => $favorites,
+                        'path' => $path,
     			    ]) ?>
 	        	<?php } else { ?>
 	        		<div class="not-product">
