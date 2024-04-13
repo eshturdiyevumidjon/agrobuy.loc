@@ -4,6 +4,7 @@ namespace backend\models;
 
 use Yii;
 use frontend\models\Sessions;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "banners".
@@ -67,11 +68,23 @@ class Banners extends \yii\db\ActiveRecord
     }
     public function getImage($for='_form')
     {
-        $adminka = Yii::$app->params['adminka'];
+        $adminka = 'admin';
         if($for=='_form')
         return $this->image ? '<img style="width:100%;border-radius:10%;" src="/'.$adminka.'/uploads/banners/' . $this->image .'">' : '<img style="width:100%; max-height:300px;border-radius:10%;" src="/'.$adminka.'/uploads/noimg.jpg">';
         if($for=='_columns')
            return $this->image  ? '<img style="width:60px; border-radius:10%;" src="/'.$adminka.'/uploads/banners/' . $this->image .' ">' : '<img style="width:60px;" src="/'.$adminka.'/uploads/noimg.jpg">';
+    }
+
+
+    public function upload()
+    {
+        $this->trash = UploadedFile::getInstance($this,'trash');
+        if(!empty($this->trash))
+        {
+            $name = $this->id . '-' . time();
+            $this->trash->saveAs('uploads/banners/' . $name.'.'.$this->trash->extension);
+            Yii::$app->db->createCommand()->update('banners', ['images' => $name.'.'.$this->trash->extension], [ 'id' => $this->id ])->execute();
+        }
     }
 
 

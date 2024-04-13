@@ -139,11 +139,15 @@ class AdvertisingsController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post()) && $model->save()){
 
+                $model->imageFiles = UploadedFile::getInstance($model,'imageFiles');
                 if(!empty($model->imageFiles))
                 {
-                    $model->unlinkFile($file);
-                    $model->upload();
+                    $name = $model->id . '-' . time();
+
+                    $model->imageFiles->saveAs('uploads/reclama-advert/' . $name.'.'.$model->imageFiles->extension);
+                    Yii::$app->db->createCommand()->update('advertising_items', ['file' => $name.'.'.$model->imageFiles->extension], [ 'id' => $model->id ])->execute();
                 }
+
                 return [
                     'forceReload'=>'#items-pjax',
                     'title'=> Yii::t('app','Update'),

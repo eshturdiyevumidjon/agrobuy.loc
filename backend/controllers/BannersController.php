@@ -147,20 +147,7 @@ class BannersController extends Controller
                          $t->save();
                       }
                   }
-                  $model->trash = UploadedFile::getInstance($model,'trash');
-                  $dir = 'uploads/banners/';
-                  if(!empty($model->trash))
-                  {   
-                      if($model->trash != null && file_exists($dir.$model->trash))
-                      {
-                          unlink(($dir.$model->trash));
-                      }
-                      $name = $model->id . '-' . time();
-
-                      $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
-
-                      Yii::$app->db->createCommand()->update('banners', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
-                  }
+                  $model->upload();
                 
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
@@ -208,6 +195,7 @@ class BannersController extends Controller
      */
     public function actionUpdate($id)
     {
+
         $request = Yii::$app->request;
         $langs = Lang::getLanguages();
         $post=$request->post();
@@ -233,19 +221,8 @@ class BannersController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($model->load($request->post())){
                 $model->save();
-                $model->trash = UploadedFile::getInstance($model,'trash');
-                $dir = 'uploads/banners/';
-                if(!empty($model->trash))
-                {   
-                     if($model->trash != null && file_exists($dir.$model->trash))
-                    {
-                        unlink(($dir.$model->trash));
-                    }
-                    $name = $model->id."-".time();
-                  
-                  $model->trash->saveAs($dir . $name.'.'.$model->trash->extension);
-                    Yii::$app->db->createCommand()->update('banners', ['image' => $name.'.'.$model->trash->extension], [ 'id' => $model->id ])->execute();
-                }
+                $model->upload();
+
                 $attr = Banners::NeedTranslation();
                 
                 foreach ($langs as $lang) {
@@ -323,6 +300,8 @@ class BannersController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
+                $model->upload();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('update', [
