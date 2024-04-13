@@ -4,7 +4,7 @@
   use yii\bootstrap\ActiveForm;
   use common\models\Ads;
 
-  $images =  $post['uploaded_files'];
+  $images =  isset($post['uploaded_files']) ? $post['uploaded_files'] : '';
   $dir = '/admin/uploads/ads/';
   $uploadDir = '/admin/uploads/ads_trash/';
   $this->title = Yii::t('app', $model->isNewRecord ? "E'lon yaratish" : "Tahrirlash" );
