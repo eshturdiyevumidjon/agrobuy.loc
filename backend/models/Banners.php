@@ -83,7 +83,7 @@ class Banners extends \yii\db\ActiveRecord
         {
             $name = $this->id . '-' . time();
             $this->trash->saveAs('uploads/banners/' . $name.'.'.$this->trash->extension);
-            Yii::$app->db->createCommand()->update('banners', ['images' => $name.'.'.$this->trash->extension], [ 'id' => $this->id ])->execute();
+            Yii::$app->db->createCommand()->update('banners', ['image' => $name.'.'.$this->trash->extension], [ 'id' => $this->id ])->execute();
         }
     }
 

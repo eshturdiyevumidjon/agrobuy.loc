@@ -47,8 +47,8 @@ $langs=backend\models\Lang::getLanguages();
                         </div>
                         <?php else: ?>
                             <div class="row">
-                         <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value'=>$titles[$lang->url]])->label(Yii::t('app','Title',null/*,$lang->url*/)) ?>
-                         <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows'=>6,'value'=>$texts[$lang->url]])->label(Yii::t('app','Text',null/*,$lang->url*/)) ?>
+                         <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value'=>$titles[$lang->url] ?? ''])->label(Yii::t('app','Title',null/*,$lang->url*/)) ?>
+                         <?= $form->field($model, 'translation_text['.$lang->url.']')->textarea(['rows'=>6,'value'=>$texts[$lang->url] ?? ''])->label(Yii::t('app','Text',null/*,$lang->url*/)) ?>
                         </div>
                         <?php endif;?>    
                     </p>

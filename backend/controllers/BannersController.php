@@ -201,6 +201,9 @@ class BannersController extends Controller
         $post=$request->post();
         $model = $this->findModel($id);
 
+        $translation_text = [];
+        $translation_title = [];
+
         if($request->isAjax){
             
           $translations = Translates::find()->where(['table_name'=>$model->tableName(),'field_id'=>$model->id])->all();
@@ -320,6 +323,7 @@ class BannersController extends Controller
      */
     public function actionDelete($id)
     {
+        $dir = 'uploads/banners/';
         $request = Yii::$app->request;
         $model=$this->findModel($id);
         Translates::deleteAll(['table_name' => $model->tableName(),'field_id' => $id]);
