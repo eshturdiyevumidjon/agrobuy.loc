@@ -17,8 +17,8 @@
     <div class="form-group select2-style">
         <select class="js-select2" name="region">
             <option value="" selected><?= Yii::t('app',"Joylashuvi") ?></option>
-            <?php foreach ($regions as $region) { ?>
-                <option value="<?=$region->id?>"><?=$region->name?></option>
+            <?php foreach ($regions as $key => $region) { ?>
+                <option value="<?=$key?>"><?=$region?></option>
             <?php } ?>
         </select>
     </div>

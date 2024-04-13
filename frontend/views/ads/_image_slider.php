@@ -6,7 +6,7 @@
         if($model->usersCatalogs != null) $catalogTitle = Yii::t('app',"Mening katalogimdan o'chirish");
         else $catalogTitle = Yii::t('app',"Mening katalogimga qo'shish");
     ?>
-    <?php if($model->user_id == Yii::$app->user->identity->id) { ?>
+    <?php if(Yii::$app->user->identity && $model->user_id == Yii::$app->user->identity->id) { ?>
         <div class="dropdown-person three_point">
             <button type="button" class="" data-toggle="dropdown">
                 <svg enable-background="new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">

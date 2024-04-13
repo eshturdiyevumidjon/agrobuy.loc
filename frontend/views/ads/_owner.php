@@ -82,7 +82,7 @@ $image_url = $model->user->getAvatarForSite(); // URL изображения
 				  </div>
 				</div>
             </div>
-        <?php if($model->user_id != $identity->id) {?>
+        <?php if(Yii::$app->user->identity && $model->user_id != $identity->id) {?>
 	        <div class="bottom-block-reuters">
 	        	<?php if($identity != null) { ?>
 	            	<a href="#" data-touch="false" data-fancybox data-src="#chats-popup" value="/<?=$nowLanguage?>/chat/message?user_id=<?=$model->user_id?>" class="link-template-img chats_class">
