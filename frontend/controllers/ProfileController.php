@@ -58,6 +58,8 @@ class ProfileController extends \yii\web\Controller
             return $this->redirect(['/profile']);
         }
 
+        $favoriteAds = null;
+
         $this->getAccess();
     	$session = new Sessions();
     	$identity = Yii::$app->user->identity;

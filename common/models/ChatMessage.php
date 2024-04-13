@@ -97,7 +97,7 @@ class ChatMessage extends \yii\db\ActiveRecord
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
 
-    public function getMessagesList($chat)
+    public static function getMessagesList($chat)
     {
         $identity = Yii::$app->user->identity;
         $date = null; $show = true; $result = [];
