@@ -177,6 +177,7 @@ class ProfileController extends \yii\web\Controller
             ->groupBy('reyting_id')
             ->all();
 
+
         return $this->render('_form',[
             'usersReyting' => $usersReyting,
             'model' => $model,

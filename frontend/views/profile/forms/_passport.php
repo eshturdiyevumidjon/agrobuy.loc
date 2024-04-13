@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use common\models\Users;
-$images =  $post['uploaded_passport_files'];
+$images =  isset($post['uploaded_passport_files']) ? $post['uploaded_passport_files'] : null;
 $dir = Users::DIR_NAME_FOR_UPLOADING_PASSPORT_FILES;
 $uploadDir = Users::TEMP_DIR_NAME;
 ?>

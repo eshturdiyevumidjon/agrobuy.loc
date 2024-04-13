@@ -31,6 +31,7 @@ $this->title = Yii::t('app', "Profilni tahrirlash");
         <?= $this->render('forms/_company', [
   	        'nowLanguage' => $nowLanguage,
   	        'model' => $model,
+            'post' => $post,
   	    ]) ?>
         
         <?= $this->render('forms/_reyting', [

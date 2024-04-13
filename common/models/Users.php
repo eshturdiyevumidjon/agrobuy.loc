@@ -657,8 +657,8 @@ class Users extends \yii\db\ActiveRecord
     //passport fayllarini saqlash uchun
     public function UploadPassportImage($post)
     {
-        $uploaded_files = $post['uploaded_passport_files'];
-        $old_uploaded_files = $post['old_uploaded_passport_files'];
+        $uploaded_files = isset($post['uploaded_passport_files']) ? $post['uploaded_passport_files'] : '';
+        $old_uploaded_files = isset($post['old_uploaded_passport_files']) ? $post['old_uploaded_passport_files'] : '';
         $source_path = Yii::getAlias('@backend/web/uploads/ads_trash/');
         $destination_path = Yii::getAlias('@backend/web/uploads/users/passports/');
         if($uploaded_files != "")
@@ -689,8 +689,14 @@ class Users extends \yii\db\ActiveRecord
 
     public function isImage($image)
     {
-        $allowedExts = array("gif", "jpeg", "jpg", "png"); 
-        $ext = array_pop(explode('.', $image));
+        $allowedExts = array("gif", "jpeg", "jpg", "png");
+        $extArray = explode(".", $image);
+
+        $ext = null;
+        if(isset($extArray[0]) && isset($extArray[1])){
+            unset($extArray[0]);
+            $ext = $extArray[1];
+        }
         if(in_array($ext, $allowedExts)){
             return "";
         }
@@ -722,8 +728,8 @@ class Users extends \yii\db\ActiveRecord
     //company fayllarini saqlash uchun
     public function UploadCompanyImage($post)
     {
-        $uploaded_files = $post['uploaded_company_files'];
-        $old_uploaded_files = $post['old_uploaded_company_files'];
+        $uploaded_files = isset($post['uploaded_company_files']) ? $post['uploaded_company_files']: null;
+        $old_uploaded_files = isset($post['old_uploaded_company_files']) ? $post['old_uploaded_company_files']: null;
         $source_path = Yii::getAlias('@backend/web/uploads/ads_trash/');
         $destination_path = Yii::getAlias('@backend/web/uploads/users/companies/');
 

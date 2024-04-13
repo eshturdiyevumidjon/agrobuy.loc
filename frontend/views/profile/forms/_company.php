@@ -4,7 +4,8 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use common\models\Users;
 
-$images =  $post['uploaded_company_files'];
+$images =  isset($post['uploaded_company_files']) ? $post['uploaded_company_files'] : null;
+
 $dir = Users::DIR_NAME_FOR_UPLOADING_COMPANIES_FILES;
 $uploadDir = Users::TEMP_DIR_NAME;
 ?>
