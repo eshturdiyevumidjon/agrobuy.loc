@@ -158,6 +158,8 @@ class CategoriesController extends Controller
         $langs = Lang::getLanguages();
         $post = $request->post();
 
+        $translation_title = [];
+
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             $translations = Translates::find()->where(['table_name' => $model->tableName(), 'field_id' => $model->id])->all();
@@ -249,6 +251,8 @@ class CategoriesController extends Controller
         $post = $request->post();
         $langs = Lang::getLanguages();
 
+        $translation_name = [];
+
         Yii::$app->response->format = Response::FORMAT_JSON;
         if($model->load($request->post()) && $model->save()){
             $attr = SubCategories::NeedTranslation();
@@ -307,6 +311,9 @@ class CategoriesController extends Controller
         $model = SubCategories::findOne($id);
         $langs = Lang::getLanguages();
         $post=$request->post();
+
+        $translation_name = [];
+
          $translations = Translates::find()->where(['table_name'=>$model->tableName(),'field_id'=>$model->id])->all();
             foreach ($translations as $key => $value) {
                 $translation_name[$value->language_code] = $value->field_value;

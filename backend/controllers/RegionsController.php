@@ -166,6 +166,8 @@ class RegionsController extends Controller
         $langs = Lang::getLanguages();
         $post = $request->post();
 
+        $translation_title = [];
+
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             $translations = Translates::find()->where(['table_name' => $model->tableName(), 'field_id' => $model->id])->all();
@@ -322,6 +324,7 @@ class RegionsController extends Controller
         $model = new Districts();
         $model->region_id = $id;
         $post = $request->post();
+        $translation_name = [];
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         if($model->load($request->post()) && $model->save()){

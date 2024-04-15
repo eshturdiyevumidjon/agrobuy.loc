@@ -25,12 +25,12 @@ $langs=backend\models\Lang::getLanguages();
                     <?php if($lang->url != 'kr'): ?>
                         <div class="row">
                             <div class="col-md-12">
-                                <?= $form->field($model, 'translation_name['.$lang->url.']')->textInput(['value'=>$names[$lang->url]])->label(Yii::t('app','Title')) ?>
+                                <?= $form->field($model, 'translation_name['.$lang->url.']')->textInput(['value'=>$names[$lang->url] ?? ''])->label(Yii::t('app','Title')) ?>
                             </div>                     
                             <div class="col-md-12">
                                 <?= $form->field($model, 'translation_value['.$lang->url.']')->widget(CKEditor::className(),[
                                         'options'=>[
-                                        'value'=> $values[$lang->url],
+                                        'value'=> $values[$lang->url] ?? '',
                                      ],
                                     'editorOptions' => [
                                         'filebrowserUploadUrl' => '/admin/settings/ckeditor_image_upload',

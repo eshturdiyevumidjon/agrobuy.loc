@@ -163,7 +163,10 @@ class SettingsController extends Controller
         $request = Yii::$app->request;
         $post=$request->post();
         $langs = Lang::getLanguages();
-        $model = $this->findModel($id); 
+        $model = $this->findModel($id);
+        $translation_name = [];
+        $translation_value = [];
+
         $translations = Translates::find()->where(['table_name' => $model->tableName(),'field_id' => $model->id])->all();
         foreach ($translations as $key => $value) {
            switch ($value->field_name) {

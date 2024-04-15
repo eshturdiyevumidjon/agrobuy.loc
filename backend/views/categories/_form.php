@@ -40,7 +40,7 @@ $i = 0;
                             </div>
                         <?php else: ?>
                             <div class="row">
-                                <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value' => $titles[$lang->url]])->label(Yii::t('app','Title')) ?>
+                                <?= $form->field($model, 'translation_title['.$lang->url.']')->textInput(['value' => $titles[$lang->url] ?? ''])->label(Yii::t('app','Title')) ?>
                             </div>
                         <?php endif;?>    
                     </p>
